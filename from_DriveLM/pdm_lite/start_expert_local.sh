@@ -22,7 +22,8 @@ export CARLA_SERVER=${CARLA_ROOT}/CarlaUE4.sh
 export REPETITIONS=1
 export DEBUG_CHALLENGE=0
 
-export PTH_ROUTE=${WORK_DIR}/leaderboard/data/routes_devtest
+# export PTH_ROUTE=${WORK_DIR}/data/routes_devtest
+export PTH_ROUTE=${WORK_DIR}/data/Bench2Drive/data/bench2drive220
 
 # Function to handle errors
 handle_error() {
@@ -34,8 +35,9 @@ handle_error() {
 trap 'handle_error' ERR
 
 # Start the carla server
-export PORT=$((RANDOM % (40000 - 2000 + 1) + 2000)) # use a random port
-sh ${CARLA_SERVER} -carla-streaming-port=0 -carla-rpc-port=${PORT} &
+# export PORT=$((RANDOM % (40000 - 2000 + 1) + 2000)) # use a random port
+export PORT=33315
+sh ${CARLA_SERVER} -RenderOffScreen -nosound -carla-streaming-port=0 -carla-rpc-port=${PORT} &
 sleep 20 # on a fast computer this can be reduced to sth. like 6 seconds
 
 echo 'Port' $PORT
@@ -48,8 +50,8 @@ export TM_PORT=$((PORT + 3))
 export CHECKPOINT_ENDPOINT=${PTH_ROUTE}.json
 export TEAM_CONFIG=${PTH_ROUTE}.xml
 export PTH_LOG='logs'
-export RESUME=1
-export DATAGEN=0
+export RESUME=0
+export DATAGEN=1
 export SAVE_PATH='logs'
 export TM_SEED=0
 
