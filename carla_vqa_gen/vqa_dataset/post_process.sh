@@ -1,1 +1,1 @@
-python ./carla_vqa_generator_main.py --data-directory=../../data --output-graph-directory=./outgraph --path-keyframes=./keyframes
+python ./carla_vqa_generator_main.py --data-directory=../../data --output-graph-directory=./outgraph --path-keyframes=./keyframes --output-graph-examples-directory=./outexample --save-examples --visualize-projection
