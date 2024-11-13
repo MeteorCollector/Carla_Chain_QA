@@ -2140,7 +2140,7 @@ class QAsGenerator():
         """
 
         scene_data = measurements['bounding_boxes']
-        ego_measurements = {k: v for k, v in scene_data.items() if k != 'sensors'}
+        ego_measurements = {k: v for k, v in measurements.items() if k != 'sensors'}
         # Initialize lists to store different types of objectss
         static_cars = []
         static_objects = []
