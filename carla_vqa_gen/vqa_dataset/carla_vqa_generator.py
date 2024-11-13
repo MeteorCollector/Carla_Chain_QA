@@ -115,29 +115,29 @@ class QAsGenerator():
             scenario_name = route_dir.split('/')[-2]
             route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1]
 
-            # Skip this scenario because it is not annotated correctly
-            if 'InterurbanAdvancedActorFlow' in route_dir:
-                continue
+            # # Skip this scenario because it is not annotated correctly
+            # if 'InterurbanAdvancedActorFlow' in route_dir:
+            #     continue
 
-            # Skip this scenario because it is not annotated correctly
-            # and we cannot differentiate between entry and exit properly
-            if 'MergerIntoSlowTraffic' in route_dir:
-                continue
+            # # Skip this scenario because it is not annotated correctly
+            # # and we cannot differentiate between entry and exit properly
+            # if 'MergerIntoSlowTraffic' in route_dir:
+            #     continue
 
-            # Skip this scenario because language labels are not adjusted
-            if 'VehicleTurningRoute' == route_dir:
-                continue
+            # # Skip this scenario because language labels are not adjusted
+            # if 'VehicleTurningRoute' == route_dir:
+            #     continue
 
-            # Skip scenarios with pedestrians if specified
-            if self.remove_pedestrian_scenarios:
-                if 'DynamicObjectCrossing' in route_dir:
-                    continue
-                if 'ParkingCrossingPedestrian' in route_dir:
-                    continue
-                if 'PedestrianCrossing' in route_dir:
-                    continue
-                if 'VehicleTurningRoutePedestrian' in route_dir:
-                    continue
+            # # Skip scenarios with pedestrians if specified
+            # if self.remove_pedestrian_scenarios:
+            #     if 'DynamicObjectCrossing' in route_dir:
+            #         continue
+            #     if 'ParkingCrossingPedestrian' in route_dir:
+            #         continue
+            #     if 'PedestrianCrossing' in route_dir:
+            #         continue
+            #     if 'VehicleTurningRoutePedestrian' in route_dir:
+            #         continue
 
             # Skip frames if RGB image does not exist
             if not os.path.isfile(path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')):
@@ -178,7 +178,7 @@ class QAsGenerator():
             image_path = path.replace('boxes', 'rgb').replace('.json.gz', '.jpg')
             relative_image_path = image_path
 
-            res = self.generate_perception_questions(data, data, scenario_name)
+            res = self.generate_perception_questions(data, scenario_name)
             qas, num_questions, num_objects, questions_per_category, key_object_infos = res
             for key, values in qas.items():
                 for value in values:
@@ -2120,7 +2120,7 @@ class QAsGenerator():
 
         return qas_conversation_vehicle, important_objects, key_object_infos
     
-    def generate_perception_questions(self, scene_data, measurements, scenario):
+    def generate_perception_questions(self, measurements, scenario):
         """
         Generates perception-based questions and answers based on the given scene data, current measurements,
         and scenario. It processes various objects in the scene, such as vehicles, pedestrians, traffic lights,
@@ -2139,6 +2139,8 @@ class QAsGenerator():
             key_object_infos (dict): Dictionary containing information about objects in the scene.
         """
 
+        scene_data = measurements['bounding_boxes']
+        ego_measurements = {k: v for k, v in scene_data.items() if k != 'sensors'}
         # Initialize lists to store different types of objectss
         static_cars = []
         static_objects = []
@@ -2146,45 +2148,56 @@ class QAsGenerator():
         ego_vehicle = None
         pedestrians = []
         traffic_lights = []
-        old_traffic_lights = []
+        # old_traffic_lights = []
+        traffic_signs = []
         stop_signs = []
-        landmarks = []
-        landmark_ids = []   # Needed to avoid duplicates of landmarks
+        # landmarks = []
+        # landmark_ids = []   # Needed to avoid duplicates of landmarks
         vehicles_by_id = {}
 
         # Categorize objects from the scene data
+        # print(scene_data) # debug
         for actor in scene_data:
-            if actor['class'] == 'ego_car':
+            # print(actor) # debug
+            if actor['class'] == 'ego_vehicle':
                 ego_vehicle = actor
-            elif actor['class'] == 'car':
+                ego = actor
+            elif actor['class'] == 'vehicle':
                 other_vehicles.append(actor)
                 vehicles_by_id[actor['id']] = actor
-            elif actor['class'] == 'walker':
+            elif actor['class'] == 'walker': 
+                # actually, b2d don't have walker either.
                 pedestrians.append(actor)
-            elif actor['class'] == 'landmark' and actor['id'] not in landmark_ids:
-                landmarks.append(actor)
-                landmark_ids.append(actor['id'])
-            elif actor['class'] == 'ego_info':
-                ego = actor
-                if ego['next_junction_id'] == -1:
-                    self.list_next_junction_id_minus_one.append(1)
-            elif actor['class'] == 'traffic_light_vqa':
-                traffic_lights.append(actor)
+            # elif actor['class'] == 'landmark' and actor['id'] not in landmark_ids:
+            #     landmarks.append(actor)
+            #     landmark_ids.append(actor['id'])
+            # elif actor['class'] == 'ego_info':
+            #     ego = actor
+            #     if ego['next_junction_id'] == -1:
+            #         self.list_next_junction_id_minus_one.append(1)
+            # elif actor['class'] == 'traffic_light_vqa':
+            #     traffic_lights.append(actor)
             elif actor['class'] == 'traffic_light':
-                old_traffic_lights.append(actor)
-            elif actor['class'] == 'stop_sign':
-                stop_signs.append(actor)
-            elif actor['class'] == 'static_car':
-                static_cars.append(actor)
-            elif actor['class'] == 'static' or actor['class'] == 'static_trafficwarning':
-                static_objects.append(actor)
+                traffic_lights.append(actor)
+            elif actor['class'] == 'traffic_sign':
+                traffic_signs.append(actor)
+                if 'stop' in actor['type_id']:
+                    print("[debug] we have a stop sign here.") # debug
+                    stop_signs.append(actor)
+
+                # pdm_lite only has stop sign, we have to fix this. (IMPORTANT)
+            # elif actor['class'] == 'static_car':
+            #     static_cars.append(actor)
+            # elif actor['class'] == 'static' or actor['class'] == 'static_trafficwarning':
+            #     static_objects.append(actor)
 
         important_objects = []
         key_object_infos = {}
 
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
-                                                ego['num_lanes_same_direction'], vehicles_by_id, measurements, scenario)
+                                                None, vehicles_by_id, measurements, scenario)
+        # None was ego['num_lanes_same_direction']
         qas_conversation_vehicle, important_objects, key_object_infos = res
         
         res = self.analyze_road_layout(ego, important_objects, key_object_infos, measurements, scenario)
