@@ -11,6 +11,7 @@ import cv2
 from PIL import Image, ImageDraw
 from collections import Counter
 import carla
+from offline_map_calculations import find_first_junction_in_direction
 
 from graph_utils import *
 
@@ -124,7 +125,7 @@ class QAsGenerator():
             if self.map is None or (self.town_name is None or self.town_name is not town_name):
                 self.town_name = town_name
                 with open(os.path.join(self.map_file_dir, f'{self.town_name}.xodr'), 'r') as fp:
-                    m = carla.Map('{self.town_name}', fp.read())
+                    self.map = carla.Map('{self.town_name}', fp.read())
 
             # # Skip this scenario because it is not annotated correctly
             # if 'InterurbanAdvancedActorFlow' in route_dir:
@@ -1946,7 +1947,8 @@ class QAsGenerator():
         qas_conversation_vehicle = []
 
         # Initialize the distance to the next junction for the ego vehicle
-        ego_distance_to_junction = ego_vehicle['distance_to_junction']
+        # ego_distance_to_junction = ego_vehicle['distance_to_junction']
+        _, ego_distance_to_junction = find_first_junction_in_direction(self.map, carla.Location(x=ego_vehicle['location'][0], y=ego_vehicle['location'][1], z=ego_vehicle['location'][2]))
         if ego_distance_to_junction is None:
             ego_distance_to_junction = 1000 # Set a default value if distance to junction is not available
 
