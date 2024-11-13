@@ -24,6 +24,8 @@ def parse_arguments():
                             help='Output directory for the vqa-graph')
     path_group.add_argument('--output-graph-examples-directory', type=str, default='output/path/of/graph/vqas',
                             help='Output directory for examples of the vqa-graph')
+    path_group.add_argument('--path-maps', type=str, required=True, default='path/to/maps',
+                            help='Data directory containings xodrs of CARLA maps')
 
     # Image and camera parameters
     img_group = parser.add_argument_group('Image and Camera Parameters')

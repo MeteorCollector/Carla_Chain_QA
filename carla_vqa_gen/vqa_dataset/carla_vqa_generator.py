@@ -72,6 +72,11 @@ class QAsGenerator():
 
         self.list_next_junction_id_minus_one = []
 
+        # added for b2d
+        self.map_file_dir = args.path_maps
+        self.town_name = None
+        self.map = None
+
     def reset_qa_stats(self):
         # Initialize data structures
         self.vqa_llava_format = {'image_paths': [], 'llava_format': [], 'image_subset': []}
@@ -112,8 +117,14 @@ class QAsGenerator():
         for path in tqdm.tqdm(self.data_boxes_paths):
             # print("analysing path") # debug
             route_dir = '/'.join(path.split('/')[:-2])
-            scenario_name = route_dir.split('/')[-2]
-            route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1]
+            scenario_name = route_dir.split('/')[-1]
+            town_name = route_dir.split('/')[-1].split('_')[1]
+            route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1] + '_' + route_dir.split('/')[-1].split('_')[2]
+            # print(f"path: {path}, route_dir: {route_dir}, scenario_name: {scenario_name}, town_name: {town_name}, route_number: {route_number}")
+            if self.map is None or (self.town_name is None or self.town_name is not town_name):
+                self.town_name = town_name
+                with open(os.path.join(self.map_file_dir, f'{self.town_name}.xodr'), 'r') as fp:
+                    m = carla.Map('{self.town_name}', fp.read())
 
             # # Skip this scenario because it is not annotated correctly
             # if 'InterurbanAdvancedActorFlow' in route_dir:
@@ -1931,6 +1942,7 @@ class QAsGenerator():
             return pointing_towards_junction
 
 
+        # main contents of this function starts here 
         qas_conversation_vehicle = []
 
         # Initialize the distance to the next junction for the ego vehicle
@@ -1969,7 +1981,7 @@ class QAsGenerator():
                 is_other_veh_in_accel_lane = True
         elif scenario == "HighwayExit" or scenario == "MergerIntoSlowTrafficV2": 
             is_ego_on_highway = True
-            if ego_vehicle['is_in_junction'] or ego_distance_to_junction <25:
+            if ego_vehicle['is_in_junction'] or ego_distance_to_junction < 25:
                 is_ego_in_exit_lane = True
             if ego_vehicle['num_lanes_same_direction'] - ego_vehicle['ego_lane_number'] - 1 == 0 and \
                         current_measurement['command'] == 6 and ego_distance_to_junction < 40:
@@ -1983,7 +1995,7 @@ class QAsGenerator():
             elif scenario == 'MergerIntoSlowTraffic' and ego_vehicle['num_lanes_same_direction'] > 1:
                 is_ego_in_entry_lane = False
                 is_ego_in_accel_lane = False
-            elif ego_vehicle['is_in_junction'] or ego_distance_to_junction <25:
+            elif ego_vehicle['is_in_junction'] or ego_distance_to_junction < 25:
                 is_ego_in_accel_lane = True
             elif ego_vehicle['num_lanes_same_direction'] == 1 and ego_vehicle['num_lanes_opposite_direction'] == 0:
                 is_ego_in_entry_lane = True
