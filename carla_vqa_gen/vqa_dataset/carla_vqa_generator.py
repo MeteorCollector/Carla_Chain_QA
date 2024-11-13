@@ -61,7 +61,7 @@ class QAsGenerator():
             Path(self.output_graph_examples_directory).mkdir(parents=True, exist_ok=True)
 
         # all the paths to the boxes in the data
-        self.data_boxes_paths = glob.glob(os.path.join(self.data_directory, '**/boxes/*.json.gz'), recursive=True)
+        self.data_boxes_paths = glob.glob(os.path.join(self.data_directory, '**/anno/*.json.gz'), recursive=True)
 
         # Randomly sample a subset of data (if random_subset_count > 0)
         if self.random_subset_count > 0:
@@ -101,6 +101,7 @@ class QAsGenerator():
 
         # Load keyframes list if sampling keyframes
         if self.sample_frame_mode == 'keyframes':
+            # print("mode = keyframes, parsing keyframes.") # debug
             keyframes_list_path = self.path_keyframes
             with open(keyframes_list_path, 'r', encoding="utf-8") as f:
                 keyframes_list = f.readlines()
@@ -109,6 +110,7 @@ class QAsGenerator():
 
         # Process each frame
         for path in tqdm.tqdm(self.data_boxes_paths):
+            # print("analysing path") # debug
             route_dir = '/'.join(path.split('/')[:-2])
             scenario_name = route_dir.split('/')[-2]
             route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1]
@@ -138,7 +140,7 @@ class QAsGenerator():
                     continue
 
             # Skip frames if RGB image does not exist
-            if not os.path.isfile(path.replace('boxes', 'rgb').replace('.json.gz', '.jpg')):
+            if not os.path.isfile(path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')):
                 self.skipped_frames += 1
                 continue
 
@@ -149,7 +151,6 @@ class QAsGenerator():
                     continue
 
             vqa_llava_entry = {}
-            path_measurements = path.replace('boxes', 'measurements')
             frame_number = int(path.split('/')[-1].split('.')[0])
 
             # Skip frames if sampling uniformly and frame number does not match
@@ -159,23 +160,25 @@ class QAsGenerator():
             # Check if files exist
             if not os.path.exists(path):
                 continue
-            if not os.path.exists(path_measurements):
-                continue
+            # there's only 'anno' folder in B2D dataset.
+            # if not os.path.exists(path_measurements):
+            #     continue
 
             # Read data and measurements files
             with gzip.open(path, 'rb') as f:
                 file_content = f.read()
                 data = json.loads(file_content.decode('utf-8'))
 
-            with gzip.open(path_measurements, 'rb') as f:
-                file_content = f.read()
-                measurements = json.loads(file_content.decode('utf-8'))
+            # with gzip.open(path_measurements, 'rb') as f:
+            #     file_content = f.read()
+            #     measurements = json.loads(file_content.decode('utf-8'))
 
             # Get perception questions
+            # print("generation reached here") # debug
             image_path = path.replace('boxes', 'rgb').replace('.json.gz', '.jpg')
             relative_image_path = image_path
 
-            res = self.generate_perception_questions(data, measurements, scenario_name)
+            res = self.generate_perception_questions(data, data, scenario_name)
             qas, num_questions, num_objects, questions_per_category, key_object_infos = res
             for key, values in qas.items():
                 for value in values:
