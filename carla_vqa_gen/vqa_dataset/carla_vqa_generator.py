@@ -11,7 +11,7 @@ import cv2
 from PIL import Image, ImageDraw
 from collections import Counter
 import carla
-from offline_map_calculations import find_first_junction_in_direction
+from offline_map_calculations import *
 
 from graph_utils import *
 
@@ -1411,7 +1411,7 @@ class QAsGenerator():
         return qas_conversation_ego, important_objects, key_object_infos
 
     def generate_vehicle_information(self, other_vehicles, ego_vehicle, important_objects, key_object_infos, 
-                                            num_lanes_ego, vehicles_by_id, current_measurement, scenario):
+                                            scene_data, vehicles_by_id, current_measurement, scenario):
         """
         Generates information and question-answer pairs for vehicles in the scene.
 
@@ -1946,15 +1946,17 @@ class QAsGenerator():
         # main contents of this function starts here 
         qas_conversation_vehicle = []
 
+        ego_location = carla.Location(x=ego_vehicle['location'][0], y=ego_vehicle['location'][1], z=ego_vehicle['location'][2])
         # Initialize the distance to the next junction for the ego vehicle
         # ego_distance_to_junction = ego_vehicle['distance_to_junction']
-        _, ego_distance_to_junction = find_first_junction_in_direction(self.map, carla.Location(x=ego_vehicle['location'][0], y=ego_vehicle['location'][1], z=ego_vehicle['location'][2]))
+        _, ego_distance_to_junction = find_first_junction_in_direction(self.map, ego_location)
         if ego_distance_to_junction is None:
             ego_distance_to_junction = 1000 # Set a default value if distance to junction is not available
 
         # Convert the speed limit from m/s to km/h
-        speed_limit_kmh = int(current_measurement['speed_limit'] * 3.6)
-
+        speed_limit_kmh = int(get_speed_limit(scene_data))
+        # this value only used to indicate specified scenario
+            
         # Flags to indicate if the ego vehicle is in an acceleration lane, exit lane, or entry lane
         is_ego_on_highway = False
         is_ego_in_accel_lane = False
@@ -2210,7 +2212,7 @@ class QAsGenerator():
 
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
-                                                None, vehicles_by_id, measurements, scenario)
+                                                scene_data, vehicles_by_id, measurements, scenario)
         # None was ego['num_lanes_same_direction']
         qas_conversation_vehicle, important_objects, key_object_infos = res
         

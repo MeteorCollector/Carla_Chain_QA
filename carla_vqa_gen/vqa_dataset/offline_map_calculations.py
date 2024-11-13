@@ -25,3 +25,18 @@ def find_first_junction_in_direction(map, ego_location):
         return junction_location, distance_to_junction
     else:
         return None, None # represents no junction found
+    
+def get_speed_limit(scene_data):
+    """
+    Finds the speed limit of ego
+    """
+    minimum_speed_limit = float('inf')
+
+    for actor in scene_data:
+        if 'traffic_sign' in actor['class']:
+            if actor['type_id'].startswith("traffic.speed_limit") and actor['affects_ego']:
+                speed_limit = float(int(actor['type_id'].split('.')[-1]))
+                if speed_limit < minimum_speed_limit:
+                    minimum_speed_limit = speed_limit
+
+    return minimum_speed_limit if minimum_speed_limit != float('inf') else 10000
