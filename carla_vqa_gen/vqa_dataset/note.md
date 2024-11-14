@@ -157,6 +157,23 @@ num_objects：场景中的对象数量。
 num_questions_per_category：每个类别的问答对数量。
 key_object_infos：场景中关键对象的相关信息。
 
+#### 笔记
+
+line 316:
+
+```python
+def should_consider_vehicle(self, vehicle):
+        """
+        True, if it's visible in the image and neither of the following applies
+        False, if vehicle is not bicycle and the number of points on it are below a threshold
+        False, if the vehicle is behind the ego vehicle
+        False, if it's a parking vehicle, that does not cut in
+        """
+```
+
+这里把后面的车都标成“不重要”了。但是变道的时候肯定要看后面的车啊！有点不妙。
+
+
 #### anno
 
 boxes: 

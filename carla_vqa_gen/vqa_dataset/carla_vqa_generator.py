@@ -78,6 +78,14 @@ class QAsGenerator():
         self.town_name = None
         self.map = None
 
+        # camera infos
+        self.CAMERA_FRONT = {}
+        self.CAMERA_FRONT_LEFT = {}
+        self.CAMERA_FRONT_RIGHT = {}
+        self.CAMERA_BACK = {}
+        self.CAMERA_BACK_LEFT = {}
+        self.CAMERA_BACK_RIGHT = {}
+
     def reset_qa_stats(self):
         # Initialize data structures
         self.vqa_llava_format = {'image_paths': [], 'llava_format': [], 'image_subset': []}
@@ -276,25 +284,25 @@ class QAsGenerator():
         # Convert and save VQA LLAVA format data
         return self.vqa_llava_format
 
-    def is_vehicle_visible_in_image(self, vehicle_obj):
-        """
-        Check if a vehicle is visible in the image.
-        """
-        # Project the 3D points of the vehicle onto the 2D image plane
-        projected_2d_points = project_center_corners(vehicle_obj, self.CAMERA_MATRIX)
+    # def is_vehicle_visible_in_image(self, vehicle_obj):
+    #     """
+    #     Check if a vehicle is visible in the image.
+    #     """
+    #     # Project the 3D points of the vehicle onto the 2D image plane
+    #     projected_2d_points = project_center_corners(vehicle_obj, self.CAMERA_MATRIX)
 
-        # Check if any projected point is visible
-        vehicle_is_visible = False
-        if projected_2d_points is None:
-            return False
+    #     # Check if any projected point is visible
+    #     vehicle_is_visible = False
+    #     if projected_2d_points is None:
+    #         return False
 
-        for point_2d in projected_2d_points:
-            if (point_2d[0] > self.MIN_X and point_2d[0] < self.MAX_X and
-                point_2d[1] > self.MIN_Y and point_2d[1] < self.MAX_Y):
-                vehicle_is_visible = True
-                break
+    #     for point_2d in projected_2d_points:
+    #         if (point_2d[0] > self.MIN_X and point_2d[0] < self.MAX_X and
+    #             point_2d[1] > self.MIN_Y and point_2d[1] < self.MAX_Y):
+    #             vehicle_is_visible = True
+    #             break
 
-        return vehicle_is_visible
+    #     return vehicle_is_visible
 
     def project_object_center(self, obj):
         """
@@ -321,19 +329,20 @@ class QAsGenerator():
         False, if it's a parking vehicle, that does not cut in
         """
         # If the vehicle is parked and not cutting in, exclude it from consideration
-        if vehicle['lane_type_str'] == "Parking" and not vehicle['vehicle_cuts_in']:
+        if vehicle['state'] == "static":
             return False
         # Max. distance is 25m and similar to the max. distance of junctions
         if  (
-            vehicle['position'][0] < -1.5
-            or (vehicle['base_type'] != 'bicycle' and vehicle['num_points'] < 15 and \
-                'scenario' not in vehicle['role_name'])
-            or ('scenario' in vehicle['role_name'] and vehicle['num_points'] < 10)
+            vehicle['bbx_loc'][0] < -1.5
+            or (vehicle['class'] != 'bicycle' and vehicle['num_points'] < 15)
+            or (vehicle['num_points'] < 10)
         ):
             return False
 
         # Check if the vehicle is visible in the image
-        vehicle_is_visible = self.is_vehicle_visible_in_image(vehicle)
+        # But here only vehicle in front is consodered!
+        # A pity...
+        vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
 
         return vehicle_is_visible
 
@@ -809,7 +818,7 @@ class QAsGenerator():
                             consider_vehicle = self.should_consider_vehicle(vehicle)
                             if not consider_vehicle:
                                 continue
-                            keep_vehicle = self.is_vehicle_visible_in_image(vehicle)
+                            keep_vehicle = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
 
                             if keep_vehicle != consider_vehicle:
                                 print("Warning: vehicle is not in image but should be considered.")
@@ -2156,6 +2165,22 @@ class QAsGenerator():
         """
 
         scene_data = measurements['bounding_boxes']
+        sensor_data = measurements['sensors']
+
+        # read all camera datas
+        if 'CAM_FRONT' in sensor_data:
+            self.CAMERA_FRONT = sensor_data['CAM_FRONT']
+        if 'CAM_FRONT_LEFT' in sensor_data:
+            self.CAMERA_FRONT_LEFT = sensor_data['CAM_FRONT_LEFT']
+        if 'CAM_FRONT_RIGHT' in sensor_data:
+            self.CAMERA_FRONT_RIGHT = sensor_data['CAM_FRONT_RIGHT']
+        if 'CAM_BACK' in sensor_data:
+            self.CAMERA_BACK = sensor_data['CAM_BACK']
+        if 'CAM_BACK_LEFT' in sensor_data:
+            self.CAMERA_BACK_LEFT = sensor_data['CAM_BACK_LEFT']
+        if 'CAM_BACK_RIGHT' in sensor_data:
+            self.CAMERA_BACK_RIGHT = sensor_data['CAM_BACK_RIGHT']
+
         ego_measurements = {k: v for k, v in measurements.items() if k != 'sensors'}
         # Initialize lists to store different types of objectss
         static_cars = []
@@ -2181,6 +2206,8 @@ class QAsGenerator():
             elif actor['class'] == 'vehicle':
                 other_vehicles.append(actor)
                 vehicles_by_id[actor['id']] = actor
+                if actor['state'] == 'static':
+                    static_cars.append(actor)
             elif actor['class'] == 'walker': 
                 # actually, b2d don't have walker either.
                 pedestrians.append(actor)
