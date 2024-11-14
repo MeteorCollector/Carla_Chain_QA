@@ -1955,10 +1955,8 @@ class QAsGenerator():
         # main contents of this function starts here 
         qas_conversation_vehicle = []
 
-        ego_location = carla.Location(x=ego_vehicle['location'][0], y=ego_vehicle['location'][1], z=ego_vehicle['location'][2])
         # Initialize the distance to the next junction for the ego vehicle
-        # ego_distance_to_junction = ego_vehicle['distance_to_junction']
-        _, ego_distance_to_junction = find_first_junction_in_direction(self.map, ego_location)
+        ego_distance_to_junction = ego_vehicle['distance_to_junction']
         if ego_distance_to_junction is None:
             ego_distance_to_junction = 1000 # Set a default value if distance to junction is not available
 
@@ -2237,13 +2235,21 @@ class QAsGenerator():
         important_objects = []
         key_object_infos = {}
 
+        # Append missing keys
+        ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
+        
+        _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
+        ego['num_lanes_same_direction'] = get_num_lanes_same_direction(self.map, ego_location)
+        ego['num_lanes_opposite_direction'] = get_num_lanes_opposite_direction(self.map, ego_location)
+        ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
+
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
                                                 scene_data, vehicles_by_id, measurements, scenario)
         # None was ego['num_lanes_same_direction']
         qas_conversation_vehicle, important_objects, key_object_infos = res
         
-        res = self.analyze_road_layout(ego, important_objects, key_object_infos, measurements, scenario)
+        res = self.analyze_road_layout(ego, scene_data, important_objects, key_object_infos, measurements, scenario)
         qas_conversation_roadlayout, important_objects, key_object_infos = res
         
         res = self.process_stop_signs(stop_signs, important_objects, key_object_infos)
@@ -2356,7 +2362,7 @@ class QAsGenerator():
 
         return combined_qas, num_questions, num_objects, num_questions_per_category, key_object_infos
 
-    def analyze_road_layout(self, ego_vehicle_info, important_objects, key_object_infos, current_measurement, scenario):
+    def analyze_road_layout(self, ego_vehicle_info, scene_data, important_objects, key_object_infos, current_measurement, scenario):
         """
         This method answers the following questions:
         - Is the ego vehicle at a junction?
@@ -2988,7 +2994,7 @@ class QAsGenerator():
         if distance_to_junction is None:
             distance_to_junction = 1000
 
-        speed_limit = int(current_measurement['speed_limit'] * 3.6)
+        speed_limit = int(get_speed_limit(scene_data))
 
         # Determine if the scenario is a highway scenario and if the ego vehicle is on an acceleration lane
         is_highway = False
@@ -3038,8 +3044,8 @@ class QAsGenerator():
                                                 ego_vehicle_info, is_highway, distance_to_junction, scenario, 
                                                 current_measurement, qas_conversation_roadlayout)
         
-        command_int = current_measurement['command']
-        command_next_int = current_measurement['next_command']
+        command_int = current_measurement['command_near']
+        command_next_int = current_measurement['command_far']
         lane_change_soon = False
         map_command = {
             1: 'go left at the next intersection',

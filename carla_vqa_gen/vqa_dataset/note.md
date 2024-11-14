@@ -173,6 +173,7 @@ def should_consider_vehicle(self, vehicle):
 
 这里把后面的车都标成“不重要”了。但是变道的时候肯定要看后面的车啊！有点不妙。
 
+command_list = ["VOID", "LEFT", "RIGHT", "STRAIGHT", "LANE FOLLOW", "CHANGE LANE LEFT",  "CHANGE LANE RIGHT",]
 
 #### anno
 
