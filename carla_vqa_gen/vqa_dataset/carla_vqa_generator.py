@@ -2239,8 +2239,21 @@ class QAsGenerator():
         ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
         
         _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
-        ego['num_lanes_same_direction'], ego['num_lanes_opposite_direction'] = get_num_lanes(self.map, ego_location)
         ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
+
+        lane_info = get_lane_info(self.map, ego_location)
+        ego['num_lanes_same_direction'] = lane_info['num_lanes_same_direction']
+        ego['num_lanes_opposite_direction'] = lane_info['num_lanes_opposite_direction']
+        ego['ego_lane_number'] = lane_info['ego_lane_number']
+        ego['lane_type_str'] = lane_info['lane_type_str']
+        ego['shoulder_left'] = lane_info['shoulder_left']
+        ego['parking_left'] = lane_info['parking_left']
+        ego['sidewalk_left'] = lane_info['sidewalk_left']
+        ego['bike_lane_left'] = lane_info['bikelane_left']
+        ego['shoulder_right'] = lane_info['shoulder_right']
+        ego['parking_right'] = lane_info['parking_right']
+        ego['sidewalk_right'] = lane_info['sidewalk_right']
+        ego['bike_lane_right'] = lane_info['bikelane_right']
 
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,

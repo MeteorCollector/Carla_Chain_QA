@@ -106,36 +106,52 @@ def is_vehicle_in_junction(map, vehicle_location):
     else:
         return False
 
-def get_num_lanes(map, vehicle_location):
+def get_lane_info(map, vehicle_location):
     """
-    Get the number of lanes of vehicle.
+    Get information keys of current lane
     """
     waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
     
     if not waypoint:
-        return 0
+        return {}
 
     lane_direction = waypoint.lane_id
     leftmost_lane = lane_direction
     rightmost_lane = lane_direction
+    lane_id_left_most_lane_same_direction = lane_direction
     vehicle_road_id = waypoint.road_id
 
     num_lanes_same_direction = 1
     num_lanes_opposite_direction = 0
 
+    shoulder_left, parking_left, sidewalk_left, bikelane_left = False, False, False, False
+    shoulder_right, parking_right, sidewalk_right, bikelane_right = False, False, False, False
+
     left_waypoint = waypoint.get_left_lane()
     while left_waypoint:
         if left_waypoint.lane_id == leftmost_lane or left_waypoint.road_id != vehicle_road_id:
             break
+
+        lane_type = left_waypoint.lane_type
+        if lane_type == carla.LaneType.Shoulder and left_waypoint.lane_width > 1.0:
+            shoulder_left = True
+        if lane_type == carla.LaneType.Parking:
+            parking_left = True
+        if lane_type == carla.LaneType.Sidewalk:
+            sidewalk_left = True
+        if lane_type == carla.LaneType.Biking:
+            bikelane_left = True
+
         if left_waypoint.lane_id * lane_direction > 0:
-            if left_waypoint.lane_type == carla.LaneType.Driving:
+            if lane_type == carla.LaneType.Driving:
                 num_lanes_same_direction += 1
+                lane_id_left_most_lane_same_direction = left_waypoint.lane_id
                 # print_waypoint_info(left_waypoint)
             
             leftmost_lane = left_waypoint.lane_id
             left_waypoint = left_waypoint.get_left_lane()
         elif left_waypoint.lane_id * lane_direction < 0:
-            if left_waypoint.lane_type == carla.LaneType.Driving:
+            if lane_type == carla.LaneType.Driving:
                 num_lanes_opposite_direction += 1
                 # print_waypoint_info(left_waypoint)
             
@@ -146,6 +162,17 @@ def get_num_lanes(map, vehicle_location):
     while right_waypoint:
         if right_waypoint.lane_id == rightmost_lane or right_waypoint.road_id != vehicle_road_id:
             break
+
+        lane_type = right_waypoint.lane_type
+        if lane_type == carla.LaneType.Shoulder and right_waypoint.lane_width > 1.0:
+            shoulder_right = True
+        if lane_type == carla.LaneType.Parking:
+            parking_right = True
+        if lane_type == carla.LaneType.Sidewalk:
+            sidewalk_right = True
+        if lane_type == carla.LaneType.Biking:
+            bikelane_right = True
+
         if right_waypoint.lane_id * lane_direction > 0:
             if right_waypoint.lane_type == carla.LaneType.Driving:
                 num_lanes_same_direction += 1
@@ -160,7 +187,28 @@ def get_num_lanes(map, vehicle_location):
             
             rightmost_lane = right_waypoint.lane_id
             right_waypoint = right_waypoint.get_left_lane()
+
+    # get ego lane number counted from left to right
+    # https://www.asam.net/standards/detail/opendrive/
+    # most left should be always the smallest number
+        ego_lane_number = abs(waypoint.lane_id - lane_id_left_most_lane_same_direction)
     
     # print(f"[debug] lanes at the same direction: {num_lanes_same_direction}, opposite direction: {num_lanes_opposite_direction}")
-    return num_lanes_same_direction, num_lanes_opposite_direction
+        
+    lane_info = {
+        "num_lanes_same_direction": num_lanes_same_direction,
+        "num_lanes_opposite_direction": num_lanes_opposite_direction,
+        "ego_lane_number": ego_lane_number,
+        "lane_type_str": str(waypoint.lane_type),
+        "shoulder_left": shoulder_left,
+        "parking_left": parking_left,
+        "sidewalk_left": sidewalk_left,
+        "bikelane_left": bikelane_left,
+        "shoulder_right": shoulder_right,
+        "parking_right": parking_right,
+        "sidewalk_right": sidewalk_right,
+        "bikelane_right": bikelane_right
+    }
+    print(lane_info)
+    return lane_info
 
