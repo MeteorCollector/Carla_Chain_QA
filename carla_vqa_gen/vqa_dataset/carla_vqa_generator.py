@@ -2255,6 +2255,9 @@ class QAsGenerator():
         ego['sidewalk_right'] = lane_info['sidewalk_right']
         ego['bike_lane_right'] = lane_info['bikelane_right']
 
+        # original only raise this flag when ego vehicle overcomes an obstacle
+        measurements['changed_route'] = is_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
+
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
                                                 scene_data, vehicles_by_id, measurements, scenario)

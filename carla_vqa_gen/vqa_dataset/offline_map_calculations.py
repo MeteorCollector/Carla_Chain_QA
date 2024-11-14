@@ -212,3 +212,161 @@ def get_lane_info(map, vehicle_location):
     print(lane_info)
     return lane_info
 
+
+import carla
+import math
+
+def is_vehicle_changing_lane(vehicle_data, map):
+    """
+    Judge whether the car is changing its lane
+    
+    Params:
+        vehicle_data (dict): from measurements
+        carla_map (carla.Map): CARLA's map object
+    """
+    
+    x, y = vehicle_data['x'], vehicle_data['y']
+    theta = vehicle_data['theta']
+    
+    vehicle_location = carla.Location(x=x, y=y)
+    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    
+    if not waypoint:
+        return False
+    
+    lane_yaw = waypoint.transform.rotation.yaw
+    lane_direction = math.radians(lane_yaw)
+    
+    vehicle_direction = math.radians(theta)
+    
+    angle_diff = abs(vehicle_direction - lane_direction)
+    angle_diff = min(angle_diff, 2 * math.pi - angle_diff)
+    
+    # if the car is more than 10 degrees off the lane
+    angle_threshold = math.radians(10)
+    if angle_diff > angle_threshold:
+        return True
+    
+    # check the distance to neiboring lane, if too close
+    left_lane = waypoint.get_left_lane()
+    right_lane = waypoint.get_right_lane()
+    
+    if left_lane and left_lane.lane_type == carla.LaneType.Driving:
+        distance_to_left_lane = left_lane.transform.location.distance(vehicle_location)
+        if distance_to_left_lane * 0.5 <= waypoint.transform.location.distance(vehicle_location):
+            return True
+    
+    if right_lane and right_lane.lane_type == carla.LaneType.Driving:
+        distance_to_right_lane = right_lane.transform.location.distance(vehicle_location)
+        if distance_to_right_lane * 0.5 <= waypoint.transform.location.distance(vehicle_location):
+            return True
+
+    return False
+
+import math
+
+def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
+    """
+    Judge whether the car is changing its lane due to obstacles
+    
+    Param:
+        vehicle_data (dict): from measurements
+        carla_map (carla.Map): CARLA map
+        bbox_list (list): bbox measurement list
+    """
+
+    if is_vehicle_changing_lane(vehicle_data, map) is False:
+        return False
+
+    vehicle_location = carla.Location(x=vehicle_data['x'], y=vehicle_data['y'])
+    vehicle_theta = vehicle_data['theta']
+    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    lane_direction = waypoint.transform.rotation.yaw
+    
+    angle_diff = (vehicle_theta - lane_direction) % 360
+    if angle_diff > 180:
+        angle_diff -= 360
+    
+    lane_change_direction = None
+    angle_threshold = 10.0
+    if angle_diff > angle_threshold:
+        lane_change_direction = 'right'
+    elif angle_diff < -angle_threshold:
+        lane_change_direction = 'left'
+    else:
+        return False
+
+    left_waypoint = waypoint.get_left_lane()
+    right_waypoint = waypoint.get_right_lane()
+    
+    def calculate_distance_to_waypoint(wp):
+        return math.sqrt((vehicle_location.x - wp.transform.location.x) ** 2 +
+                         (vehicle_location.y - wp.transform.location.y) ** 2)
+    
+    nearest_lane = None
+    nearest_lane_distance = 1000 # max value
+    
+    if left_waypoint:
+        left_distance = calculate_distance_to_waypoint(left_waypoint)
+        if left_distance < nearest_lane_distance:
+            nearest_lane = left_waypoint
+            nearest_lane_distance = left_distance
+
+    if right_waypoint:
+        right_distance = calculate_distance_to_waypoint(right_waypoint)
+        if right_distance < nearest_lane_distance:
+            nearest_lane = right_waypoint
+            nearest_lane_distance = right_distance
+    
+    if nearest_lane is None:
+        return False # there is no other lane!
+    
+    if lane_change_direction is 'left':
+        if nearest_lane == left_waypoint:
+            target_lane = left_waypoint
+            original_lane = waypoint
+        else:
+            target_lane = waypoint
+            original_lane = right_waypoint
+    elif lane_change_direction is 'right':
+        if nearest_lane == right_waypoint:
+            target_lane = right_waypoint
+            original_lane = waypoint
+        else:
+            target_lane = waypoint
+            original_lane = left_waypoint
+    
+    detection_distance = 20.0  # detect obstacle
+    angle_threshold = 10.0
+    
+    for obj in bbox_list:
+        if obj['class'] == 'ego_vehicle':
+            continue
+        
+        obj_location = obj['location']
+        obj_x, obj_y, obj_z = obj_location[0], obj_location[1], obj_location[2]
+        
+        vehicle_x = vehicle_data['x']
+        vehicle_y = vehicle_data['y']
+
+        distance_to_obj = math.sqrt((obj_x - vehicle_x) ** 2 + (obj_y - vehicle_y) ** 2)
+        
+        if distance_to_obj > detection_distance:
+            continue
+        
+        angle_to_obj = math.degrees(math.atan2(obj_y - vehicle_y, obj_x - vehicle_x))
+        
+        relative_angle = (angle_to_obj - vehicle_theta) % 360
+        if relative_angle > 180:
+            relative_angle -= 360
+        
+        if abs(relative_angle) < angle_threshold:
+            obj_location = carla.Location(x=obj_x, y=obj_y, z=obj_z)
+            obj_waypoint = map.get_waypoint(obj_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+
+            if obj_waypoint:
+                if (obj_waypoint.road_id == original_lane['road_id'] and
+                    obj_waypoint.lane_id == original_lane['lane_id']):
+                    return True
+    
+    return False
