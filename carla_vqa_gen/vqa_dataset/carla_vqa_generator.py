@@ -2239,8 +2239,7 @@ class QAsGenerator():
         ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
         
         _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
-        ego['num_lanes_same_direction'] = get_num_lanes_same_direction(self.map, ego_location)
-        ego['num_lanes_opposite_direction'] = get_num_lanes_opposite_direction(self.map, ego_location)
+        ego['num_lanes_same_direction'], ego['num_lanes_opposite_direction'] = get_num_lanes(self.map, ego_location)
         ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
 
         # Generate questions and answers for different categories
