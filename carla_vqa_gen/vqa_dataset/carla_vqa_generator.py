@@ -718,8 +718,7 @@ class QAsGenerator():
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
 
-            #  if measurements['control_brake'] or acc is "Decelerate" or hazardous: # remember to recover this!
-            if True:
+            if measurements['control_brake'] or acc is "Decelerate" or hazardous:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 limit_speed = float(measurements['speed_limit']) / 3.6
                 junction_speed = 64. / 3.6
@@ -919,7 +918,7 @@ class QAsGenerator():
                             answer = f"The ego vehicle should slow down because of the {color}{vehicletype} that is " +\
                                                                     f"{rough_pos_str} and is blocking the intersection."
 
-                        if measurements['vehicle_hazard']:
+                        if hazardous:
                             if scenario_type == 'CrossingBicycleFlow' and bike_scenario:
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
                                 answer = f"The ego vehicle should slow down because of the {color}{vehicletype} " +\
@@ -2259,8 +2258,12 @@ class QAsGenerator():
         ego['sidewalk_right'] = lane_info['sidewalk_right']
         ego['bike_lane_right'] = lane_info['bikelane_right']
 
+        for actor in scene_data:
+            if actor['class'] == 'vehicle':
+                actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map)
+
         # original only raise this flag when ego vehicle overcomes an obstacle
-        measurements['changed_route'] = is_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
+        measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
         measurements['control_brake'] = measurements['should_brake']
 
         # Generate questions and answers for different categories

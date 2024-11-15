@@ -349,18 +349,11 @@ def get_lane_info(map, vehicle_location):
 
     return lane_info
 
-def is_vehicle_changing_lane(vehicle_data, map):
+def is_changing_lane(x, y, theta, map):
     """
-    Judge whether the car is changing its lane
-    
-    Params:
-        vehicle_data (dict): from measurements
-        carla_map (carla.Map): CARLA's map object
+    Judge whether the object is changing its lane by its position
     """
-    
-    x, y = vehicle_data['x'], vehicle_data['y']
-    theta = vehicle_data['theta']
-    
+
     vehicle_location = carla.Location(x=x, y=y)
     waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
     
@@ -375,8 +368,8 @@ def is_vehicle_changing_lane(vehicle_data, map):
     angle_diff = abs(vehicle_direction - lane_direction)
     angle_diff = min(angle_diff, 2 * math.pi - angle_diff)
     
-    # if the car is more than 10 degrees off the lane
-    angle_threshold = math.radians(10)
+    # if the car is more than 7 degrees off the lane
+    angle_threshold = math.radians(7)
     if angle_diff > angle_threshold:
         return True
     
@@ -396,9 +389,35 @@ def is_vehicle_changing_lane(vehicle_data, map):
 
     return False
 
-import math
+def is_ego_changing_lane(vehicle_data, map):
+    """
+    Judge whether the ego vehicle is changing its lane
+    
+    Params:
+        vehicle_data (dict): from measurements
+        carla_map (carla.Map): CARLA's map object
+    """
+    
+    x, y = vehicle_data['x'], vehicle_data['y']
+    theta = vehicle_data['theta']
+    
+    return is_changing_lane(x, y, theta, map)
 
-def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
+def is_vehicle_changing_lane(vehicle_data, map):
+    """
+    Judge whether the vehicle is changing its lane
+    
+    Params:
+        vehicle_data (dict): from scene_data (actor format)
+        carla_map (carla.Map): CARLA's map object
+    """
+    
+    x, y = vehicle_data['location'][0], vehicle_data['location'][1]
+    theta = vehicle_data['rotation'][1] # yaw
+    
+    return is_changing_lane(x, y, theta, map)
+
+def is_ego_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
     """
     Judge whether the car is changing its lane due to obstacles
     
@@ -408,7 +427,7 @@ def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
         bbox_list (list): bbox measurement list
     """
 
-    if is_vehicle_changing_lane(vehicle_data, map) is False:
+    if is_ego_changing_lane(vehicle_data, map) is False:
         return False
 
     vehicle_location = carla.Location(x=vehicle_data['x'], y=vehicle_data['y'])
@@ -504,7 +523,81 @@ def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
     
     return False
 
-import math
+def is_vehicle_cutting_in(ego_data, vehicle_data, map):
+    """
+    Judge whether the car is cutting in ego's lane
+    
+    Params:
+        ego_data (dict): from measurements
+        vehicle_data (dict): from scene_data (actor)
+        carla_map (carla.Map): CARLA map
+    """
+
+    if is_vehicle_changing_lane(vehicle_data, map) is False:
+        return False
+
+    vehicle_location = carla.Location(x=vehicle_data['x'], y=vehicle_data['y'])
+    vehicle_theta = vehicle_data['theta']
+    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    lane_direction = waypoint.transform.rotation.yaw
+    
+    angle_diff = (vehicle_theta - lane_direction) % 360
+    if angle_diff > 180:
+        angle_diff -= 360
+    
+    lane_change_direction = None
+    angle_threshold = 10.0
+    if angle_diff > angle_threshold:
+        lane_change_direction = 'right'
+    elif angle_diff < -angle_threshold:
+        lane_change_direction = 'left'
+    else:
+        return False
+
+    left_waypoint = waypoint.get_left_lane()
+    right_waypoint = waypoint.get_right_lane()
+    
+    def calculate_distance_to_waypoint(wp):
+        return math.sqrt((vehicle_location.x - wp.transform.location.x) ** 2 +
+                         (vehicle_location.y - wp.transform.location.y) ** 2)
+    
+    nearest_lane = None
+    nearest_lane_distance = 1000 # max value
+    
+    if left_waypoint:
+        left_distance = calculate_distance_to_waypoint(left_waypoint)
+        if left_distance < nearest_lane_distance:
+            nearest_lane = left_waypoint
+            nearest_lane_distance = left_distance
+
+    if right_waypoint:
+        right_distance = calculate_distance_to_waypoint(right_waypoint)
+        if right_distance < nearest_lane_distance:
+            nearest_lane = right_waypoint
+            nearest_lane_distance = right_distance
+    
+    if nearest_lane is None:
+        return False # there is no other lane!
+    
+    if lane_change_direction is 'left':
+        if nearest_lane == left_waypoint:
+            target_lane = left_waypoint
+            original_lane = waypoint
+        else:
+            target_lane = waypoint
+            original_lane = right_waypoint
+    elif lane_change_direction is 'right':
+        if nearest_lane == right_waypoint:
+            target_lane = right_waypoint
+            original_lane = waypoint
+        else:
+            target_lane = waypoint
+    
+    ego_location = carla.Location(x=ego_data['x'], y=ego_data['y'])
+    ego_waypoint = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+
+    return target_lane.road_id == ego_waypoint.road_id and target_lane.lane_id == ego_waypoint.lane_id
+
 
 def get_acceleration_by_imu(speed, theta, acceleration):
     """
@@ -633,10 +726,7 @@ def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=
     ego_speed = ego_vehicle.get("speed", 0)  # Default speed is 0
     ego_yaw = math.radians(ego_vehicle["rotation"][2])  # Extract yaw angle and convert to radians
 
-    expanded_extent = {
-        "x": ego_extent[0] * expansion,
-        "y": ego_extent[1] * expansion,
-    }
+    ego_expanded_extent = [ego_extent[0] * expansion, ego_extent[1] * expansion]
 
     ego_future_position = [
         ego_center[0] + ego_speed * prediction_time * math.cos(ego_yaw),
@@ -663,7 +753,7 @@ def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=
                     walker_position[1] + walker_speed * time_elapsed * math.sin(walker_yaw),
                 ]
 
-                if is_point_in_rotated_box(walker_future_position, ego_future_position, ego_extent, ego_yaw):
+                if is_point_in_rotated_box(walker_future_position, ego_future_position, ego_expanded_extent, ego_yaw):
                     collision_detected = True
                     break
 
@@ -673,8 +763,6 @@ def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=
                 hazardous_walkers.append(walker_id)
 
     return hazardous_walkers
-
-import math
 
 def get_all_hazard_with_prediction_sorted(bbox_data, expansion=1.2, prediction_time=20.0, delta_time=0.1):
     """
