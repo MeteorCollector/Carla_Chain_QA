@@ -724,11 +724,21 @@ class QAsGenerator():
 
             acc = get_acceleration_by_future(self.current_measurement_path, 4)
             flags = get_affect_flags(scene_data)
-            #  if measurements['control_brake'] or acc is "Decelerate": # remember to recover this!
+            hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
+            hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15)
+            hazardous = len(hazardous_actors) > 0
+
+            #  if measurements['control_brake'] or acc is "Decelerate" or hazardous: # remember to recover this!
             if True:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 limit_speed = float(get_speed_limit(scene_data)) / 3.6
                 junction_speed = 64. / 3.6
+                
+                if (hazardous):
+                    measurements['speed_reduced_by_obj'] = hazardous_actors[0]
+                    measurements['speed_reduced_by_obj_id'] = hazardous_actors[0]['id']
+                    measurements['speed_reduced_by_obj_type'] = hazardous_actors[0]['type_id']
+                    measurements['speed_reduced_by_obj_distance'] = hazardous_actors[0]['distance']
 
                 if measurements['speed'] / limit_speed > 1.031266635497984:
                     answer = "The ego vehicle should brake because it is faster than speed limit."
@@ -748,7 +758,7 @@ class QAsGenerator():
                     answer = "The ego vehicle should slow down because of the traffic light that is yellow."
                     object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
                 
-                elif len(get_walker_hazard_with_prediction(scene_data, prediction_time=20)):
+                elif len(hazardous_walkers):
                     closest_pedestrian_idx = np.argmin([x['distance'] for x in pedestrians])
                     closest_pedestrian = pedestrians[closest_pedestrian_idx]
                     closest_pedestrian_distance = closest_pedestrian['distance']
@@ -760,19 +770,19 @@ class QAsGenerator():
                     else:
                         answer = f"The ego vehicle should {brake_or_slow_down} because of the pedestrian "\
                                     "that is crossing the road."
+                
+                # beware! below contents are scenario-specified. take special care of them.
                 else:
                     if 'AccidentTwoWays' in scenario_type \
-                            and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
-                        police_cars = [x for x in vehicles.values() if x['type_id'] == 'vehicle.dodge.charger_police_2020' 
-                                       and 'scenario' in x['role_name']]
+                            and hazardous and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
+                        police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
                         if police_cars:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_cars[0])
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
                                     "occupied, in order to bypass the accident."
                     elif 'ConstructionObstacleTwoWays' in scenario_type \
-                                    and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
+                                    and hazardous and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
                         traffic_warnings = [x for x in static_objects if 'class' in x and x['class'] == 'static_trafficwarning']
-
                         if traffic_warnings:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warnings[0])
 
@@ -780,22 +790,19 @@ class QAsGenerator():
                                     "occupied, in order to bypass the construction warning."
                         
                     elif 'ParkedObstacleTwoWays' in scenario_type \
-                                    and measurements['speed_reduced_by_obj_id'] in vehicles \
-                                    and 'scenario' in vehicles[measurements['speed_reduced_by_obj_id']]['role_name']:
+                                    and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
                                     "is occupied, in order to bypass the parked vehicle."
                     elif 'VehicleOpensDoorTwoWays' in scenario_type \
-                                    and measurements['speed_reduced_by_obj_id'] in vehicles \
-                                    and 'scenario' in vehicles[measurements['speed_reduced_by_obj_id']]['role_name']:
+                                    and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
                                                     "occupied, in order to bypass the vehicle with the opened doors."
                     elif 'HazardAtSideLaneTwoWays' in scenario_type \
-                            and measurements['speed_reduced_by_obj_id'] in vehicles \
-                            and 'scenario' in vehicles[measurements['speed_reduced_by_obj_id']]['role_name']:
+                            and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
@@ -832,7 +839,7 @@ class QAsGenerator():
                                 print("Warning: vehicle is not in image but should be considered.")
 
                             # find bicycles that are of type scenario
-                            if vehicle['base_type'] == 'bicycle' and 'scenario' in vehicle['role_name'] and \
+                            if vehicle['base_type'] == 'bicycle' and \
                                             (ego_data['distance_to_junction'] < 10 or ego_data['is_in_junction']) and \
                                             scenario_name == 'CrossingBicycleFlow':
                                 bike_scenario = True
@@ -847,7 +854,7 @@ class QAsGenerator():
                                     rough_pos_str = 'to the front left'
                                 else:
                                     rough_pos_str = 'at an unknown position'
-                            elif 'scenario' in vehicle['role_name'] and vehicle['distance'] < 15 and \
+                            elif vehicle['distance'] < 15 and \
                                                                                 scenario_name == 'BlockedIntersection':
                                 blocked_intersection_scenario = True
                                     
@@ -949,7 +956,7 @@ class QAsGenerator():
                                                                     f"{color}{vehicletype} that is {rough_pos_str}."
                     
                     # Special cases for specific scenarios
-                    if 'scenario' in leading_vehicle['role_name'] and leading_vehicle['distance'] < 15 and \
+                    if leading_vehicle['distance'] < 15 and \
                                                                                 scenario_name == 'BlockedIntersection':
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=leading_vehicle)
                         answer = f"The ego vehicle should stop because of the {color}{vehicletype} that is " +\
@@ -957,8 +964,7 @@ class QAsGenerator():
 
             if answer == "There is no reason for the ego vehicle to brake." and measurements['control_brake']:
                 if scenario_name == 'Accident':
-                    police_cars = [x for x in vehicles.values() if x['type_id'] == 'vehicle.dodge.charger_police_2020' 
-                                                                                    and 'scenario' in x['role_name']]
+                    police_cars = [x for x in vehicles.values() if x['type_id'] == 'vehicle.dodge.charger_police_2020']
                     if police_cars:
                         police_car = list(sorted(police_cars, key=lambda x: x['distance']))[0]
 
@@ -980,8 +986,7 @@ class QAsGenerator():
                                         "bypass the construction warning."
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warning)
                 elif scenario_name == 'HazardAtSideLane':
-                    bicycles = [x for x in vehicles.values() if 'scenario' in x['role_name'] 
-                                    and x['base_type'] == 'bicycle']
+                    bicycles = [x for x in vehicles.values() if x['base_type'] == 'bicycle']
                     if bicycles:
                         assert len(bicycles) == 2
                         bicycles.sort(key=lambda x:x['distance'])
@@ -993,7 +998,7 @@ class QAsGenerator():
                                         "to bypass the two bicycles."
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=closest_bicycle)
                 elif scenario_name == 'ParkedObstacle':
-                    parked_vehicles = [x for x in vehicles.values() if 'scenario' in x['role_name']]
+                    parked_vehicles = [x for x in vehicles.values()]
                     if parked_vehicles:
                         assert len(parked_vehicles) == 1
                         parked_vehicle = parked_vehicles[0]
@@ -1162,8 +1167,7 @@ class QAsGenerator():
                                                                 and x['position'][0] > 0.6]
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
-                relevant_objects = [v for v in vehicles_by_id.values() if 'scenario' in v['role_name'] 
-                                and v['next_action'] is None 
+                relevant_objects = [v for v in vehicles_by_id.values() if v['next_action'] is None 
                                 and v['position'][0] > -0.2 
                                 and (float(v['distance']) < 10 or v['distance']/max(1e-6, measurements['speed']) < 3)]
                 
@@ -1173,8 +1177,7 @@ class QAsGenerator():
                                             and x['distance'] <= 40, static_objects))
             elif 'ParkingExit' == scenario_name:
                 if ego_data['lane_type_str'] == 'Parking':
-                    relevant_objects = [x for x in vehicles_by_id.values() if 'scenario' in x['role_name'] 
-                                        and x['lane_type_str']=='Parking' 
+                    relevant_objects = [x for x in vehicles_by_id.values() if x['lane_type_str']=='Parking' 
                                         and x['position'][0]>0]
                     assert len(relevant_objects) == 1
 
@@ -1272,8 +1275,7 @@ class QAsGenerator():
                         obstacle = 'bicycle'
                 elif scenario_name not in ['VehicleOpensDoorTwoWays', 'ConstructionObstacle', 
                                            'ConstructionObstacleTwoWays', 'InvadingTurn']:
-                    relevant_objects = [v for v in vehicles_by_id.values() if 'scenario' in v['role_name'] 
-                                                                        and self.should_consider_vehicle(v) 
+                    relevant_objects = [v for v in vehicles_by_id.values() if self.should_consider_vehicle(v) 
                                                                         and v['speed'] == 0. 
                                                                         and float(v['distance']) < 40]
                 
@@ -1533,7 +1535,7 @@ class QAsGenerator():
                                                             "ego vehicle should pay attention to not crash into it."
             
             # Check for the BlockedIntersection scenario
-            elif 'scenario' in other_vehicle['role_name'] and scenario == 'BlockedIntersection' and \
+            elif scenario == 'BlockedIntersection' and \
                                         other_vehicle['distance'] < 40 and not other_vehicle['same_direction_as_ego']:
                 answer = f"Yes, the {other_vehicle_description} is behind the intersection on the road the ego " +\
                                     "vehicle will enter, so the ego vehicle should pay attention to not crash into it."
@@ -1588,20 +1590,19 @@ class QAsGenerator():
                         f"ego vehicle does a lane change to the right onto the lane of the {other_vehicle_description}."
                 
             # Check for scenarios involving acceleration lanes
-            elif 'scenario'in other_vehicle['role_name'] and is_ego_on_highway and is_ego_in_accel_lane:
+            elif is_ego_on_highway and is_ego_in_accel_lane:
                 # special case if ego is still on acceleration lane and the lane of the other vehicle is not considered
                 # as the same road -> lane_relative_to_ego is None
                 answer = f"The routes of the ego vehicle and the {other_vehicle_description} might cross as " +\
                     f"the {other_vehicle_description} is on the highway and the ego vehicle is on the acceleration " +\
                                                                                     f"lane about to enter the highway."
-            elif 'scenario'in other_vehicle['role_name'] and is_ego_on_highway and is_other_veh_in_accel_lane:
+            elif is_ego_on_highway and is_other_veh_in_accel_lane:
                 answer = f"The routes of the ego vehicle and the {other_vehicle_description} might cross as " +\
                     f"the {other_vehicle_description} is on the acceleration lane about to enter the highway, " +\
                     f"potentially cutting into the lane of the ego vehicle."
 
             # Check for the CrossingBicycleFlow scenario
-            if 'scenario' in other_vehicle['role_name'] \
-                        and other_vehicle['base_type'] == 'bicycle' \
+            if other_vehicle['base_type'] == 'bicycle' \
                         and scenario == "CrossingBicycleFlow":
                 # CrossingBicycleFlow scenario
                 if command_int == 4:
@@ -1610,14 +1611,12 @@ class QAsGenerator():
                     command_str = 'turns at the next intersection'
                 answer = f"Yes, the bike lane on which the {other_vehicle_description} is currently riding on is " +\
                                                 f"crossing paths with the ego vehicle if the ego vehicle {command_str}."
-            elif 'scenario' in other_vehicle['role_name'] \
-                        and other_vehicle['base_type'] == 'bicycle' \
+            elif other_vehicle['base_type'] == 'bicycle' \
                         and scenario == "VehicleTurningRoute":
                 answer = f"Yes, the {other_vehicle_description} will cross paths with the ego vehicle if " \
                             f"the ego vehicle {command_str}."
 
-            elif 'scenario' in other_vehicle['role_name'] \
-                        and scenario == "HighwayCutIn" \
+            elif scenario == "HighwayCutIn" \
                         and other_vehicle['lane_relative_to_ego'] == 1:
                 answer = f"Yes, the routes of the ego vehicle and the {other_vehicle_description} might cross as " +\
                     f"the {other_vehicle_description} is on the acceleration lane, potentially cutting into the " +\
@@ -1940,7 +1939,7 @@ class QAsGenerator():
 
             
             # Handle the HighwayCutIn scenario
-            if 'scenario' in other_vehicle['role_name'] and scenario == "HighwayCutIn" and \
+            if scenario == "HighwayCutIn" and \
                                                         other_vehicle['lane_relative_to_ego'] != 0:
                 # Currently we can't differentiate between acceleration lane and entry lane
                 answer = f"The {other_vehicle_description} is on the acceleration lane of the highway to the right " +\

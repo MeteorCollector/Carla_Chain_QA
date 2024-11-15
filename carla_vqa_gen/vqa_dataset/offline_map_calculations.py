@@ -50,6 +50,29 @@ def is_point_in_rotated_box(point, box_center, box_extent, box_yaw):
         return True
     return False
 
+def get_rotated_vertices(center, extent, yaw):
+        """
+        Calculate the 2D vertices of a rotated rectangle (collision box).
+        """
+        cx, cy = center
+        hw, hh = extent[0] / 2, extent[1] / 2  # Half-width and half-height
+
+        local_vertices = [
+            [-hw, -hh],
+            [-hw, hh],
+            [hw, hh],
+            [hw, -hh],
+        ]
+
+        rotated_vertices = []
+        cos_yaw, sin_yaw = math.cos(yaw), math.sin(yaw)
+        for vx, vy in local_vertices:
+            rx = cx + vx * cos_yaw - vy * sin_yaw
+            ry = cy + vx * sin_yaw + vy * cos_yaw
+            rotated_vertices.append([rx, ry])
+
+        return rotated_vertices
+
 
 # calculation functions
 
@@ -590,3 +613,73 @@ def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=
                 hazardous_walkers.append(walker_id)
 
     return hazardous_walkers
+
+import math
+
+def get_all_hazard_with_prediction_sorted(bbox_data, expansion=1.2, prediction_time=20.0, delta_time=0.1):
+    """
+    Predict if the ego_vehicle will collide with any actor within the prediction time,
+    using detailed collision box checks for all vertices, and sort the result by distance.
+
+    Parameters:
+        bbox_data (list): List of dictionaries containing data for all actors.
+        expansion (float): Scaling factor for the ego_vehicle's collision box, default is 1.2 (expand by 20%).
+        prediction_time (float): Time window (in seconds) for collision prediction, default is 20.
+        delta_time (float): Time step for prediction intervals, default is 0.1 seconds.
+
+    Returns:
+        list: List of dictionaries with 'id' and 'distance' keys for hazardous actors, sorted by distance.
+    """
+
+    # Find the ego_vehicle data
+    ego_vehicle = next((actor for actor in bbox_data if actor["class"] == "ego_vehicle"), None)
+    if not ego_vehicle:
+        return []
+
+    # Extract ego_vehicle information
+    ego_center = ego_vehicle["location"][:2]
+    ego_extent = [ego_vehicle["extent"][0] * expansion, ego_vehicle["extent"][1] * expansion]
+    ego_speed = ego_vehicle.get("speed", 0)
+    ego_yaw = math.radians(ego_vehicle["rotation"][2])
+
+    hazardous_actors = []
+
+    # Iterate through all other actors
+    for actor in bbox_data:
+        if actor["class"] == "ego_vehicle":
+            continue
+
+        actor_center = actor["location"][:2]
+        actor_extent = [actor["extent"][0], actor["extent"][1]]
+        actor_speed = actor.get("speed", 0)
+        actor_yaw = math.radians(actor["rotation"][2])
+
+        time_elapsed = 0
+        collision_detected = False
+        while time_elapsed <= prediction_time:
+            ego_future_position = [
+                ego_center[0] + ego_speed * time_elapsed * math.cos(ego_yaw),
+                ego_center[1] + ego_speed * time_elapsed * math.sin(ego_yaw),
+            ]
+            actor_future_position = [
+                actor_center[0] + actor_speed * time_elapsed * math.cos(actor_yaw),
+                actor_center[1] + actor_speed * time_elapsed * math.sin(actor_yaw),
+            ]
+
+            ego_vertices = get_rotated_vertices(ego_future_position, ego_extent, ego_yaw)
+            actor_vertices = get_rotated_vertices(actor_future_position, actor_extent, actor_yaw)
+
+            if any(is_point_in_rotated_box(vertex, actor_future_position, actor_extent, actor_yaw) for vertex in ego_vertices) or \
+               any(is_point_in_rotated_box(vertex, ego_future_position, ego_extent, ego_yaw) for vertex in actor_vertices):
+                collision_detected = True
+                break
+
+            time_elapsed += delta_time
+
+        if collision_detected:
+            hazardous_actors.append(actor)
+
+    # Sort the actors by distance
+    hazardous_actors.sort(key=lambda x: x["distance"])
+
+    return hazardous_actors
