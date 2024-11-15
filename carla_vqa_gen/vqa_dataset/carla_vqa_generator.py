@@ -836,11 +836,12 @@ class QAsGenerator():
                                 color = rgb_to_color_name(vehicle["color"]) + ' ' if vehicle["color"] is not None and \
                                                                                 vehicle["color"] != 'None' else ''
                                 vehicletype = vehicle['base_type']
-                                if vehicle['position'][1] < 2 and vehicle['position'][1] > -2:
+                                vehicle_rel_position = transform_to_ego_coordinates(vehicle['location'], ego_data['world2ego'])
+                                if vehicle_rel_position[1] < 2 and vehicle_rel_position[1] > -2:
                                     rough_pos_str = 'to the front of it'
-                                elif vehicle['position'][1] > 2:
+                                elif vehicle_rel_position[1] > 2:
                                     rough_pos_str = 'to the front right'
-                                elif vehicle['position'][1] < -2:
+                                elif vehicle_rel_position[1] < -2:
                                     rough_pos_str = 'to the front left'
                                 else:
                                     rough_pos_str = 'at an unknown position'
@@ -885,13 +886,14 @@ class QAsGenerator():
                             if (ego_vehicle['is_in_junction'] or (ego_vehicle['distance_to_junction'] is not None and \
                                                                     ego_vehicle['distance_to_junction'] < 10)) and \
                                                                     actor_hazard['road_id'] != ego_vehicle['road_id']:
+                                actor_rel_position = transform_to_ego_coordinates(actor_hazard['location'], ego_data['world2ego'])
                                 # Determine the direction of the hazard vehicle relative to the junction
-                                if actor_hazard['position'][1] < -8:
+                                if actor_rel_position[1] < -8:
                                     direction_junction = "on the left side of the junction"
                                 # right
-                                elif actor_hazard['position'][1] > 8:
+                                elif actor_rel_position[1] > 8:
                                     direction_junction = "on the right side of the junction"
-                                elif not actor_hazard['same_road_as_ego']:
+                                elif actor_hazard['road_id'] != ego_vehicle['road_id']:
                                     direction_junction = "on the opposite side of the junction"
                                 else:
                                     # raise ValueError(f"Unknown position of vehicle {vehicle['id']}.")

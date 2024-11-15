@@ -73,6 +73,25 @@ def get_rotated_vertices(center, extent, yaw):
 
     return rotated_vertices
 
+def transform_to_ego_coordinates(world_coordinates, world2ego_matrix):
+    """
+    Transform a point in world coordinates to ego_vehicle coordinates.
+
+    Params:
+        world_coordinates (list or tuple): The (x, y, z) world coordinates.
+        world2ego_matrix (list): The 4x4 world-to-ego transformation matrix.
+
+    Returns:
+        tuple: The transformed (x', y', z') coordinates in ego_vehicle's coordinate system.
+    """
+
+    P_world = np.array(list(world_coordinates) + [1])
+    M_world2ego = np.array(world2ego_matrix)
+
+    P_ego_homogeneous = M_world2ego @ P_world
+
+    return tuple(P_ego_homogeneous[:3])
+
 def rgb_to_color_name(rgb_str):
     """
     Convert an RGB string (e.g., '255,0,0') to a natural language color description.
