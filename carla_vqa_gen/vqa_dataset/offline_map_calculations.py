@@ -5,6 +5,54 @@ import gzip
 import os
 import json
 
+# math utils
+
+def calculate_distance(location1, location2):
+    """
+        Calculate Euclidean distance between two locations.
+    """
+    return math.sqrt((location1.x - location2.x) ** 2 +
+                     (location1.y - location2.y) ** 2 +
+                     (location1.z - location2.z) ** 2)
+
+def rotate_point(point, center, angle):
+    """
+    Rotate a 2D point around a center by a given angle (in radians).
+    """
+    x, y = point
+    cx, cy = center
+    cos_theta = math.cos(angle)
+    sin_theta = math.sin(angle)
+
+    x -= cx
+    y -= cy
+
+    x_new = x * cos_theta - y * sin_theta
+    y_new = x * sin_theta + y * cos_theta
+
+    x_new += cx
+    y_new += cy
+
+    return [x_new, y_new]
+
+def is_point_in_rotated_box(point, box_center, box_extent, box_yaw):
+    """
+    Check if a 2D point is inside a rotated rectangular box.
+    """
+
+    local_point = rotate_point(point, box_center, -box_yaw)
+    
+    dx, dy = box_extent
+    if (
+        -dx <= local_point[0] - box_center[0] <= dx and
+        -dy <= local_point[1] - box_center[1] <= dy
+    ):
+        return True
+    return False
+
+
+# calculation functions
+
 def print_waypoint_info(waypoint):
     """
     Print coordinate, road ID and lane ID of waypoint, just for debug
@@ -16,14 +64,6 @@ def print_waypoint_info(waypoint):
     print(f"Waypoint coordinates: x={location.x}, y={location.y}, z={location.z}")
     print(f"Route ID: {road_id}")
     print(f"Lane ID: {lane_id}")
-
-def calculate_distance(location1, location2):
-    """
-        Calculate Euclidean distance between two locations.
-    """
-    return math.sqrt((location1.x - location2.x) ** 2 +
-                     (location1.y - location2.y) ** 2 +
-                     (location1.z - location2.z) ** 2)
 
 def find_first_junction_in_direction(map, ego_location):
     """
@@ -383,7 +423,7 @@ def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
 
 import math
 
-def determine_motion_state(speed, theta, acceleration):
+def get_acceleration_by_imu(speed, theta, acceleration):
     """
     Returns:
         str: "Accelerating" or
@@ -402,7 +442,7 @@ def determine_motion_state(speed, theta, acceleration):
     
     if abs(acc_in_direction) < epsilon:
         return "Constant Speed"
-    elif acc_in_direction > 0:
+    elif acc_in_direction * speed > 0:
         return "Accelerating"
     else:
         return "Decelerating"
@@ -450,3 +490,103 @@ def get_acceleration_by_future(path, k):
     else:
         print("[debug] vehicle status is Constant")  # debug
         return "Constant"
+
+
+def get_affect_flags(bbox_data):
+    """
+    Analyze traffic and get affect flags
+
+    Param:
+        bbox_data (list): bounding_box data from measurements
+    
+    Return:
+        dict: flags
+    """
+
+    flags = {
+        "affected_by_red_light": False,
+        "affected_by_yellow_light": False,
+        "affected_by_stop_sign": False
+    }
+
+    # for traffic_light
+    # 0 - Red; 1 - Yellow; 2 - Green; 3 - Off; 4 - Unknown;
+    for actor in bbox_data:
+        if "traffic_light" in actor["class"]:
+            if actor["state"] == 0 and actor["affects_ego"] is True:
+                flags["affected_by_red_light"] = True
+            if actor["state"] == 1 and actor["affects_ego"] is True:
+                flags["affected_by_yellow_light"] = True
+
+        if "traffic_sign" in actor["class"]:
+            if "stop" in actor["type_id"].lower() and actor["affects_ego"] is True:
+                flags["affected_by_stop_sign"] = True
+
+    return flags
+
+def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=20.0, delta_time=0.1):
+    """
+    Determine if any walker will enter the ego_vehicle's collision box within the prediction time
+    and return a list of IDs of walkers with collision risks.
+
+    Param:
+        bbox_data (list): List of dictionaries containing data for all actors.
+        expansion (float): Scaling factor for the collision box, default is 1.2 (expand by 20%).
+        prediction_time (float): Time window (in seconds) for collision prediction, default is 20.
+        delta_time (float): Time step for prediction intervals, default is 0.1 seconds.
+
+    Return:
+        list: List of walker IDs with collision risks.
+    """
+
+    hazardous_walkers = []
+
+    ego_vehicle = next((actor for actor in bbox_data if actor["class"] == "ego_vehicle"), None)
+    if not ego_vehicle:
+        return hazardous_walkers 
+    
+    ego_center = ego_vehicle["location"][:2]
+    ego_extent = ego_vehicle["extent"]
+    ego_speed = ego_vehicle.get("speed", 0)  # Default speed is 0
+    ego_yaw = math.radians(ego_vehicle["rotation"][2])  # Extract yaw angle and convert to radians
+
+    expanded_extent = {
+        "x": ego_extent[0] * expansion,
+        "y": ego_extent[1] * expansion,
+    }
+
+    ego_future_position = [
+        ego_center[0] + ego_speed * prediction_time * math.cos(ego_yaw),
+        ego_center[1] + ego_speed * prediction_time * math.sin(ego_yaw),
+    ]
+
+    for actor in bbox_data:
+        if actor["class"] == "walker":
+            walker_id = actor["id"]
+            walker_position = actor["location"][:2]  # Extract x, y coordinates
+            walker_speed = actor.get("speed", 0)
+            walker_yaw = math.radians(actor["rotation"][2])  # yaw
+
+            # Simulate motion over time and check for collision
+            time_elapsed = 0
+            collision_detected = False
+            while time_elapsed <= prediction_time:
+                ego_future_position = [
+                    ego_center[0] + ego_speed * time_elapsed * math.cos(ego_yaw),
+                    ego_center[1] + ego_speed * time_elapsed * math.sin(ego_yaw),
+                ]
+                walker_future_position = [
+                    walker_position[0] + walker_speed * time_elapsed * math.cos(walker_yaw),
+                    walker_position[1] + walker_speed * time_elapsed * math.sin(walker_yaw),
+                ]
+
+                if is_point_in_rotated_box(walker_future_position, ego_future_position, ego_extent, ego_yaw):
+                    collision_detected = True
+                    break
+
+                time_elapsed += delta_time
+
+            if collision_detected:
+                hazardous_walkers.append(walker_id)
+
+    return hazardous_walkers

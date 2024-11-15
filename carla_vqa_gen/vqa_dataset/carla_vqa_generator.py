@@ -610,7 +610,7 @@ class QAsGenerator():
 
     def generate_ego_vehicle_actions(self, ego_vehicle_data, pedestrians, ego_data, important_objects, key_object_infos, 
                                      vehicles_by_id, traffic_light_info, stop_sign_info, static_objects, 
-                                     measurements, scenario_name, stop_signs, stop_sign_object_tags, 
+                                     measurements, scene_data, scenario_name, stop_signs, stop_sign_object_tags, 
                                      traffic_light_object_tags):
         """
         Answers the questions:
@@ -695,7 +695,7 @@ class QAsGenerator():
 
             return color
 
-        def determine_braking_requirement(qas_conversation_ego, pedestrians, measurements, vehicles, ego_vehicle, 
+        def determine_braking_requirement(qas_conversation_ego, pedestrians, measurements, scene_data, vehicles, ego_vehicle, 
                                           scenario_type, traffic_light_info, stop_sign_info, static_objects):
             """
             This function has massive modification because the agent we use is not rule-based.
@@ -723,23 +723,32 @@ class QAsGenerator():
             object_tags = []
 
             acc = get_acceleration_by_future(self.current_measurement_path, 4)
-            if measurements['control_brake'] or acc is "Decelerate":
+            flags = get_affect_flags(scene_data)
+            #  if measurements['control_brake'] or acc is "Decelerate": # remember to recover this!
+            if True:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
-                if measurements['speed_reduced_by_obj_type'] is None:
-                    target_speed = 0.72 * measurements['speed_limit']
-                    if ego_vehicle['is_in_junction']:
-                        target_speed = 64. / 3.6
+                limit_speed = float(get_speed_limit(scene_data)) / 3.6
+                junction_speed = 64. / 3.6
 
-                    if measurements['speed'] / target_speed > 1.031266635497984:
-                        answer = "The ego vehicle should brake because it is too fast."
+                if measurements['speed'] / limit_speed > 1.031266635497984:
+                    answer = "The ego vehicle should brake because it is faster than speed limit."
 
-                elif measurements['speed_reduced_by_obj_type'] == 'traffic.stop':
+                elif ego_vehicle['is_in_junction'] and measurements['speed'] / junction_speed > 1.031266635497984:
+                    answer = "The ego vehicle should brake because it should slow down in junction."
+
+                elif flags['affected_by_stop_sign'] is True:
                     answer = "The ego vehicle should stop because of the stop sign."
                     object_tags = self.get_key_of_key_object(key_object_infos, object_dict=stop_sign_info)
-                elif measurements['speed_reduced_by_obj_type'] == 'traffic.traffic_light':
+                
+                elif flags['affected_by_red_light'] is True:
                     answer = "The ego vehicle should stop because of the traffic light that is red."
                     object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
-                elif measurements['walker_hazard']:
+                
+                elif flags['affected_by_yellow_light'] is True:
+                    answer = "The ego vehicle should slow down because of the traffic light that is yellow."
+                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
+                
+                elif len(get_walker_hazard_with_prediction(scene_data, prediction_time=20)):
                     closest_pedestrian_idx = np.argmin([x['distance'] for x in pedestrians])
                     closest_pedestrian = pedestrians[closest_pedestrian_idx]
                     closest_pedestrian_distance = closest_pedestrian['distance']
@@ -1392,6 +1401,7 @@ class QAsGenerator():
         determine_braking_requirement(qas_conversation_ego,
                                       pedestrians,
                                       measurements,
+                                      scene_data,
                                       vehicles_by_id,
                                       ego_data,
                                       scenario_name,
@@ -2288,7 +2298,7 @@ class QAsGenerator():
         qas_conversation_pedestrian, important_objects, key_object_infos = res
         
         res = self.generate_ego_vehicle_actions(ego_vehicle, pedestrians, ego, important_objects, key_object_infos,
-                                                vehicles_by_id, tl_info, ss_info, static_objects, measurements,
+                                                vehicles_by_id, tl_info, ss_info, static_objects, measurements, scene_data,
                                                 scenario, stop_signs, ss_object_tags, tl_object_tags)
         qas_conversation_ego, important_objects, key_object_infos = res
         
