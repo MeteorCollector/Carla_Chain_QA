@@ -420,7 +420,8 @@ def get_acceleration_by_future(path, k):
     """
 
     dir_name, file_name = os.path.split(path)
-    base_name, ext = os.path.splitext(file_name)
+    base_name, _ = os.path.splitext(file_name)
+    base_name, _ = os.path.splitext(base_name)
     ext = ".json.gz"
     initial_index = int(base_name)
 
@@ -436,12 +437,16 @@ def get_acceleration_by_future(path, k):
         speeds.append(data['speed'])
 
     if len(speeds) < 2:
+        print("[debug] vehicle status is Ambiguous")  # debug
         return "Ambiguous"
     
     acceleration_trend = speeds[-1] - speeds[0]
     if acceleration_trend > 0:
+        print("[debug] vehicle status is Accelerate")  # debug
         return "Accelerate"
     elif acceleration_trend < 0:
+        print("[debug] vehicle status is Decelerate")  # debug
         return "Decelerate"
     else:
-        return "Ambiguous"
+        print("[debug] vehicle status is Constant")  # debug
+        return "Constant"

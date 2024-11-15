@@ -722,10 +722,8 @@ class QAsGenerator():
 
             object_tags = []
 
-            print(measurements['theta'])
-            print(measurements['speed'])
-            print(measurements['acceleration'])
-            if measurements['control_brake'] or measurements['acceleration'] < 0:
+            acc = get_acceleration_by_future(self.current_measurement_path, 4)
+            if measurements['control_brake'] or acc is "Decelerate":
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 if measurements['speed_reduced_by_obj_type'] is None:
                     target_speed = 0.72 * measurements['speed_limit']
