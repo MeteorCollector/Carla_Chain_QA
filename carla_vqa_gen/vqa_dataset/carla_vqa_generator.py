@@ -86,6 +86,9 @@ class QAsGenerator():
         self.CAMERA_BACK_LEFT = {}
         self.CAMERA_BACK_RIGHT = {}
 
+        # to look into future
+        self.current_measurement_path = None
+
     def reset_qa_stats(self):
         # Initialize data structures
         self.vqa_llava_format = {'image_paths': [], 'llava_format': [], 'image_subset': []}
@@ -129,6 +132,8 @@ class QAsGenerator():
             scenario_name = route_dir.split('/')[-1]
             town_name = route_dir.split('/')[-1].split('_')[1]
             route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1] + '_' + route_dir.split('/')[-1].split('_')[2]
+            
+            self.current_measurement_path = path
             # print(f"path: {path}, route_dir: {route_dir}, scenario_name: {scenario_name}, town_name: {town_name}, route_number: {route_number}")
             if self.map is None or (self.town_name is None or self.town_name is not town_name):
                 self.town_name = town_name
@@ -693,6 +698,7 @@ class QAsGenerator():
         def determine_braking_requirement(qas_conversation_ego, pedestrians, measurements, vehicles, ego_vehicle, 
                                           scenario_type, traffic_light_info, stop_sign_info, static_objects):
             """
+            This function has massive modification because the agent we use is not rule-based.
             Answers "Does the ego vehicle need to brake? Why?".
 
             Args:
@@ -716,10 +722,10 @@ class QAsGenerator():
 
             object_tags = []
 
-            if measurements['control_brake'] or measurements['speed'] < 0.9 * 0.72 * measurements['speed_limit'] \
-                                                    and measurements['speed_reduced_by_obj_id'] is not None \
-                                                    and measurements['speed_reduced_by_obj_distance'] < 40 \
-                                                    and measurements['target_speed'] < measurements['speed']:
+            print(measurements['theta'])
+            print(measurements['speed'])
+            print(measurements['acceleration'])
+            if measurements['control_brake'] or measurements['acceleration'] < 0:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 if measurements['speed_reduced_by_obj_type'] is None:
                     target_speed = 0.72 * measurements['speed_limit']
@@ -2268,7 +2274,7 @@ class QAsGenerator():
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
                                                 scene_data, vehicles_by_id, measurements, scenario)
-        # None was ego['num_lanes_same_direction']
+
         qas_conversation_vehicle, important_objects, key_object_infos = res
         
         res = self.analyze_road_layout(ego, scene_data, important_objects, key_object_infos, measurements, scenario)

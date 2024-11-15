@@ -1,6 +1,9 @@
 import carla
 import math
 import numpy as np
+import gzip
+import os
+import json
 
 def print_waypoint_info(waypoint):
     """
@@ -220,12 +223,8 @@ def get_lane_info(map, vehicle_location):
         "sidewalk_right": sidewalk_right,
         "bikelane_right": bikelane_right
     }
-    print(lane_info)
+
     return lane_info
-
-
-import carla
-import math
 
 def is_vehicle_changing_lane(vehicle_data, map):
     """
@@ -381,3 +380,68 @@ def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
                     return True
     
     return False
+
+import math
+
+def determine_motion_state(speed, theta, acceleration):
+    """
+    Returns:
+        str: "Accelerating" or
+             "Decelerating" or
+             "Constant Speed"
+    """
+    if len(acceleration) < 2:
+        raise ValueError("Acceleration vector must have at least two components [ax, ay].")
+    
+    ax, ay = acceleration[0], acceleration[1]
+    
+    theta_rad = math.radians(theta)
+    acc_in_direction = ax * math.cos(theta_rad) + ay * math.sin(theta_rad)
+    
+    epsilon = 1e-2
+    
+    if abs(acc_in_direction) < epsilon:
+        return "Constant Speed"
+    elif acc_in_direction > 0:
+        return "Accelerating"
+    else:
+        return "Decelerating"
+
+def load_measurement(file_path):
+    with gzip.open(file_path, 'rt', encoding='utf-8') as f:
+        return json.load(f)
+
+def get_acceleration_by_future(path, k):
+    """
+    Calculate acceleration trend by future k measurements
+    
+    Return:
+        str: "Accelerate", "Decelerate", "Constant", "Ambiguous"
+    """
+
+    dir_name, file_name = os.path.split(path)
+    base_name, ext = os.path.splitext(file_name)
+    ext = ".json.gz"
+    initial_index = int(base_name)
+
+    speeds = []
+    for i in range(k + 1):
+        file_index = f"{initial_index + i:05d}"
+        file_path = os.path.join(dir_name, f"{file_index}{ext}")
+
+        if not os.path.exists(file_path):
+            break
+        
+        data = load_measurement(file_path)
+        speeds.append(data['speed'])
+
+    if len(speeds) < 2:
+        return "Ambiguous"
+    
+    acceleration_trend = speeds[-1] - speeds[0]
+    if acceleration_trend > 0:
+        return "Accelerate"
+    elif acceleration_trend < 0:
+        return "Decelerate"
+    else:
+        return "Ambiguous"
