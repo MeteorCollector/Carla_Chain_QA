@@ -523,7 +523,7 @@ class QAsGenerator():
 
         return qas_stop_sign, important_objects, object_infos, stop_sign_info, object_tags
 
-    def process_traffic_lights(self, traffic_lights, previous_traffic_lights, ego_vehicle, important_objects, 
+    def process_traffic_lights(self, traffic_lights, ego_vehicle, important_objects, 
                                object_infos):
         """
         Answers the questions:
@@ -535,17 +535,12 @@ class QAsGenerator():
         traffic_light_info = None
         object_tags = []
 
-        state_key = 'state_str'
-        if ego_vehicle['is_in_junction']:
-            traffic_lights = previous_traffic_lights
-            state_key = 'state'
-
         traffic_light_affects_ego = False
 
         for traffic_light in traffic_lights:
-            if traffic_light['affects_ego'] and ego_vehicle['traffic_light_state'] != 'None':
+            if traffic_light['affects_ego']: # and ego_vehicle['traffic_light_state'] != 'None':
                 if traffic_light['distance'] < 45:
-                    state = traffic_light[state_key]
+                    state = traffic_light['state']
                     state = state[:1].lower() + state[1:]
                     traffic_light_affects_ego = True
                     traffic_light_info = traffic_light
@@ -2268,6 +2263,7 @@ class QAsGenerator():
 
         # original only raise this flag when ego vehicle overcomes an obstacle
         measurements['changed_route'] = is_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
+        measurements['control_brake'] = measurements['should_brake']
 
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
@@ -2281,7 +2277,7 @@ class QAsGenerator():
         res = self.process_stop_signs(stop_signs, important_objects, key_object_infos)
         qas_conversation_stopsign, important_objects, key_object_infos, ss_info, ss_object_tags = res
 
-        res = self.process_traffic_lights(traffic_lights, old_traffic_lights, ego, important_objects, key_object_infos)
+        res = self.process_traffic_lights(traffic_lights, ego, important_objects, key_object_infos)
         qas_conversation_trafficlight, important_objects, key_object_infos, tl_info, tl_object_tags = res
         
         res = self.process_pedestrians(pedestrians, important_objects, key_object_infos)
