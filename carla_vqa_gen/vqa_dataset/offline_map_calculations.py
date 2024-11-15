@@ -9,7 +9,7 @@ import json
 
 def calculate_distance(location1, location2):
     """
-        Calculate Euclidean distance between two locations.
+    Calculate Euclidean distance between two locations.
     """
     return math.sqrt((location1.x - location2.x) ** 2 +
                      (location1.y - location2.y) ** 2 +
@@ -51,28 +51,72 @@ def is_point_in_rotated_box(point, box_center, box_extent, box_yaw):
     return False
 
 def get_rotated_vertices(center, extent, yaw):
-        """
-        Calculate the 2D vertices of a rotated rectangle (collision box).
-        """
-        cx, cy = center
-        hw, hh = extent[0] / 2, extent[1] / 2  # Half-width and half-height
+    """
+    Calculate the 2D vertices of a rotated rectangle (collision box).
+    """
+    cx, cy = center
+    hw, hh = extent[0] / 2, extent[1] / 2  # Half-width and half-height
 
-        local_vertices = [
-            [-hw, -hh],
-            [-hw, hh],
-            [hw, hh],
-            [hw, -hh],
-        ]
+    local_vertices = [
+        [-hw, -hh],
+        [-hw, hh],
+        [hw, hh],
+        [hw, -hh],
+    ]
 
-        rotated_vertices = []
-        cos_yaw, sin_yaw = math.cos(yaw), math.sin(yaw)
-        for vx, vy in local_vertices:
-            rx = cx + vx * cos_yaw - vy * sin_yaw
-            ry = cy + vx * sin_yaw + vy * cos_yaw
-            rotated_vertices.append([rx, ry])
+    rotated_vertices = []
+    cos_yaw, sin_yaw = math.cos(yaw), math.sin(yaw)
+    for vx, vy in local_vertices:
+        rx = cx + vx * cos_yaw - vy * sin_yaw
+        ry = cy + vx * sin_yaw + vy * cos_yaw
+        rotated_vertices.append([rx, ry])
 
-        return rotated_vertices
+    return rotated_vertices
 
+def rgb_to_color_name(rgb_str):
+    """
+    Convert an RGB string (e.g., '255,0,0') to a natural language color description.
+
+    Params:
+        rgb_str (str): RGB value in the format 'R,G,B'.
+
+    Returns:
+        str: The corresponding natural language color description.
+    """
+
+    # Predefined common colors with their RGB values
+    color_mapping = {
+        "red": (255, 0, 0),
+        "green": (0, 255, 0),
+        "dark green": (0, 28, 0),
+        "dark green ": (12, 42, 12),
+        "blue": (0, 0, 255),
+        "blue ": (145, 255, 181),
+        "yellow": (255, 255, 0),
+        "yellow ": (211, 142, 0),
+        "cyan": (0, 255, 255),
+        "magenta": (255, 0, 255),
+        "black": (0, 0, 0),
+        "white": (255, 255, 255),
+        "gray": (128, 128, 128),
+        "orange": (255, 165, 0),
+        "orange ": (215, 88, 0),
+        "pink": (255, 192, 203),
+        "brown": (165, 42, 42),
+        "purple": (128, 0, 128),
+    }
+
+    try:
+        r, g, b = map(int, rgb_str.split(","))
+    except ValueError:
+        return "unknown"
+
+    def euclidean_distance(rgb1, rgb2):
+        return math.sqrt(sum((c1 - c2) ** 2 for c1, c2 in zip(rgb1, rgb2)))
+
+    closest_color = min(color_mapping, key=lambda color: euclidean_distance((r, g, b), color_mapping[color]))
+
+    return closest_color
 
 # calculation functions
 
@@ -124,9 +168,6 @@ def get_speed_limit(scene_data):
 def is_vehicle_in_camera(camera, vehicle):
     """
     Check if the vehicle is in the view of camera
-    :param camera: Camera's params in anno
-    :param vehicle: Vehicle's params in anno
-    :return: True - in the view; False - not
     """
 
     camera_location = np.array(camera['location'])
@@ -342,7 +383,7 @@ def is_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
     """
     Judge whether the car is changing its lane due to obstacles
     
-    Param:
+    Params:
         vehicle_data (dict): from measurements
         carla_map (carla.Map): CARLA map
         bbox_list (list): bbox measurement list
@@ -478,7 +519,7 @@ def get_acceleration_by_future(path, k):
     """
     Calculate acceleration trend by future k measurements
     
-    Return:
+    Returns:
         str: "Accelerate", "Decelerate", "Constant", "Ambiguous"
     """
 
@@ -519,10 +560,10 @@ def get_affect_flags(bbox_data):
     """
     Analyze traffic and get affect flags
 
-    Param:
+    Params:
         bbox_data (list): bounding_box data from measurements
     
-    Return:
+    Returns:
         dict: flags
     """
 
@@ -552,13 +593,13 @@ def get_walker_hazard_with_prediction(bbox_data, expansion=1.2, prediction_time=
     Determine if any walker will enter the ego_vehicle's collision box within the prediction time
     and return a list of IDs of walkers with collision risks.
 
-    Param:
+    Params:
         bbox_data (list): List of dictionaries containing data for all actors.
         expansion (float): Scaling factor for the collision box, default is 1.2 (expand by 20%).
         prediction_time (float): Time window (in seconds) for collision prediction, default is 20.
         delta_time (float): Time step for prediction intervals, default is 0.1 seconds.
 
-    Return:
+    Returns:
         list: List of walker IDs with collision risks.
     """
 
@@ -621,7 +662,7 @@ def get_all_hazard_with_prediction_sorted(bbox_data, expansion=1.2, prediction_t
     Predict if the ego_vehicle will collide with any actor within the prediction time,
     using detailed collision box checks for all vertices, and sort the result by distance.
 
-    Parameters:
+    Params:
         bbox_data (list): List of dictionaries containing data for all actors.
         expansion (float): Scaling factor for the ego_vehicle's collision box, default is 1.2 (expand by 20%).
         prediction_time (float): Time window (in seconds) for collision prediction, default is 20.

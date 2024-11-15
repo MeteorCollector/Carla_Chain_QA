@@ -680,19 +680,8 @@ class QAsGenerator():
             return vehicle['base_type']
         
         def get_vehicle_color(vehicle):
-            color = vehicle["color_name"] + ' ' if vehicle["color_name"] is not None and \
-                                                vehicle["color_name"] != 'None' else ''
-
-            # Handle specific color RGB values
-            if vehicle['color_rgb'] == [0, 28, 0] or vehicle['color_rgb'] == [12, 42, 12]:
-                color = 'dark green '
-            elif vehicle['color_rgb'] == [211, 142, 0]:
-                color = 'yellow '
-            elif vehicle['color_rgb'] == [145, 255, 181]:
-                color = 'blue '
-            elif vehicle['color_rgb'] == [215, 88, 0]:
-                color = 'orange '
-
+            color = rgb_to_color_name(vehicle["color"]) + ' ' if vehicle["color"] is not None and \
+                                                vehicle["color"] != 'None' else ''
             return color
 
         def determine_braking_requirement(qas_conversation_ego, pedestrians, measurements, scene_data, vehicles, ego_vehicle, 
@@ -727,11 +716,12 @@ class QAsGenerator():
             hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15)
             hazardous = len(hazardous_actors) > 0
+            measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
 
             #  if measurements['control_brake'] or acc is "Decelerate" or hazardous: # remember to recover this!
             if True:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
-                limit_speed = float(get_speed_limit(scene_data)) / 3.6
+                limit_speed = float(measurements['speed_limit']) / 3.6
                 junction_speed = 64. / 3.6
                 
                 if (hazardous):
@@ -773,41 +763,41 @@ class QAsGenerator():
                 
                 # beware! below contents are scenario-specified. take special care of them.
                 else:
-                    if 'AccidentTwoWays' in scenario_type \
-                            and hazardous and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
+                    if hazardous and 'AccidentTwoWays' in scenario_type \
+                            and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
                         police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
                         if police_cars:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_cars[0])
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
                                     "occupied, in order to bypass the accident."
-                    elif 'ConstructionObstacleTwoWays' in scenario_type \
-                                    and hazardous and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
-                        traffic_warnings = [x for x in static_objects if 'class' in x and x['class'] == 'static_trafficwarning']
+                    elif hazardous and 'ConstructionObstacleTwoWays' in scenario_type \
+                                    and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
+                        traffic_warnings = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning']
                         if traffic_warnings:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warnings[0])
 
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
                                     "occupied, in order to bypass the construction warning."
                         
-                    elif 'ParkedObstacleTwoWays' in scenario_type \
+                    elif hazardous and 'ParkedObstacleTwoWays' in scenario_type \
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
                                     "is occupied, in order to bypass the parked vehicle."
-                    elif 'VehicleOpensDoorTwoWays' in scenario_type \
+                    elif hazardous and 'VehicleOpensDoorTwoWays' in scenario_type \
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
                                                     "occupied, in order to bypass the vehicle with the opened doors."
-                    elif 'HazardAtSideLaneTwoWays' in scenario_type \
+                    elif hazardous and 'HazardAtSideLaneTwoWays' in scenario_type \
                             and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
                                         "is occupied, in order to bypass the bicycles."
-                    elif measurements['speed_reduced_by_obj_id'] in vehicles:
+                    elif hazardous and measurements['speed_reduced_by_obj_id'] in vehicles:
                         brake_due_to_leading_vehicle = not measurements['vehicle_hazard']
                         is_highway = False
 
@@ -822,7 +812,7 @@ class QAsGenerator():
                             "YieldToEmergencyVehicle",
                         ]
 
-                        speed_limit = int(measurements['speed_limit'] * 3.6)
+                        speed_limit = int(measurements['speed_limit'])
 
                         if scenario_name in highway_scenarios and speed_limit > 50:
                             is_highway = True
@@ -839,12 +829,12 @@ class QAsGenerator():
                                 print("Warning: vehicle is not in image but should be considered.")
 
                             # find bicycles that are of type scenario
-                            if vehicle['base_type'] == 'bicycle' and \
+                            if 'bicycle' in vehicle['class'] and \
                                             (ego_data['distance_to_junction'] < 10 or ego_data['is_in_junction']) and \
                                             scenario_name == 'CrossingBicycleFlow':
                                 bike_scenario = True
-                                color = vehicle["color_name"] + ' ' if vehicle["color_name"] is not None and \
-                                                                                vehicle["color_name"] != 'None' else ''
+                                color = rgb_to_color_name(vehicle["color"]) + ' ' if vehicle["color"] is not None and \
+                                                                                vehicle["color"] != 'None' else ''
                                 vehicletype = vehicle['base_type']
                                 if vehicle['position'][1] < 2 and vehicle['position'][1] > -2:
                                     rough_pos_str = 'to the front of it'
@@ -854,8 +844,7 @@ class QAsGenerator():
                                     rough_pos_str = 'to the front left'
                                 else:
                                     rough_pos_str = 'at an unknown position'
-                            elif vehicle['distance'] < 15 and \
-                                                                                scenario_name == 'BlockedIntersection':
+                            elif vehicle['distance'] < 15 and scenario_name == 'BlockedIntersection':
                                 blocked_intersection_scenario = True
                                     
 
@@ -2220,10 +2209,6 @@ class QAsGenerator():
             # elif actor['class'] == 'landmark' and actor['id'] not in landmark_ids:
             #     landmarks.append(actor)
             #     landmark_ids.append(actor['id'])
-            # elif actor['class'] == 'ego_info':
-            #     ego = actor
-            #     if ego['next_junction_id'] == -1:
-            #         self.list_next_junction_id_minus_one.append(1)
             # elif actor['class'] == 'traffic_light_vqa':
             #     traffic_lights.append(actor)
             elif actor['class'] == 'traffic_light':
@@ -2235,10 +2220,8 @@ class QAsGenerator():
                     stop_signs.append(actor)
 
                 # pdm_lite only has stop sign, we have to fix this. (IMPORTANT)
-            # elif actor['class'] == 'static_car':
-            #     static_cars.append(actor)
-            # elif actor['class'] == 'static' or actor['class'] == 'static_trafficwarning':
-            #     static_objects.append(actor)
+            elif actor['class'] == 'static' or actor['class'] == 'static_trafficwarning':
+                static_objects.append(actor)
 
         important_objects = []
         key_object_infos = {}
