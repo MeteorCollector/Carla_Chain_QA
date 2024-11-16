@@ -929,7 +929,7 @@ class QAsGenerator():
                                 answer = f"The ego vehicle should stop because of the {color}{vehicletype} that " +\
                                                 f"is on the oncoming lane and is crossing paths with the ego vehicle."
 
-            else:
+            elif ego_vehicle['hazard_detected_40']:
                 leading_vehicle_id = ego_vehicle['affects_ego_40']
 
                 if leading_vehicle_id is not None:
@@ -946,8 +946,7 @@ class QAsGenerator():
                                                                     f"{color}{vehicletype} that is {rough_pos_str}."
                     
                     # Special cases for specific scenarios
-                    if leading_vehicle['distance'] < 15 and \
-                                                                                scenario_name == 'BlockedIntersection':
+                    if leading_vehicle['distance'] < 15 and scenario_name == 'BlockedIntersection':
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=leading_vehicle)
                         answer = f"The ego vehicle should stop because of the {color}{vehicletype} that is " +\
                                                                     f"{rough_pos_str} and is blocking the intersection."
@@ -964,8 +963,8 @@ class QAsGenerator():
                                                                                                 "bypass the accident."
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_car)
                 elif scenario_name == 'ConstructionObstacle':
-                    traffic_warnings = [x for x in static_objects if 'class' in x 
-                                                    and x['class'] == 'static_trafficwarning']
+                    traffic_warnings = [x for x in static_objects if 'type_id' in x 
+                                                    and x['type_id'] == 'static.prop.trafficwarning']
                     if traffic_warnings:
                         assert len(traffic_warnings) == 1
                         traffic_warning = traffic_warnings[0]
