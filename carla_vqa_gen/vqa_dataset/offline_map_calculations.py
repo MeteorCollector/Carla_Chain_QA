@@ -867,7 +867,6 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
         lane_type=carla.LaneType.Any
     )
 
-    last_wpt = ego_wpt
     search_distance = max_distance
 
     def get_route_polygon():
@@ -884,39 +883,42 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
         forward_points = []
         total_distance = 0
         current_wpt = ego_wpt
+        last_wpt = None
+        if ego_wpt.is_junction:
+            last_wpt = ego_wpt
+        else:
+            while total_distance <= search_distance:
+                next_wpt = current_wpt.next(2.0)[0]
+                total_distance += 2.0
+                if not next_wpt:
+                    break
 
-        while total_distance <= search_distance:
-            next_wpt = current_wpt.next(2.0)[0]
-            total_distance += 2.0
-            if not next_wpt:
-                break
+                if next_wpt.is_junction:
+                    last_wpt = next_wpt
+                    break
 
-            last_wpt = next_wpt
-            if next_wpt.is_junction:
-                break
+                forward_location = next_wpt.transform.location
+                forward_vector = next_wpt.transform.get_right_vector()
+                forward_p1 = (
+                    forward_location.x + r_ext * forward_vector.x,
+                    forward_location.y + r_ext * forward_vector.y
+                )
+                forward_p2 = (
+                    forward_location.x + l_ext * forward_vector.x,
+                    forward_location.y + l_ext * forward_vector.y
+                )
 
-            forward_location = next_wpt.transform.location
-            forward_vector = next_wpt.transform.get_right_vector()
-            forward_p1 = (
-                forward_location.x + r_ext * forward_vector.x,
-                forward_location.y + r_ext * forward_vector.y
-            )
-            forward_p2 = (
-                forward_location.x + l_ext * forward_vector.x,
-                forward_location.y + l_ext * forward_vector.y
-            )
-
-            forward_points.append(forward_p1)
-            forward_points.append(forward_p2)
-            current_wpt = next_wpt
+                forward_points.append(forward_p1)
+                forward_points.append(forward_p2)
+                current_wpt = next_wpt
 
         route_bb = [p1, p2] + forward_points
 
         if len(route_bb) < 3:  # can't form a polygon
-            return None
-        return Polygon(route_bb)
+            return None, None
+        return Polygon(route_bb), last_wpt
 
-    route_polygon = get_route_polygon()
+    route_polygon, last_wpt = get_route_polygon()
 
     for target_vehicle in vehicle_list:
         if target_vehicle['id'] == ego_data['id']:
@@ -934,6 +936,7 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
             return True, target_vehicle
 
         if last_wpt:
+            print("[debug] detect stopped before junction") # debug
             target_forward_vector = get_forward_vector(target_vehicle['rotation'])
             last_forward_vector = last_wpt.transform.get_front_vector()
             dot_product = last_forward_vector.x * target_forward_vector[0] + last_forward_vector.y * target_forward_vector[1]

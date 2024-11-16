@@ -2265,8 +2265,8 @@ class QAsGenerator():
                 ego['affects_ego_10'] = hazard_actor_10['id']
                 ego['affects_ego_10_id'] = hazard_actor_10['id']
                 ego['affects_ego_10_dis'] = hazard_actor_10['distance']
-                print(f"[debug] affects_ego_10 = {ego['affects_ego_10_id']}") # debug
-                print(f"[debug] affects_ego_10 = {ego['affects_ego_10_dis']}") # debug
+                print(f"[debug] affects_ego_10_id = {ego['affects_ego_10_id']}") # debug
+                print(f"[debug] affects_ego_10_dis = {ego['affects_ego_10_dis']}") # debug
 
         ego['hazard_detected_15'] = False
         affected_by_vehicle_15, hazard_actor_15 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 15)
@@ -2276,8 +2276,8 @@ class QAsGenerator():
                 ego['affects_ego_15'] = hazard_actor_15['id']
                 ego['affects_ego_15_id'] = hazard_actor_15['id']
                 ego['affects_ego_15_dis'] = hazard_actor_15['distance']
-                print(f"[debug] affects_ego_15 = {ego['affects_ego_15_id']}") # debug
-                print(f"[debug] affects_ego_15 = {ego['affects_ego_15_dis']}") # debug
+                print(f"[debug] affects_ego_15_id = {ego['affects_ego_15_id']}") # debug
+                print(f"[debug] affects_ego_15_dis = {ego['affects_ego_15_dis']}") # debug
 
         ego['hazard_detected_20'] = False
         affected_by_vehicle_20, hazard_actor_20 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 20)
@@ -2287,8 +2287,8 @@ class QAsGenerator():
                 ego['affects_ego_20'] = hazard_actor_20['id']
                 ego['affects_ego_20_id'] = hazard_actor_20['id']
                 ego['affects_ego_20_dis'] = hazard_actor_20['distance']
-                print(f"[debug] affects_ego_20 = {ego['affects_ego_20_id']}") # debug
-                print(f"[debug] affects_ego_20 = {ego['affects_ego_20_dis']}") # debug
+                print(f"[debug] affects_ego_20_id = {ego['affects_ego_20_id']}") # debug
+                print(f"[debug] affects_ego_20_dis = {ego['affects_ego_20_dis']}") # debug
         
         ego['hazard_detected_40'] = False
         affected_by_vehicle_40, hazard_actor_40 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 40)
@@ -2298,8 +2298,8 @@ class QAsGenerator():
                 ego['affects_ego_40'] = hazard_actor_40['id']
                 ego['affects_ego_40_id'] = hazard_actor_40['id']
                 ego['affects_ego_40_dis'] = hazard_actor_40['distance']
-                print(f"[debug] affects_ego_40 = {ego['affects_ego_40_id']}") # debug
-                print(f"[debug] affects_ego_40 = {ego['affects_ego_40_dis']}") # debug
+                print(f"[debug] affects_ego_40_id = {ego['affects_ego_40_id']}") # debug
+                print(f"[debug] affects_ego_40_dis = {ego['affects_ego_40_dis']}") # debug
     
         for actor in scene_data:
             if actor['class'] == 'vehicle':
