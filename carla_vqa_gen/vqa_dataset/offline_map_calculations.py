@@ -185,38 +185,58 @@ def get_speed_limit(scene_data):
 
     return minimum_speed_limit if minimum_speed_limit != float('inf') else 10000
 
-def is_vehicle_in_camera(camera, vehicle):
+def project_point_to_camera(intrinsic_matrix, world2cam_matrix, point, image_width, image_height):
     """
-    Check if the vehicle is in the view of camera
-    """
+    Project point in world coordinate to camera 2d plane
 
-    camera_location = np.array(camera['location'])
-    camera_rotation = camera['rotation']
+    Returns:
+        Tuple ([u, v], is_in_view) - Projection coordinate (u, v), bool indicates whether it is in camera's view
+    """
+    point_cam_location = world2cam_matrix @ np.append(point, 1)
+
+    uv = intrinsic_matrix @ (point_cam_location[:3] / point_cam_location[2])
+    u, v = uv[0], uv[1]
+
+    # z <= 0. point is behind the camera
+    if point_cam_location[2] <= 0:
+        return [u, v], False
+
+    is_in_view = 0 <= u < image_width and 0 <= v < image_height
+    return [u, v], is_in_view
+
+def get_vehicle_projected_corners(camera, vehicle):
+    """
+    Calculate vehicle's corners in camera's view
+
+    Returns:
+        - np.array which conveted from list of list [u, v] - Projection coordinate (u, v)
+        - list of bool - Indicates whether it is in camera's view
+    """
     intrinsic_matrix = np.array(camera['intrinsic'])
     world2cam_matrix = np.array(camera['world2cam'])
     image_width = camera['image_size_x']
     image_height = camera['image_size_y']
-    fov = camera['fov']
-    
-    vehicle_location = np.array(vehicle['location'])
-    vehicle_world_corners = np.array(vehicle['world_cord'])
+    vehicle_corners = np.array(vehicle['world_cord'])
 
-    # translate vehicle's coordinate from world coord to camera coord
-    vehicle_cam_location = world2cam_matrix @ np.append(vehicle_location, 1)
-    
-    # if z <= 0, it is behind the camera
-    if vehicle_cam_location[2] <= 0:
-        return False
-    
-    # check all vetices of the bounding box
-    for corner in vehicle_world_corners:
-        corner_cam_location = world2cam_matrix @ np.append(corner, 1)
-        if corner_cam_location[2] <= 0:
-            continue
-        
-        uv = intrinsic_matrix @ (corner_cam_location[:3] / corner_cam_location[2])
-        u, v = uv[0], uv[1]
-        if 0 <= u < image_width and 0 <= v < image_height:
+    projected_corners = []
+    in_view_list = []
+    for corner in vehicle_corners:
+        uv, is_in_view = project_point_to_camera(
+            intrinsic_matrix, world2cam_matrix, corner, image_width, image_height
+        )
+        projected_corners.append(uv)
+        in_view_list.append(is_in_view)
+
+    return np.array(projected_corners), in_view_list
+
+def is_vehicle_in_camera(camera, vehicle):
+    """
+    Check if the vehicle is in the view of camera
+    """
+    projected_corners, in_view_list = get_vehicle_projected_corners(camera, vehicle)
+
+    for is_in_view in in_view_list:
+        if is_in_view:
             return True
     
     # all vertices out of sight

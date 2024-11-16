@@ -600,7 +600,8 @@ class QAsGenerator():
 
     def get_key_of_key_object(self, key_object_infos, object_dict=None):
         if object_dict is not None:
-            projected_points, _ = project_all_corners(object_dict, self.CAMERA_MATRIX)
+            projected_points, _ = get_vehicle_projected_corners(self.CAMERA_FRONT, object_dict)
+            print(projected_points)
             two_d_box = self.generate_2d_box_from_projected_points(projected_points)
             keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
@@ -2639,25 +2640,25 @@ class QAsGenerator():
                 question = f"What lane marking is on the {side_name} side of the ego car?"
 
                 # Determine the lane marking type
-                if ego_vehicle_info[f'{side_key}_marking_type'] == 'NONE':
+                if ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.NONE:
                     answer = f"There is no lane marking on the {side_name} side of the ego car."
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Broken':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.Broken:
                     lanetype = "broken"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Solid':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.Solid:
                     lanetype = "solid"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'SolidSolid':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.SolidSolid:
                     lanetype = "double solid"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Curb':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.Curb:
                     lanetype = "curb"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'SolidBroken':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.SolidBroken:
                     lanetype = "solid broken"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BrokenSolid':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.BrokenSolid:
                     lanetype = "broken solid"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BrokenBroken':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.BrokenBroken:
                     lanetype = "broken broken"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Grass':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.Grass:
                     lanetype = "grass"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BottsDots':
+                elif ego_vehicle_info[f'{side_key}_marking_type'] is carla.LaneMarkingType.BottsDots:
                     lanetype = "botts dots"
                 else:
                     raise ValueError(f"Unknown lane marking type {ego_vehicle_info[f'{side_key}_marking_type']}.")
