@@ -4,6 +4,7 @@ import numpy as np
 import gzip
 import os
 import json
+from shapely.geometry import Polygon, Point
 
 # math utils
 
@@ -359,6 +360,9 @@ def is_changing_lane(x, y, theta, map):
     
     if not waypoint:
         return False
+    
+    if waypoint.is_junction:
+        return False # vehicle must leave its lane at junction, so omit
     
     lane_yaw = waypoint.transform.rotation.yaw
     lane_direction = math.radians(lane_yaw)
@@ -831,3 +835,112 @@ def get_all_hazard_with_prediction_sorted(bbox_data, expansion=1.2, prediction_t
     hazardous_actors.sort(key=lambda x: x["distance"])
 
     return hazardous_actors
+
+def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30.0, junction_threshold=3.0):
+    """
+    Method to check if there is a vehicle in front of the agent blocking its path.
+    Migrated from pdm_lite, but massive modification
+        :param ego_vehicle (actor dict): ego vehicle object information.
+        :param vehicle_list (list of actor dict): list contatining vehicle object information.
+        :param carla_map (carla.map): current map.
+        :param max_distance: max freespace to check for obstacles.
+                If None, the base threshold value is used
+        :param junction_threshold: when vehicle waypoint goes into junction, how much further is detected.
+                If None, the base threshold value is used
+        :return Tuple (bool: detected or not, dict(actor): nearest obstacle vehicle at front, if exist)
+    """
+
+    def compute_distance(loc1, loc2):
+        return math.sqrt((loc1[0] - loc2[0])**2 + (loc1[1] - loc2[1])**2)
+
+    def get_forward_vector(rotation):
+        theta = math.radians(rotation[1])
+        return [math.cos(theta), math.sin(theta)]
+
+    ego_location = ego_data['location']
+    ego_rotation = ego_data['rotation']
+    ego_extent = ego_data['extent']
+    ego_forward_vector = get_forward_vector(ego_rotation)
+
+    ego_wpt = carla_map.get_waypoint(
+        carla.Location(x=ego_location[0], y=ego_location[1], z=ego_location[2]),
+        lane_type=carla.LaneType.Any
+    )
+
+    last_wpt = ego_wpt
+    search_distance = max_distance
+
+    def get_route_polygon():
+        extent_y = ego_extent[1]
+        r_ext = extent_y
+        l_ext = -extent_y
+
+        right_vector = [-ego_forward_vector[1], ego_forward_vector[0]]
+
+        # two vertices start from vehicle's current location
+        p1 = (ego_location[0] + r_ext * right_vector[0], ego_location[1] + r_ext * right_vector[1])
+        p2 = (ego_location[0] + l_ext * right_vector[0], ego_location[1] + l_ext * right_vector[1])
+
+        forward_points = []
+        total_distance = 0
+        current_wpt = ego_wpt
+
+        while total_distance <= search_distance:
+            next_wpt = current_wpt.next(2.0)[0]
+            total_distance += 2.0
+            if not next_wpt:
+                break
+
+            last_wpt = next_wpt
+            if next_wpt.is_junction:
+                break
+
+            forward_location = next_wpt.transform.location
+            forward_vector = next_wpt.transform.get_right_vector()
+            forward_p1 = (
+                forward_location.x + r_ext * forward_vector.x,
+                forward_location.y + r_ext * forward_vector.y
+            )
+            forward_p2 = (
+                forward_location.x + l_ext * forward_vector.x,
+                forward_location.y + l_ext * forward_vector.y
+            )
+
+            forward_points.append(forward_p1)
+            forward_points.append(forward_p2)
+            current_wpt = next_wpt
+
+        route_bb = [p1, p2] + forward_points
+
+        if len(route_bb) < 3:  # can't form a polygon
+            return None
+        return Polygon(route_bb)
+
+    route_polygon = get_route_polygon()
+
+    for target_vehicle in vehicle_list:
+        if target_vehicle['id'] == ego_data['id']:
+            continue
+
+        target_location = target_vehicle['location']
+        target_bounding_box = target_vehicle['world_cord']
+
+        if compute_distance(ego_location, target_location) > search_distance:
+            continue
+
+        target_polygon = Polygon([(v[0], v[1]) for v in target_bounding_box])
+
+        if route_polygon and route_polygon.intersects(target_polygon):
+            return True, target_vehicle
+
+        if last_wpt:
+            target_forward_vector = get_forward_vector(target_vehicle['rotation'])
+            last_forward_vector = last_wpt.transform.get_front_vector()
+            dot_product = last_forward_vector.x * target_forward_vector[0] + last_forward_vector.y * target_forward_vector[1]
+            angle = math.degrees(math.acos(dot_product))
+            distance = compute_distance([last_wpt.transform.x, last_wpt.transform.y], target_location)
+
+            if distance < junction_threshold and abs(angle) <= 20:
+                return True, target_vehicle
+
+    return False, None
