@@ -601,7 +601,6 @@ class QAsGenerator():
     def get_key_of_key_object(self, key_object_infos, object_dict=None):
         if object_dict is not None:
             projected_points, _ = get_vehicle_projected_corners(self.CAMERA_FRONT, object_dict)
-            print(projected_points)
             two_d_box = self.generate_2d_box_from_projected_points(projected_points)
             keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 

@@ -541,8 +541,8 @@ def is_ego_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
             obj_waypoint = map.get_waypoint(obj_location, project_to_road=True, lane_type=carla.LaneType.Driving)
 
             if obj_waypoint:
-                if (obj_waypoint.road_id == original_lane['road_id'] and
-                    obj_waypoint.lane_id == original_lane['lane_id']):
+                if (obj_waypoint.road_id == original_lane.road_id and
+                    obj_waypoint.lane_id == original_lane.lane_id):
                     return True
     
     return False
@@ -958,10 +958,10 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
         if last_wpt:
             print("[debug] detect stopped before junction") # debug
             target_forward_vector = get_forward_vector(target_vehicle['rotation'])
-            last_forward_vector = last_wpt.transform.get_front_vector()
+            last_forward_vector = last_wpt.transform.get_forward_vector()
             dot_product = last_forward_vector.x * target_forward_vector[0] + last_forward_vector.y * target_forward_vector[1]
             angle = math.degrees(math.acos(dot_product))
-            distance = compute_distance([last_wpt.transform.x, last_wpt.transform.y], target_location)
+            distance = compute_distance([last_wpt.transform.location.x, last_wpt.transform.location.y], target_location)
 
             if distance < junction_threshold and abs(angle) <= 20:
                 return True, target_vehicle

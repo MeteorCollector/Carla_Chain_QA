@@ -142,11 +142,11 @@ def convert_carla_to_nuscenes_and_save(args, carla_file_content):
 
                 qa_data[q_dic['type']].append(qa_item)
 
-        scenario_name, route_number, _, image_number = path.split('/')[-4:]
-        route_number = route_number.split('_')[0] + '_' + route_number.split('_')[1]
+        scenario_name, _, _, image_number = path.split('/')[-4:]
+
         image_number = image_number.replace('.jpg', '')
         
-        save_dir = os.path.join(args.output_graph_directory, scenario_name, route_number)
+        save_dir = os.path.join(args.output_graph_directory, scenario_name)
         pathlib.Path(save_dir).mkdir(exist_ok=True, parents=True)
         with open(save_dir + '/' + image_number + '.json', 'w', encoding='utf-8') as f:
             json.dump(tick_data, f, indent=4)
