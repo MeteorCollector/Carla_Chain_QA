@@ -29,9 +29,9 @@ def parse_arguments():
 
     # Image and camera parameters
     img_group = parser.add_argument_group('Image and Camera Parameters')
-    img_group.add_argument('--target-image-size', nargs=2, type=int, default=[1024, 384],
+    img_group.add_argument('--target-image-size', nargs=2, type=int, default=[1600, 900],
                            help='Target image size [width, height]')
-    img_group.add_argument('--original-image-size', nargs=2, type=int, default=[1024, 512],
+    img_group.add_argument('--original-image-size', nargs=2, type=int, default=[1600, 900],
                            help='Original image size [width, height]')
     img_group.add_argument('--original-fov', type=float, default=110,
                            help='Original field of view')

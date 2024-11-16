@@ -200,7 +200,7 @@ class QAsGenerator():
 
             # Get perception questions
             # print("generation reached here") # debug
-            image_path = path.replace('boxes', 'rgb').replace('.json.gz', '.jpg')
+            image_path = path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')
             relative_image_path = image_path
 
             res = self.generate_perception_questions(data, scenario_name)
