@@ -540,8 +540,8 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map):
     if is_vehicle_changing_lane(vehicle_data, map) is False:
         return False
 
-    vehicle_location = carla.Location(x=vehicle_data['x'], y=vehicle_data['y'])
-    vehicle_theta = vehicle_data['theta']
+    vehicle_location = carla.Location(x=vehicle_data['location'][0], y=vehicle_data['location'][1])
+    vehicle_theta = vehicle_data['rotation'][1]
     waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
     lane_direction = waypoint.transform.rotation.yaw
     
@@ -597,7 +597,7 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map):
         else:
             target_lane = waypoint
     
-    ego_location = carla.Location(x=ego_data['x'], y=ego_data['y'])
+    ego_location = carla.Location(x=ego_data['location'][0], y=ego_data['location'][1])
     ego_waypoint = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
 
     return target_lane.road_id == ego_waypoint.road_id and target_lane.lane_id == ego_waypoint.lane_id

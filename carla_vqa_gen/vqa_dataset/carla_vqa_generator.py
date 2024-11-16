@@ -652,7 +652,10 @@ class QAsGenerator():
             question = "What is the current speed limit?"
 
             speed_limit = int(measurements['speed_limit'] * 3.6)
-            answer = f"The current speed limit is {speed_limit} km/h."
+            if speed_limit >= 999:
+                answer = f"There's no speed limit now."
+            else:
+                answer = f"The current speed limit is {speed_limit} km/h."
 
             self.add_qas_questions(qa_list=qas_conversation_ego,
                                    chain=3,
@@ -665,11 +668,13 @@ class QAsGenerator():
 
 
         def get_rough_position(actor):
-            if -2 <= actor['position'][1] <= 2:
+            actor_rel_position = transform_to_ego_coordinates(actor['location'], ego_data['world2ego'])
+
+            if -2 <= actor_rel_position[1] <= 2:
                 rough_pos_str = 'to the front of it'
-            elif actor['position'][1] > 2:
+            elif actor_rel_position[1] > 2:
                 rough_pos_str = 'to the front right'
-            elif actor['position'][1] < -2:
+            elif actor_rel_position[1] < -2:
                 rough_pos_str = 'to the front left'
             else:
                 rough_pos_str = 'at an unknown position'
@@ -714,9 +719,10 @@ class QAsGenerator():
             acc = get_acceleration_by_future(self.current_measurement_path, 4)
             flags = get_affect_flags(scene_data)
             hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
-            hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15)
+            hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
+            measurements['vehicle_hazard'] = hazardous and 'vehicle' in hazardous_actors[0]['class']
 
             if measurements['control_brake'] or acc is "Decelerate" or hazardous:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
@@ -2159,6 +2165,7 @@ class QAsGenerator():
             key_object_infos (dict): Dictionary containing information about objects in the scene.
         """
 
+        print(f"[debug] generating perception questions, path = {self.current_measurement_path}") # debug
         scene_data = measurements['bounding_boxes']
         sensor_data = measurements['sensors']
 
