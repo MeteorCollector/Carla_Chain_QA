@@ -2639,16 +2639,26 @@ class QAsGenerator():
                 question = f"What lane marking is on the {side_name} side of the ego car?"
 
                 # Determine the lane marking type
-                if ego_vehicle_info[f'{side_key}_marking_type'] == 10:
+                if ego_vehicle_info[f'{side_key}_marking_type'] == 'NONE':
                     answer = f"There is no lane marking on the {side_name} side of the ego car."
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 1:
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Broken':
                     lanetype = "broken"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 2:
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Solid':
                     lanetype = "solid"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 3:
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'SolidSolid':
                     lanetype = "double solid"
-                elif ego_vehicle_info[f'{side_key}_marking_type'] == 9:
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Curb':
                     lanetype = "curb"
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'SolidBroken':
+                    lanetype = "solid broken"
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BrokenSolid':
+                    lanetype = "broken solid"
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BrokenBroken':
+                    lanetype = "broken broken"
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'Grass':
+                    lanetype = "grass"
+                elif ego_vehicle_info[f'{side_key}_marking_type'] == 'BottsDots':
+                    lanetype = "botts dots"
                 else:
                     raise ValueError(f"Unknown lane marking type {ego_vehicle_info[f'{side_key}_marking_type']}.")
 
