@@ -2199,14 +2199,22 @@ class QAsGenerator():
         # landmark_ids = []   # Needed to avoid duplicates of landmarks
         vehicles_by_id = {}
 
-        # Categorize objects from the scene data
-        # print(scene_data) # debug
+        # Find ego vehicle first
         for actor in scene_data:
             # print(actor) # debug
             if actor['class'] == 'ego_vehicle':
                 ego_vehicle = actor
                 ego = actor
-            elif actor['class'] == 'vehicle':
+
+        # Preprocess, add some keys
+        for actor in scene_data:
+            # relative position
+            actor['position'] = transform_to_ego_coordinates(actor['location'], ego['world2ego'])
+
+        # Categorize objects from the scene data
+        # print(scene_data) # debug
+        for actor in scene_data:
+            if actor['class'] == 'vehicle':
                 other_vehicles.append(actor)
                 vehicles_by_id[actor['id']] = actor
                 if actor['state'] == 'static':
