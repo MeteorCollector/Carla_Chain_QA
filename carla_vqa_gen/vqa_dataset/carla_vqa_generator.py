@@ -89,6 +89,22 @@ class QAsGenerator():
         # to look into future
         self.current_measurement_path = None
 
+        # to memorize progress
+        self.processed_paths_file = "processed_paths.txt"
+        self.processed_paths = self.load_processed_paths()
+    
+    def load_processed_paths(self):
+        """从文件加载已处理的路径"""
+        if os.path.exists(self.processed_paths_file):
+            with open(self.processed_paths_file, 'r') as file:
+                return set(file.read().splitlines())
+        return set()
+
+    def save_processed_path(self, path):
+        """将处理完成的路径追加到文件"""
+        with open(self.processed_paths_file, 'a') as file:
+            file.write('\n' + path)
+
     def reset_qa_stats(self):
         # Initialize data structures
         self.vqa_llava_format = {'image_paths': [], 'llava_format': [], 'image_subset': []}
@@ -127,18 +143,28 @@ class QAsGenerator():
 
         # Process each frame
         for path in tqdm.tqdm(self.data_boxes_paths):
+
+            # skip if path or path's root path is in processed_paths.txt
+            if any(processed_path in path for processed_path in self.processed_paths):
+                print(f"[info] skipping {path}, which has already marked processed.")
+                continue
+
             # print("analysing path") # debug
             route_dir = '/'.join(path.split('/')[:-2])
             scenario_name = route_dir.split('/')[-1]
             town_name = route_dir.split('/')[-1].split('_')[1]
             route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1] + '_' + route_dir.split('/')[-1].split('_')[2]
-            
+
             self.current_measurement_path = path
             # print(f"path: {path}, route_dir: {route_dir}, scenario_name: {scenario_name}, town_name: {town_name}, route_number: {route_number}")
             if self.map is None or (self.town_name is None or self.town_name is not town_name):
                 self.town_name = town_name
-                with open(os.path.join(self.map_file_dir, f'{self.town_name}.xodr'), 'r') as fp:
-                    self.map = carla.Map('{self.town_name}', fp.read())
+                if os.path.exists(os.path.join(self.map_file_dir, f'OpenDrive/{self.town_name}.xodr')):
+                    with open(os.path.join(self.map_file_dir, f'OpenDrive/{self.town_name}.xodr'), 'r') as fp:
+                        self.map = carla.Map('{self.town_name}', fp.read())
+                else:
+                    with open(os.path.join(self.map_file_dir, f'{self.town_name}/OpenDrive/', f'{self.town_name}.xodr'), 'r') as fp:
+                        self.map = carla.Map('{self.town_name}', fp.read())
 
             # # Skip this scenario because it is not annotated correctly
             # if 'InterurbanAdvancedActorFlow' in route_dir:
@@ -215,12 +241,12 @@ class QAsGenerator():
                 image = Image.open(image_path)
                 draw = ImageDraw.Draw(image)
 
-                path = f'{self.output_graph_examples_directory}/original_images/{scenario_name}/{route_number}'
-                Path(path).mkdir(parents=True, exist_ok=True)
-                path = f'{self.output_graph_examples_directory}/resized_images/{scenario_name}/{route_number}'
-                Path(path).mkdir(parents=True, exist_ok=True)
-                path = f'{self.output_graph_examples_directory}/graphs/{scenario_name}/{route_number}'
-                Path(path).mkdir(parents=True, exist_ok=True)
+                eg_path = f'{self.output_graph_examples_directory}/original_images/{scenario_name}/{route_number}'
+                Path(eg_path).mkdir(parents=True, exist_ok=True)
+                eg_path = f'{self.output_graph_examples_directory}/resized_images/{scenario_name}/{route_number}'
+                Path(eg_path).mkdir(parents=True, exist_ok=True)
+                eg_path = f'{self.output_graph_examples_directory}/graphs/{scenario_name}/{route_number}'
+                Path(eg_path).mkdir(parents=True, exist_ok=True)
 
                 assert image.width == self.ORIGINAL_IMAGE_SIZE[0], f'{image.width} != {self.ORIGINAL_IMAGE_SIZE[0]}'
                 assert image.height == self.ORIGINAL_IMAGE_SIZE[1], f'{image.height} != {self.ORIGINAL_IMAGE_SIZE[1]}'
@@ -252,6 +278,9 @@ class QAsGenerator():
                 with open(file_name, 'w', encoding='utf-8') as f:
                     json.dump(qas, f, sort_keys=True, indent=4)
 
+            # TODO: implement an offline method to do stats, 
+            # since we do not always generate full dataset in a row.
+                    
             # Update minimum number of questions
             self.min_num_questions = min(self.min_num_questions, num_questions)
 
@@ -273,6 +302,11 @@ class QAsGenerator():
 
             self.frame_num += 1
 
+            self.save_processed_path(path)
+
+        # TODO: implement an offline method to do stats, 
+        # since we do not always generate full dataset in a row.
+            
         # Save statistics
         with open(os.path.join(self.output_graph_directory, 'stats.json'), 'w', encoding="utf-8") as f:
             json.dump({
