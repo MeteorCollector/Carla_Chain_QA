@@ -103,7 +103,7 @@ class QAsGenerator():
     def save_processed_path(self, path):
         """将处理完成的路径追加到文件"""
         with open(self.processed_paths_file, 'a') as file:
-            file.write('\n' + path)
+            file.write(path + '\n')
 
     def reset_qa_stats(self):
         # Initialize data structures
@@ -146,7 +146,20 @@ class QAsGenerator():
 
             # skip if path or path's root path is in processed_paths.txt
             if any(processed_path in path for processed_path in self.processed_paths):
-                print(f"[info] skipping {path}, which has already marked processed.")
+                # print(f"[info] skipping {path}, which has already marked processed.")
+                continue
+
+             # Skip frames based on keyframes list
+            if self.sample_frame_mode == 'keyframes':
+                if path not in keyframes_list:
+                    self.skipped_frames += 1
+                    continue
+
+            vqa_llava_entry = {}
+            frame_number = int(path.split('/')[-1].split('.')[0])
+
+            # Skip frames if sampling uniformly and frame number does not match
+            if self.sample_frame_mode == 'uniform' and frame_number % self.sample_uniform_interval != 0:
                 continue
 
             # print("analysing path") # debug
@@ -193,19 +206,6 @@ class QAsGenerator():
             # Skip frames if RGB image does not exist
             if not os.path.isfile(path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')):
                 self.skipped_frames += 1
-                continue
-
-            # Skip frames based on keyframes list
-            if self.sample_frame_mode == 'keyframes':
-                if path not in keyframes_list:
-                    self.skipped_frames += 1
-                    continue
-
-            vqa_llava_entry = {}
-            frame_number = int(path.split('/')[-1].split('.')[0])
-
-            # Skip frames if sampling uniformly and frame number does not match
-            if self.sample_frame_mode == 'uniform' and frame_number % self.sample_uniform_interval != 0:
                 continue
 
             # Check if files exist
