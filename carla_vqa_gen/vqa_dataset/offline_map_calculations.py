@@ -338,7 +338,7 @@ def get_lane_info(map, vehicle_location):
     # get ego lane number counted from left to right
     # https://www.asam.net/standards/detail/opendrive/
     # most left should be always the smallest number
-        ego_lane_number = abs(waypoint.lane_id - lane_id_left_most_lane_same_direction)
+    ego_lane_number = abs(waypoint.lane_id - lane_id_left_most_lane_same_direction)
     
     # print(f"[debug] lanes at the same direction: {num_lanes_same_direction}, opposite direction: {num_lanes_opposite_direction}")
         
@@ -961,7 +961,7 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
             return True, target_vehicle
 
         if last_wpt:
-            print("[debug] detect stopped before junction") # debug
+            # print("[debug] detect stopped before junction") # debug
             target_forward_vector = get_forward_vector(target_vehicle['rotation'])
             last_forward_vector = last_wpt.transform.get_forward_vector()
             dot_product = last_forward_vector.x * target_forward_vector[0] + last_forward_vector.y * target_forward_vector[1]

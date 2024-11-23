@@ -52,6 +52,7 @@ class QAsGenerator():
         self.output_graph_examples_directory = args.output_graph_examples_directory
 
         # Build camera projection matrix
+        # should modify
         self.CAMERA_MATRIX = build_projection_matrix(self.ORIGINAL_IMAGE_SIZE[0],
                                                      self.ORIGINAL_IMAGE_SIZE[1],
                                                      self.ORIGINAL_FOV)
@@ -652,7 +653,7 @@ class QAsGenerator():
 
     def get_key_of_key_object(self, key_object_infos, object_dict=None):
         if object_dict is not None:
-            projected_points, _ = get_vehicle_projected_corners(self.CAMERA_FRONT, object_dict)
+            projected_points, _ = project_all_corners(object_dict, self.CAMERA_MATRIX)
             two_d_box = self.generate_2d_box_from_projected_points(projected_points)
             keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
@@ -1127,7 +1128,7 @@ class QAsGenerator():
                     # Check if the actor is within the current distance
                     if actor['distance'] < dist:
                         # Check if there is a leading vehicle affecting the ego vehicle
-                        if ego_vehicle[f'affects_ego_{dist}']:
+                        if ego_vehicle[f'hazard_detected_{dist}']:
                             # Handle the case where there is a leading vehicle
                             if actor_type == 'traffic light':
                                 # Handle different traffic light states
@@ -3202,7 +3203,9 @@ class QAsGenerator():
 
         if current_measurement['next_command'] == 5 or current_measurement['next_command'] == 6:
             # get distance to current_measurement['target_point_next'], ego is at 0,0
-            target_point_next = current_measurement['target_point_next']
+            # print(current_measurement)
+            # target_point_next = current_measurement['target_point_next']
+            target_point_next = [current_measurement['x_command_far'], current_measurement['y_command_far']]
             distance_to_target_point_next = np.sqrt(target_point_next[0]**2 + target_point_next[1]**2)
             if distance_to_target_point_next < 20 and current_measurement['next_command'] == 5:
                 command_str = 'do a lane change to the left soon'
