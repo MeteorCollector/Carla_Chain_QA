@@ -2386,7 +2386,7 @@ class QAsGenerator():
 
         # for [debug]
         file_name = f'{self.output_graph_directory}/appendix/' \
-                            f'{scenario_name}/{route_number}/{int(frame_number):05d}.json'
+                            f'{scenario_name}/{int(frame_number):05d}.json'
         os.makedirs(os.path.dirname(file_name), exist_ok=True)
         with open(file_name, 'w', encoding='utf-8') as f:
             json.dump(append_dict, f, sort_keys=True, indent=4)
