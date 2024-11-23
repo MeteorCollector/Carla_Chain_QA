@@ -580,7 +580,25 @@ class QAsGenerator():
             if traffic_light['affects_ego']: # and ego_vehicle['traffic_light_state'] != 'None':
                 if traffic_light['distance'] < 45:
                     state = traffic_light['state']
-                    state = state[:1].lower() + state[1:]
+                    # for traffic_light
+                    # 0 - Red; 1 - Yellow; 2 - Green; 3 - Off; 4 - Unknown;
+                    if state == 2:
+                        ego_vehicle['traffic_light_state'] = "green"
+                        state = "green"
+                    elif state == 1:
+                        ego_vehicle['traffic_light_state'] = "yellow"
+                        state = "yellow"
+                    elif state == 0:
+                        ego_vehicle['traffic_light_state'] = "red"
+                        state = "red"
+                    elif state == 3:
+                        state = "off"
+                        continue
+                    else:
+                        state = "unknown"
+                        continue
+                    # print(f'[debug] state is {state}') # debug
+                    # state = state[:1].lower() + state[1:]
                     traffic_light_affects_ego = True
                     traffic_light_info = traffic_light
                     break

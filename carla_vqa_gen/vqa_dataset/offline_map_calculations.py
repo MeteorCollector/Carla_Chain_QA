@@ -706,17 +706,22 @@ def get_affect_flags(bbox_data):
     flags = {
         "affected_by_red_light": False,
         "affected_by_yellow_light": False,
-        "affected_by_stop_sign": False
+        "affected_by_stop_sign": False,
+        "traffic_light_state": None
     }
 
     # for traffic_light
     # 0 - Red; 1 - Yellow; 2 - Green; 3 - Off; 4 - Unknown;
     for actor in bbox_data:
         if "traffic_light" in actor["class"]:
-            if actor["state"] == 0 and actor["affects_ego"] is True:
-                flags["affected_by_red_light"] = True
+            if actor["state"] == 2 and actor["affects_ego"] is True:
+                flags["traffic_light_state"] = "green"
             if actor["state"] == 1 and actor["affects_ego"] is True:
                 flags["affected_by_yellow_light"] = True
+                flags["traffic_light_state"] = "yellow"
+            if actor["state"] == 0 and actor["affects_ego"] is True:
+                flags["affected_by_red_light"] = True
+                flags["traffic_light_state"] = "red"
 
         if "traffic_sign" in actor["class"]:
             if "stop" in actor["type_id"].lower() and actor["affects_ego"] is True:
