@@ -165,7 +165,7 @@ def find_first_junction_in_direction(map, ego_location):
     if waypoint and waypoint.is_junction:
         junction_location = waypoint.transform.location
         distance_to_junction = calculate_distance(ego_location, junction_location)
-        print(f"[debug] first junction of vehicle is at {junction_location}, {distance_to_junction}m away. ego is at {ego_location}") # debug
+        # print(f"[debug] first junction of vehicle is at {junction_location}, {distance_to_junction}m away. ego is at {ego_location}") # debug
         return junction_location, distance_to_junction
     else:
         return None, None # represents no junction found
@@ -677,18 +677,18 @@ def get_acceleration_by_future(path, k):
         speeds.append(data['speed'])
 
     if len(speeds) < 2:
-        print("[debug] vehicle status is Ambiguous")  # debug
+        # print("[debug] vehicle status is Ambiguous")  # debug
         return "Ambiguous"
     
     acceleration_trend = speeds[-1] - speeds[0]
     if acceleration_trend > 0:
-        print("[debug] vehicle status is Accelerate")  # debug
+        # print("[debug] vehicle status is Accelerate")  # debug
         return "Accelerate"
     elif acceleration_trend < 0:
-        print("[debug] vehicle status is Decelerate")  # debug
+        # print("[debug] vehicle status is Decelerate")  # debug
         return "Decelerate"
     else:
-        print("[debug] vehicle status is Constant")  # debug
+        # print("[debug] vehicle status is Constant")  # debug
         return "Constant"
 
 

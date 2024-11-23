@@ -119,6 +119,12 @@ def convert_carla_to_nuscenes_and_save(args, carla_file_content):
         tick_data['image_paths'] = {key: None for key in ['CAM_FRONT', 'CAM_FRONT_LEFT', 'CAM_FRONT_RIGHT',
                                                             'CAM_BACK', 'CAM_BACK_LEFT', 'CAM_BACK_RIGHT']}
         tick_data['image_paths']['CAM_FRONT'] = image_path
+        tick_data['image_paths']['CAM_FRONT_LEFT'] = image_path.replace('front', 'front_left')
+        tick_data['image_paths']['CAM_FRONT_RIGHT'] = image_path.replace('front', 'front_right')
+        tick_data['image_paths']['CAM_BACK'] = image_path.replace('front', 'back')
+        tick_data['image_paths']['CAM_BACK_LEFT'] = image_path.replace('front', 'back_left')
+        tick_data['image_paths']['CAM_BACK_RIGHT'] = image_path.replace('front', 'back_right')
+
 
         for key, items in tick['conversations'].items():
             # Available keys: important_objects, dynamic_vehicles, roadlayout, stopsign, trafficlight, ego
