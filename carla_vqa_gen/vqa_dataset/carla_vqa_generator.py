@@ -735,11 +735,11 @@ class QAsGenerator():
             return rough_pos_str
     
         def get_vehicle_type(vehicle):
-            return vehicle['base_type']
+            return vehicle.get('base_type') if vehicle.get('base_type') is not None else 'vehicle'
         
         def get_vehicle_color(vehicle):
-            color = rgb_to_color_name(vehicle["color"]) + ' ' if vehicle["color"] is not None and \
-                                                vehicle["color"] != 'None' else ''
+            color = rgb_to_color_name(vehicle.get("color")) + ' ' if vehicle.get("color") is not None and \
+                                                vehicle.get("color") != 'None' else ''
             return color
 
         def determine_braking_requirement(qas_conversation_ego, pedestrians, measurements, scene_data, vehicles, ego_vehicle, 
