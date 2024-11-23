@@ -1215,7 +1215,7 @@ class QAsGenerator():
                                                                 and x['position'][0] > 0.6]
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
-                relevant_objects = [v for v in vehicles_by_id.values() if v['next_action'] is None 
+                relevant_objects = [v for v in vehicles_by_id.values() if v.get('next_action') is None 
                                 and v['position'][0] > -0.2 
                                 and (float(v['distance']) < 10 or v['distance']/max(1e-6, measurements['speed']) < 3)]
                 
@@ -1255,16 +1255,17 @@ class QAsGenerator():
                     visual_description = "construction cone"
                 elif 'VehicleOpensDoorTwoWays' in scenario_name or 'ParkingExit' in scenario_name:
                     # Determine the color of the vehicle
-                    color_str = relevant_obj["color_name"] + ' ' if relevant_obj["color_name"] is not None \
+                    color_str = relevant_obj["color_name"] + ' ' if relevant_obj.get("color_name") is not None \
                                                                 and relevant_obj["color_name"] != 'None' else ''
-                    if relevant_obj['color_rgb'] == [0, 28, 0] or relevant_obj['color_rgb'] == [12, 42, 12]:
-                        color_str = 'dark green '
-                    elif relevant_obj['color_rgb'] == [211, 142, 0]:
-                        color_str = 'yellow '
-                    elif relevant_obj['color_rgb'] == [145, 255, 181]:
-                        color_str = 'blue '
-                    elif relevant_obj['color_rgb'] == [215, 88, 0]:
-                        color_str = 'orange '
+                    if relevant_obj.get('color_rgb') is not None:
+                        if relevant_obj['color_rgb'] == [0, 28, 0] or relevant_obj['color_rgb'] == [12, 42, 12]:
+                            color_str = 'dark green '
+                        elif relevant_obj['color_rgb'] == [211, 142, 0]:
+                            color_str = 'yellow '
+                        elif relevant_obj['color_rgb'] == [145, 255, 181]:
+                            color_str = 'blue '
+                        elif relevant_obj['color_rgb'] == [215, 88, 0]:
+                            color_str = 'orange '
 
                     category = "Vehicle"
                     visual_description = f"{color_str}vehicle"
