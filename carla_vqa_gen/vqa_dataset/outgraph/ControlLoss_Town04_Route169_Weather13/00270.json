@@ -1,0 +1,546 @@
+{
+    "key_object_infos": {},
+    "QA": {
+        "perception": [
+            {
+                "Q": "What are the important objects in the scene?",
+                "A": "There are no important objects in the scene.",
+                "C": null,
+                "con_up": -1,
+                "con_down": -1,
+                "cluster": 0,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "Is the ego vehicle at a junction?",
+                "A": "No, the ego vehicle is not at a junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        1,
+                        0
+                    ],
+                    [
+                        2,
+                        0
+                    ],
+                    [
+                        3,
+                        1
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ],
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "con_down": -1,
+                "cluster": 3,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "How many lanes are there in the same direction as the ego car?",
+                "A": "There are four lanes in the same direction.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        1
+                    ],
+                    [
+                        3,
+                        3
+                    ],
+                    [
+                        3,
+                        4
+                    ],
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ],
+                    [
+                        3,
+                        7
+                    ],
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 2,
+                "object_tags": []
+            },
+            {
+                "Q": "How many lanes are there in the opposite direction to the ego car?",
+                "A": "There are four lanes in the opposite direction.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        1
+                    ],
+                    [
+                        3,
+                        3
+                    ],
+                    [
+                        3,
+                        4
+                    ],
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ],
+                    [
+                        3,
+                        7
+                    ],
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 2,
+                "object_tags": []
+            },
+            {
+                "Q": "On which lane is the ego vehicle (left most lane of the lanes going in the same direction is indicated with 0)?",
+                "A": "The ego vehicle is on lane 3.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        1
+                    ],
+                    [
+                        3,
+                        4
+                    ],
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ],
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 3,
+                "object_tags": []
+            },
+            {
+                "Q": "What lane marking is on the left side of the ego car?",
+                "A": "The lane marking on the left side of the ego car is a white broken lane.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 4,
+                "object_tags": []
+            },
+            {
+                "Q": "What lane marking is on the right side of the ego car?",
+                "A": "The lane marking on the right side of the ego car is a white solid lane.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 4,
+                "object_tags": []
+            },
+            {
+                "Q": "Is the ego vehicle affected by a traffic light?",
+                "A": "No, the ego vehicle is not affected by a traffic light.",
+                "C": null,
+                "con_up": [
+                    [
+                        2,
+                        1
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "cluster": 2,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "How many pedestrians are there?",
+                "A": "There are no pedestrians.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": -1,
+                "cluster": 5,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "Is there an obstacle on the current road?",
+                "A": "No, there is no obstacle on the current route.",
+                "C": null,
+                "con_up": [
+                    [
+                        3,
+                        8
+                    ]
+                ],
+                "con_down": -1,
+                "cluster": 3,
+                "layer": 9,
+                "object_tags": []
+            },
+            {
+                "Q": "What is the current speed limit?",
+                "A": "There's no speed limit now.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        2
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 7,
+                "object_tags": []
+            }
+        ],
+        "prediction": [
+            {
+                "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
+                "A": "The ego vehicle should pay particular attention to traffic changing lanes from neighboring lanes.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 1,
+                "object_tags": []
+            },
+            {
+                "Q": "In which direction is the ego car allowed to change lanes?",
+                "A": "The ego vehicle is allowed to change lanes to the left.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ],
+                    [
+                        3,
+                        4
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 5,
+                "object_tags": []
+            },
+            {
+                "Q": "From which side are other vehicles allowed to change lanes into the ego lane?",
+                "A": "Vehicles are allowed to change lanes from the left side.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ],
+                    [
+                        3,
+                        4
+                    ],
+                    [
+                        3,
+                        5
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 6,
+                "object_tags": []
+            },
+            {
+                "Q": "Is the ego vehicle affected by a stop sign?",
+                "A": "No, the ego vehicle is not affected by a stop sign.",
+                "C": null,
+                "con_up": [
+                    [
+                        1,
+                        1
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ]
+                ],
+                "cluster": 1,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "What is the state of the traffic light?",
+                "A": "There is no traffic light affecting the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        2,
+                        2
+                    ]
+                ],
+                "con_down": [
+                    [
+                        2,
+                        0
+                    ]
+                ],
+                "cluster": 2,
+                "layer": 1,
+                "object_tags": []
+            }
+        ],
+        "planning": [
+            {
+                "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
+                "A": "No, the ego vehicle can stay on its current lane.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        9
+                    ]
+                ],
+                "cluster": 3,
+                "layer": 8,
+                "object_tags": []
+            },
+            {
+                "Q": "Does the ego vehicle need to brake? Why?",
+                "A": "There is no reason for the ego vehicle to brake.",
+                "C": null,
+                "con_up": -1,
+                "con_down": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        2,
+                        2
+                    ],
+                    [
+                        3,
+                        5
+                    ],
+                    [
+                        3,
+                        6
+                    ],
+                    [
+                        3,
+                        7
+                    ],
+                    [
+                        3,
+                        8
+                    ],
+                    [
+                        4,
+                        3
+                    ],
+                    [
+                        5,
+                        0
+                    ]
+                ],
+                "cluster": 6,
+                "layer": 0,
+                "object_tags": []
+            },
+            {
+                "Q": "What should the ego vehicle do based on the traffic light?",
+                "A": "There is no traffic light affecting the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        2,
+                        1
+                    ]
+                ],
+                "cluster": 2,
+                "layer": 2,
+                "object_tags": []
+            },
+            {
+                "Q": "What should the ego vehicle do based on the stop sign?",
+                "A": "There is no stop sign affecting the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        1,
+                        0
+                    ]
+                ],
+                "cluster": 1,
+                "layer": 1,
+                "object_tags": []
+            }
+        ],
+        "behavior": []
+    },
+    "image_paths": {
+        "CAM_FRONT": "../../../Bench2Drive-rep/ControlLoss_Town04_Route169_Weather13/camera/rgb_front/00270.jpg",
+        "CAM_FRONT_LEFT": null,
+        "CAM_FRONT_RIGHT": null,
+        "CAM_BACK": null,
+        "CAM_BACK_LEFT": null,
+        "CAM_BACK_RIGHT": null
+    }
+}
