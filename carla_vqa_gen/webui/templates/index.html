@@ -25,6 +25,22 @@
             padding: 5px;
             text-align: left;
         }
+        .json-entry {
+            margin: 5px 0;
+        }
+        .json-key {
+            font-weight: bold;
+        }
+        .json-value {
+            margin-left: 20px;
+        }
+        .json-collapse {
+            cursor: pointer;
+            color: blue;
+        }
+        .json-input-filter {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -61,14 +77,148 @@
 
     <div class="json-container">
         <h3>Annotation JSON:</h3>
-        {{ content.anno_json | safe }}
+        <input class="json-input-filter" type="text" id="filter-anno" placeholder="Filter by keyword (space-separated)">
+        <button onclick="filterJson('anno_json', 'filter-anno')">Filter</button>
+        <button class="json-collapse" onclick="toggleCollapseAll('anno-json')">Collapse / Show</button>
+        <div id="anno-json">
+            {{ content.anno_json | safe }}
+        </div>
 
         <h3>Appendix JSON:</h3>
-        {{ content.appendix_json | safe }}
+        <input class="json-input-filter" type="text" id="filter-appendix" placeholder="Filter by keyword (space-separated)">
+        <button onclick="filterJson('appendix_json', 'filter-appendix')">Filter</button>
+        <button class="json-collapse" onclick="toggleCollapseAll('appendix-json')">Collapse / Show</button>
+        <div id="appendix-json">
+            {{ content.appendix_json | safe }}
+        </div>
 
         <h3>QA JSON:</h3>
-        {{ content.qa_json | safe }}
+        <input class="json-input-filter" type="text" id="filter-qa" placeholder="Filter by keyword (space-separated)">
+        <button onclick="filterJson('qa_json', 'filter-qa')">Filter</button>
+        <button class="json-collapse" onclick="toggleCollapseAll('qa-json')">Collapse / Show</button>
+        <div id="qa-json">
+            {{ content.qa_json | safe }}
+        </div>
     </div>
+
     {% endif %}
+
+    <script>
+        function filterJson(jsonType, filterInputId) {
+            const input = document.getElementById(filterInputId);
+            const filterKeywords = input.value.split(' ').map(keyword => keyword.trim()).filter(keyword => keyword);
+
+            // 构建请求的 URL，包含过滤关键字作为查询参数
+            let url = `/get_json/${jsonType}`;
+            if (filterKeywords.length > 0) {
+                url += `?filter=${filterKeywords.join(' ')}`;  // 将过滤条件传递给后端
+            }
+
+            // 向后端请求过滤后的 JSON 数据
+            fetch(url)
+                .then(response => response.json())
+                .then(jsonContent => {
+                    // 如果返回的数据是 "not exist"，则不进行处理
+                    if (jsonContent === "not exist") {
+                        alert(`${jsonType} not found.`);
+                        return;
+                    }
+
+                    // 更新显示
+                    displayJson(jsonContent, jsonType);
+                })
+                .catch(error => {
+                    console.error('Error fetching JSON:', error);
+                });
+        }
+
+        // 递归过滤 JSON
+        function filterJsonRecursive(obj, filterKeywords, parentKey = '') {
+            console.debug("filtering")
+            let result = {};
+            let isKept = false;  // 是否保留当前节点
+
+            // 遍历对象的每个键值
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const fullKey = parentKey ? `${parentKey}.${key}` : key;
+
+                    // 如果键名包含任意一个关键词，则标记为保留
+                    const containsKeyword = filterKeywords.some(keyword => fullKey.includes(keyword));
+                    if (containsKeyword) {
+                        isKept = true;  // 如果当前键包含关键词，则标记当前节点和其子节点都保留
+                        result[key] = value;
+                    } else if (typeof value === 'object' && value !== null) {
+                        // 如果值是对象，递归处理
+                        const childResult = filterJsonRecursive(value, filterKeywords, fullKey);
+                        if (Object.keys(childResult).length > 0) {
+                            isKept = true;  // 如果子树有保留的内容，则保留该节点
+                            result[key] = childResult;
+                        }
+                    }
+                }
+            }
+
+            return isKept ? result : null;  // 如果当前节点及子树都没有内容，则返回 null，表示删除该节点
+        }
+
+        // 显示 JSON
+        function displayJson(filteredJson, jsonId) {
+            const jsonContainer = document.getElementById(jsonId);
+            jsonContainer.innerHTML = '';  // 清空当前内容
+
+            if (filteredJson) {
+                createJsonElement(filteredJson, jsonContainer);
+            }
+        }
+
+        // 递归创建 JSON 元素并插入到 DOM
+        function createJsonElement(obj, parentElement) {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const keyDiv = document.createElement('div');
+                    keyDiv.classList.add('json-entry');
+                    
+                    const keySpan = document.createElement('span');
+                    keySpan.classList.add('json-key');
+                    keySpan.innerText = key;
+
+                    // 递归处理对象
+                    if (typeof value === 'object' && value !== null) {
+                        const toggleButton = document.createElement('button');
+                        toggleButton.innerText = 'Show';
+                        toggleButton.classList.add('json-collapse');
+                        toggleButton.onclick = function() {
+                            const childContainer = this.nextElementSibling;
+                            childContainer.style.display = childContainer.style.display === 'none' ? 'block' : 'none';
+                            this.innerText = this.innerText === 'Show' ? 'Hide' : 'Show';
+                        };
+
+                        keyDiv.appendChild(toggleButton);
+                        const childContainer = document.createElement('div');
+                        childContainer.style.display = 'none';
+                        createJsonElement(value, childContainer);
+                        keyDiv.appendChild(childContainer);
+                    } else {
+                        const valueSpan = document.createElement('span');
+                        valueSpan.classList.add('json-value');
+                        valueSpan.innerText = value;
+                        keyDiv.appendChild(valueSpan);
+                    }
+
+                    parentElement.appendChild(keyDiv);
+                }
+            }
+        }
+
+        // Toggle Collapse All
+        function toggleCollapseAll(jsonId) {
+            const container = document.getElementById(jsonId);
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+    </script>
 </body>
 </html>
