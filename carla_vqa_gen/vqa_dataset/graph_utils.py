@@ -83,34 +83,34 @@ def project_all_corners(obj, K, extrinsics):
     K = np.array(K)
     extrinsics = np.array(extrinsics)
     
-    # 从相机外参中提取相机在世界坐标系中的 yaw
-    R = extrinsics[:3, :3]  # 提取旋转矩阵
-    camera_yaw = np.arctan2(-R[2, 0], R[2, 2])  # 提取相机的 yaw
+    # get cam's yaw
+    R = extrinsics[:3, :3]  # rotation matrix
+    camera_yaw = np.arctan2(-R[2, 0], R[2, 2])  # cam's yaw
 
-    # 获取 bbox 顶点的世界坐标
+    # world cord of bbox vertices
     if 'world_cord' in obj and obj['world_cord']:
         world_corners = np.array(obj['world_cord'])
     else:
         extent = obj.get('extent', [0.15, 0.15, 0.15])
         position = np.array(obj['center'])
         corners = np.array([
-            [-extent[0], -extent[1], 0],  # bottom left back
-            [extent[0], -extent[1], 0],   # bottom right back
-            [extent[0], extent[1], 0],    # bottom right front
-            [-extent[0], extent[1], 0],   # bottom left front
-            [-extent[0], -extent[1], 2 * extent[2]],   # top left back
-            [extent[0], -extent[1], 2 * extent[2]],    # top right back
-            [extent[0], extent[1], 2 * extent[2]],     # top right front
-            [-extent[0], extent[1], 2 * extent[2]]     # top left front
+            [-extent[0], -extent[1], -extent[2]],  # bottom left back
+            [extent[0], -extent[1], -extent[2]],   # bottom right back
+            [extent[0], extent[1], -extent[2]],    # bottom right front
+            [-extent[0], extent[1], -extent[2]],   # bottom left front
+            [-extent[0], -extent[1], extent[2]],   # top left back
+            [extent[0], -extent[1], extent[2]],    # top right back
+            [extent[0], extent[1], extent[2]],     # top right front
+            [-extent[0], extent[1], extent[2]]     # top left front
         ])
         
-        # 物体在世界坐标系中的 yaw
+        # object yaw in world
         world_yaw = obj.get('rotation', [0, 0, 0])[2]
 
-        # 计算物体在相机坐标系中的 yaw
+        # yaw to cam
         yaw_camera = world_yaw - camera_yaw
         
-        # 旋转 bbox
+        # rotate bbox
         rotation_matrix = np.array([
             [np.cos(yaw_camera), -np.sin(yaw_camera), 0],
             [np.sin(yaw_camera), np.cos(yaw_camera), 0],
@@ -118,32 +118,25 @@ def project_all_corners(obj, K, extrinsics):
         ])
         corners = corners @ rotation_matrix.T
 
-        # 平移 bbox
+        # move bbox
         world_corners = corners + position
     
-    # 转换到相机坐标系
-    world_corners_h = np.hstack((world_corners, np.ones((world_corners.shape[0], 1))))  # 转为齐次坐标
-    camera_corners = (extrinsics @ world_corners_h.T).T[:, :3]  # 转到相机坐标系
-    print(camera_corners)
+    # world to cam cord
+    world_corners_h = np.hstack((world_corners, np.ones((world_corners.shape[0], 1))))
+    camera_corners = (extrinsics @ world_corners_h.T).T[:, :3]
     
     all_points_2d = []
     valid_corners = []
     
     for corner in camera_corners:
-        # if corner[2] <= 0:  # 如果点在相机后方，跳过
-        #     continue
-        
-        # 投影到图像平面
         pos_3d = np.array([corner[1], -corner[2], corner[0]])
-        if pos_3d[2] <= 0:  # 如果点位于相机后方，跳过
+        if pos_3d[2] <= 0:  # skip if behind cam
             continue
         
-        # 定义相机外参和内参
         rvec = np.zeros((3, 1), np.float32) 
-        tvec = np.array([[0.0, 2.0, 1.5]], np.float32)
+        tvec = np.array([[0.0, 0.0, 0.0]], np.float32)
         dist_coeffs = np.zeros((5, 1), np.float32) 
         
-        # 投影点
         points_2d, _ = cv2.projectPoints(
             pos_3d, rvec, tvec, K, dist_coeffs
         )
