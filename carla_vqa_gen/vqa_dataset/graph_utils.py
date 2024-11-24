@@ -92,14 +92,14 @@ def project_all_corners(obj, K):
         yaw = -obj['yaw']
             
     corners = np.array([
-        [-extent[0], -extent[1], 0],  # bottom left back
-        [extent[0], -extent[1], 0],   # bottom right back
-        [extent[0], extent[1], 0],    # bottom right front
-        [-extent[0], extent[1], 0],   # bottom left front
-        [-extent[0], -extent[1], 2*extent[2]],   # top left back
-        [extent[0], -extent[1], 2*extent[2]],    # top right back
-        [extent[0], extent[1], 2*extent[2]],     # top right front
-        [-extent[0], extent[1], 2*extent[2]]     # top left front
+        [-extent[0], -extent[1], -extent[2]],  # bottom left back
+        [extent[0], -extent[1], -extent[2]],   # bottom right back
+        [extent[0], extent[1], -extent[2]],    # bottom right front
+        [-extent[0], extent[1], -extent[2]],   # bottom left front
+        [-extent[0], -extent[1], extent[2]],   # top left back
+        [extent[0], -extent[1], extent[2]],    # top right back
+        [extent[0], extent[1], extent[2]],     # top right front
+        [-extent[0], extent[1], extent[2]]     # top left front
     ])
 
     # rotate bbox

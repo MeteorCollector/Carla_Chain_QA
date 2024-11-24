@@ -265,23 +265,23 @@ class QAsGenerator():
             if 'CAM_FRONT_LEFT' in sensor_data:
                 self.CAMERA_FRONT_LEFT = sensor_data['CAM_FRONT_LEFT']
                 self.CAM_INTRINSIC_FRONT = sensor_data['CAM_FRONT_LEFT']['intrinsic']
-                self.WORLD2CAM_FRONT = sensor_data['CAM_FRONT_LEFT']['world2cam']
+                self.WORLD2CAM_FRONT_LEFT = sensor_data['CAM_FRONT_LEFT']['world2cam']
             if 'CAM_FRONT_RIGHT' in sensor_data:
                 self.CAMERA_FRONT_RIGHT = sensor_data['CAM_FRONT_RIGHT']
                 self.CAM_INTRINSIC_FRONT = sensor_data['CAM_FRONT_RIGHT']['intrinsic']
-                self.WORLD2CAM_FRONT = sensor_data['CAM_FRONT_RIGHT']['world2cam']
+                self.WORLD2CAM_FRONT_RIGHT = sensor_data['CAM_FRONT_RIGHT']['world2cam']
             if 'CAM_BACK' in sensor_data:
                 self.CAMERA_BACK = sensor_data['CAM_BACK']
                 self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK']['intrinsic']
-                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK']['world2cam']
+                self.WORLD2CAM_BACK = sensor_data['CAM_BACK']['world2cam']
             if 'CAM_BACK_LEFT' in sensor_data:
                 self.CAMERA_BACK_LEFT = sensor_data['CAM_BACK_LEFT']
                 self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK_LEFT']['intrinsic']
-                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK_LEFT']['world2cam']
+                self.WORLD2CAM_BACK_LEFT = sensor_data['CAM_BACK_LEFT']['world2cam']
             if 'CAM_BACK_RIGHT' in sensor_data:
                 self.CAMERA_BACK_RIGHT = sensor_data['CAM_BACK_RIGHT']
                 self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK_RIGHT']['intrinsic']
-                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK_RIGHT']['world2cam']
+                self.WORLD2CAM_BACK_RIGHT = sensor_data['CAM_BACK_RIGHT']['world2cam']
 
             image_path = path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')
             relative_image_path = image_path
@@ -317,8 +317,8 @@ class QAsGenerator():
                     if self.WORLD2CAM_FRONT is not None:
                         for single_object in data['bounding_boxes']:
                             # print(single_object)
-                            if 'position' in single_object:
-                                single_object['location'] = transform_to_ego_coordinates(single_object['position'], self.WORLD2CAM_FRONT)
+                            if 'location' in single_object:
+                                single_object['position'] = transform_to_ego_coordinates(single_object['center'], self.WORLD2CAM_FRONT)
                                 
                                 if single_object['class'] == 'ego_car':
                                     continue
