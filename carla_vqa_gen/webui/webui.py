@@ -23,6 +23,8 @@ filter_dict = {
     "appendix_json": [],
     "qa_json": [],
 }
+json_files = []
+json_numbers = []
 
 from flask import send_from_directory
 
@@ -35,6 +37,26 @@ class RelPathForm(FlaskForm):
     json_number = SelectField("Choose JSON Number", choices=[], coerce=str)
     submit = SubmitField("Load")
 
+def update_content():
+    global json_content, content, filter_dict, selected_number, rel_path
+    rgb_front_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_front", f"{selected_number}.jpg")
+    rgb_top_down_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_top_down", f"{selected_number}.jpg")
+    anno_json_path = os.path.join(b2d_data_path, rel_path, "anno", f"{selected_number}.json.gz")
+    appendix_json_path = os.path.join(appendix_path, rel_path, f"{selected_number}.json")
+    qa_json_path = os.path.join(qa_path, rel_path, f"{selected_number}.json")
+
+    content["rgb_front"] = rgb_front_path if os.path.exists(rgb_front_path) else "not exist"
+    content["rgb_top_down"] = rgb_top_down_path if os.path.exists(rgb_top_down_path) else "not exist"
+    json_content["anno_json"] = (
+        load_gzip_json(anno_json_path) if os.path.exists(anno_json_path) else "not exist"
+    )
+    json_content["appendix_json"] = load_json(appendix_json_path) if os.path.exists(appendix_json_path) else "not exist"
+    json_content["qa_json"] = load_json(qa_json_path) if os.path.exists(qa_json_path) else "not exist"
+
+    for key in ["anno_json", "appendix_json", "qa_json"]:
+        if isinstance(json_content[key], (dict, list)):
+            content[key] = filter_json_tree(json_content[key], filter_dict[key])
+            content[key] = json2html.convert(json=content[key])
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -58,6 +80,9 @@ def index():
         rel_path = form.rel_path.data
         qa_dir = os.path.join(qa_path, rel_path)
 
+        global json_files, json_numbers
+        json_files = []
+        json_numbers = []
         # Populate the JSON number choices if directory exists
         if os.path.exists(qa_dir):
             json_files = [f for f in os.listdir(qa_dir) if f.endswith(".json")]
@@ -72,27 +97,10 @@ def index():
 
         # Load the selected data if a number is chosen
         if selected_number:
-            rgb_front_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_front", f"{selected_number}.jpg")
-            rgb_top_down_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_top_down", f"{selected_number}.jpg")
-            anno_json_path = os.path.join(b2d_data_path, rel_path, "anno", f"{selected_number}.json.gz")
-            appendix_json_path = os.path.join(appendix_path, rel_path, f"{selected_number}.json")
-            qa_json_path = os.path.join(qa_path, rel_path, f"{selected_number}.json")
-
-            content["rgb_front"] = rgb_front_path if os.path.exists(rgb_front_path) else "not exist"
-            content["rgb_top_down"] = rgb_top_down_path if os.path.exists(rgb_top_down_path) else "not exist"
-            json_content["anno_json"] = (
-                load_gzip_json(anno_json_path) if os.path.exists(anno_json_path) else "not exist"
-            )
-            json_content["appendix_json"] = load_json(appendix_json_path) if os.path.exists(appendix_json_path) else "not exist"
-            json_content["qa_json"] = load_json(qa_json_path) if os.path.exists(qa_json_path) else "not exist"
-
-    # Render JSON with json2html if available
-    for key in ["anno_json", "appendix_json", "qa_json"]:
-        if isinstance(json_content[key], (dict, list)):
-            content[key] = filter_json_tree(json_content[key], filter_dict[key])
-            content[key] = json2html.convert(json=content[key])
+            update_content()
 
     return render_template("index.html", form=form, selected_number=selected_number, content=content)
+
 
 def filter_json_tree(json_data, filter_keywords):
     if (filter_keywords is None or len(filter_keywords) == 0):
@@ -129,6 +137,36 @@ def filter_json_tree(json_data, filter_keywords):
 
     return filtered_data
 
+@app.route("/change_number", methods=["POST"])
+def change_number():
+    global selected_number
+
+    if not selected_number:
+        return jsonify({"error": "No selected number"}), 400
+
+    data = request.json
+    direction = data.get("direction")
+
+    if not direction or direction not in ["prev", "next"]:
+        return jsonify({"error": "Invalid direction"}), 400
+
+    global json_files, json_numbers
+
+    if selected_number not in json_numbers:
+        return jsonify({"error": "Selected number not in list"}), 404
+
+    current_index = json_numbers.index(selected_number)
+
+    if direction == "prev":
+        new_index = (current_index - 1) % len(json_numbers)
+    elif direction == "next":
+        new_index = (current_index + 1) % len(json_numbers)
+
+    selected_number = json_numbers[new_index]
+
+    update_content()
+
+    return jsonify({"selected_number": selected_number, "content": content})
 
 @app.route("/filter", methods=["POST"])
 def filter_json():

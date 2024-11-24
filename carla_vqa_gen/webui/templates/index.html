@@ -60,6 +60,10 @@
 
     {% if selected_number %}
     <h2>Selected Number: {{ selected_number }}</h2>
+    <p>
+        <button type="button" onclick="changeNumber('prev')">Prev</button>
+        <button type="button" onclick="changeNumber('next')">Next</button>
+    </p>
 
     <div class="images">
         {% if content.rgb_front != "not exist" %}
@@ -133,88 +137,56 @@
             });
         }
 
-
-        // 递归过滤 JSON
-        function filterJsonRecursive(obj, filterKeywords, parentKey = '') {
-            console.debug("filtering")
-            let result = {};
-            let isKept = false;  // 是否保留当前节点
-
-            // 遍历对象的每个键值
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    const value = obj[key];
-                    const fullKey = parentKey ? `${parentKey}.${key}` : key;
-
-                    // 如果键名包含任意一个关键词，则标记为保留
-                    const containsKeyword = filterKeywords.some(keyword => fullKey.includes(keyword));
-                    if (containsKeyword) {
-                        isKept = true;  // 如果当前键包含关键词，则标记当前节点和其子节点都保留
-                        result[key] = value;
-                    } else if (typeof value === 'object' && value !== null) {
-                        // 如果值是对象，递归处理
-                        const childResult = filterJsonRecursive(value, filterKeywords, fullKey);
-                        if (Object.keys(childResult).length > 0) {
-                            isKept = true;  // 如果子树有保留的内容，则保留该节点
-                            result[key] = childResult;
-                        }
-                    }
+        function changeNumber(direction) {
+            fetch("/change_number", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ direction: direction }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
                 }
-            }
 
-            return isKept ? result : null;  // 如果当前节点及子树都没有内容，则返回 null，表示删除该节点
-        }
+                // 更新选中的选项号
+                document.querySelector("h2").innerText = "Selected Number: " + data.selected_number;
 
-        // 显示 JSON
-        function displayJson(filteredJson, jsonId) {
-            const jsonContainer = document.getElementById(jsonId);
-            console.debug(jsonId)
-            console.debug(jsonContainer)
-            jsonContainer.innerHTML = '';  // 清空当前内容
+                // 更新图片
+                const imagesDiv = document.querySelector(".images");
+                imagesDiv.innerHTML = "";
 
-            if (filteredJson) {
-                createJsonElement(filteredJson, jsonContainer);
-            }
-        }
-
-        // 递归创建 JSON 元素并插入到 DOM
-        function createJsonElement(obj, parentElement) {
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    const value = obj[key];
-                    const keyDiv = document.createElement('div');
-                    keyDiv.classList.add('json-entry');
-                    
-                    const keySpan = document.createElement('span');
-                    keySpan.classList.add('json-key');
-                    keySpan.innerText = key;
-
-                    // 递归处理对象
-                    if (typeof value === 'object' && value !== null) {
-                        const toggleButton = document.createElement('button');
-                        toggleButton.innerText = 'Show';
-                        toggleButton.classList.add('json-collapse');
-                        toggleButton.onclick = function() {
-                            const childContainer = this.nextElementSibling;
-                            childContainer.style.display = childContainer.style.display === 'none' ? 'block' : 'none';
-                            this.innerText = this.innerText === 'Show' ? 'Hide' : 'Show';
-                        };
-
-                        keyDiv.appendChild(toggleButton);
-                        const childContainer = document.createElement('div');
-                        childContainer.style.display = 'none';
-                        createJsonElement(value, childContainer);
-                        keyDiv.appendChild(childContainer);
-                    } else {
-                        const valueSpan = document.createElement('span');
-                        valueSpan.classList.add('json-value');
-                        valueSpan.innerText = value;
-                        keyDiv.appendChild(valueSpan);
-                    }
-
-                    parentElement.appendChild(keyDiv);
+                if (data.content.rgb_front !== "not exist") {
+                    const frontImg = document.createElement("img");
+                    frontImg.src = "/media/" + data.content.rgb_front;
+                    frontImg.alt = "RGB Front Image";
+                    frontImg.style.maxWidth = "45%";
+                    frontImg.style.height = "auto";
+                    imagesDiv.appendChild(frontImg);
+                } else {
+                    imagesDiv.innerHTML += "<p>RGB Front Image not found.</p>";
                 }
-            }
+
+                if (data.content.rgb_top_down !== "not exist") {
+                    const topDownImg = document.createElement("img");
+                    topDownImg.src = "/media/" + data.content.rgb_top_down;
+                    topDownImg.alt = "RGB Top-down Image";
+                    topDownImg.style.maxWidth = "45%";
+                    topDownImg.style.height = "auto";
+                    imagesDiv.appendChild(topDownImg);
+                } else {
+                    imagesDiv.innerHTML += "<p>RGB Top-down Image not found.</p>";
+                }
+
+                // 更新 JSON 数据
+                document.getElementById("anno-json").innerHTML = data.content.anno_json || "<p>not exist</p>";
+                document.getElementById("appendix-json").innerHTML = data.content.appendix_json || "<p>not exist</p>";
+                document.getElementById("qa-json").innerHTML = data.content.qa_json || "<p>not exist</p>";
+            })
+            .catch(error => console.error("Error:", error));
         }
 
         // Toggle Collapse All
