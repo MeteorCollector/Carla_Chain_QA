@@ -322,7 +322,7 @@ class QAsGenerator():
                                 
                                 if single_object['class'] == 'ego_car':
                                     continue
-                                all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX)
+                                all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
                                 if 'car' in single_object['class']:
                                     color = (255, 0, 0, 0)
@@ -548,7 +548,7 @@ class QAsGenerator():
             important_objects.append(f'the pedestrian {rough_pos_str}')
 
             # Project pedestrian points and center onto the image plane
-            projected_points, projected_points_meters = project_all_corners(pedestrian, self.CAMERA_MATRIX)
+            projected_points, projected_points_meters = project_all_corners(pedestrian, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
             # Generate key-value pair for the pedestrian object
             key, value = self.generate_object_key_value(
@@ -597,7 +597,7 @@ class QAsGenerator():
             if stop_sign['affects_ego'] and stop_sign['distance'] < 40:
                 stop_sign_affects_ego = True
                 important_objects.append('the stop sign')
-                projected_points, projected_points_meters = project_all_corners(stop_sign, self.CAMERA_MATRIX)
+                projected_points, projected_points_meters = project_all_corners(stop_sign, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                 key, value = self.generate_object_key_value(
                     category='Traffic element',
                     visual_description='Stop sign',
@@ -681,7 +681,7 @@ class QAsGenerator():
         if traffic_light_affects_ego:
             answer = "Yes, the ego vehicle is affected by a traffic light."
             important_objects.append(f'the {state} traffic light')
-            projected_points, projected_points_meters = project_all_corners(traffic_light, self.CAMERA_MATRIX)
+            projected_points, projected_points_meters = project_all_corners(traffic_light, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
             visual_description = f'{ego_vehicle["traffic_light_state"]} traffic light'
             key, value = self.generate_object_key_value(category='Traffic element',
                                                         visual_description=visual_description,
@@ -726,7 +726,7 @@ class QAsGenerator():
 
     def get_key_of_key_object(self, key_object_infos, object_dict=None):
         if object_dict is not None:
-            projected_points, _ = project_all_corners(object_dict, self.CAMERA_MATRIX)
+            projected_points, _ = project_all_corners(object_dict, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
             two_d_box = self.generate_2d_box_from_projected_points(projected_points)
             keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
@@ -1352,7 +1352,7 @@ class QAsGenerator():
 
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
                                      'ParkingExit', 'VehicleOpensDoorTwoWays']:
-                    projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX)
+                    projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
                     # Generate a unique key and value for the vehicle object
                     key, value = self.generate_object_key_value(
@@ -1413,7 +1413,7 @@ class QAsGenerator():
 
                         relevant_obj = relevant_objects[0]
                         projected_points, projected_points_meters = project_all_corners(relevant_obj, 
-                                                                                        self.CAMERA_MATRIX)
+                                                                                        self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                         two_d_box = self.generate_2d_box_from_projected_points(projected_points)
                         keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
@@ -1426,7 +1426,7 @@ class QAsGenerator():
 
                         relevant_obj = relevant_objects[0]
                         projected_points, projected_points_meters = project_all_corners(relevant_obj, 
-                                                                                        self.CAMERA_MATRIX)
+                                                                                        self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                         two_d_box = self.generate_2d_box_from_projected_points(projected_points)
                         keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
@@ -2217,7 +2217,7 @@ class QAsGenerator():
             important_objects.append(important_object_str)
 
             # Project the vehicle's bounding box points onto the image plane
-            projected_points, projected_points_meters = project_all_corners(vehicle, self.CAMERA_MATRIX)
+            projected_points, projected_points_meters = project_all_corners(vehicle, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
             projected_points_meters[:, 2] -= vehicle['position'][2]
 
             # Generate a unique key and value for the vehicle object
