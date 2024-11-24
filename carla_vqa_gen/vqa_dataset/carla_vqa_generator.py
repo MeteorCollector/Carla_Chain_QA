@@ -96,8 +96,12 @@ class QAsGenerator():
     
     def load_processed_paths(self):
         """从文件加载已处理的路径"""
-        if os.path.exists(self.processed_paths_file):
-            with open(self.processed_paths_file, 'r') as file:
+        return self.load_marked_paths(self.processed_paths_file)
+
+    def load_marked_paths(self, file_path):
+        """从文件加载已处理的路径"""
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
                 return set(file.read().splitlines())
         return set()
 
@@ -142,6 +146,11 @@ class QAsGenerator():
             keyframes_list = [x.strip() for x in keyframes_list]
             keyframes_list = [x.replace('rgb', 'boxes').replace('.jpg', '.json.gz') for x in keyframes_list]
 
+        # For debug, used when wanting a subset
+        do_subset = int(os.environ.get('SUBSET', 0))
+        if do_subset:
+            subset_keys = self.load_marked_paths('./subset.txt')
+        
         # Process each frame
         for path in tqdm.tqdm(self.data_boxes_paths):
 
@@ -149,6 +158,11 @@ class QAsGenerator():
             if any(processed_path in path for processed_path in self.processed_paths):
                 # print(f"[info] skipping {path}, which has already marked processed.")
                 continue
+
+            if do_subset:
+                if not (any(marked_path in path for marked_path in subset_keys)):
+                    # print(f"[info] skipping {path}, which has already marked processed.")
+                    continue
 
              # Skip frames based on keyframes list
             if self.sample_frame_mode == 'keyframes':
@@ -242,40 +256,60 @@ class QAsGenerator():
                 image = Image.open(image_path)
                 draw = ImageDraw.Draw(image)
 
-                eg_path = f'{self.output_graph_examples_directory}/original_images/{scenario_name}/{route_number}'
-                Path(eg_path).mkdir(parents=True, exist_ok=True)
-                eg_path = f'{self.output_graph_examples_directory}/resized_images/{scenario_name}/{route_number}'
-                Path(eg_path).mkdir(parents=True, exist_ok=True)
-                eg_path = f'{self.output_graph_examples_directory}/graphs/{scenario_name}/{route_number}'
-                Path(eg_path).mkdir(parents=True, exist_ok=True)
+                original_img_path = f'{self.output_graph_examples_directory}/original_images/{scenario_name}'
+                Path(original_img_path).mkdir(parents=True, exist_ok=True)
+                resized_img_path = f'{self.output_graph_examples_directory}/resized_images/{scenario_name}'
+                Path(resized_img_path).mkdir(parents=True, exist_ok=True)
+                anno_img_path = f'{self.output_graph_examples_directory}/anno_images/{scenario_name}'
+                Path(anno_img_path).mkdir(parents=True, exist_ok=True)
+                graph_path = f'{self.output_graph_examples_directory}/graphs/{scenario_name}'
+                Path(graph_path).mkdir(parents=True, exist_ok=True)
 
                 assert image.width == self.ORIGINAL_IMAGE_SIZE[0], f'{image.width} != {self.ORIGINAL_IMAGE_SIZE[0]}'
                 assert image.height == self.ORIGINAL_IMAGE_SIZE[1], f'{image.height} != {self.ORIGINAL_IMAGE_SIZE[1]}'
                 
                 # Draw a point for each object (e.g, car, traffic light, ...) on the image
                 if self.visualize_projection:
-                    for single_object in data:
-                        if 'position' in single_object:
-                            if single_object['class'] == 'ego_car':
-                                continue
-                            all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX)
+                    world2ego = None
+                    for single_object in data['bounding_boxes']:
+                        if 'ego' in single_object['class']:
+                            world2ego = single_object['world2ego']
+                    
+                    if world2ego is not None:
+                        for single_object in data['bounding_boxes']:
+                            # print(single_object)
+                            if 'position' in single_object:
+                                single_object['location'] = transform_to_ego_coordinates(single_object['position'], world2ego)
+                                
+                                if single_object['class'] == 'ego_car':
+                                    continue
+                                all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX)
 
-                            if 'car' in single_object['class']:
-                                color = (255, 0, 0, 0)
-                            elif 'traffic_light' in single_object['class'] or 'stop' in single_object['class']:
-                                color = (0, 255, 0, 0)
-                            elif 'landmark' in single_object['class']:
-                                color = (0, 0, 255, 0)
-                            else:
-                                color = (0, 0, 0, 0)
-                            if all_points_2d is not None:
-                                for points_2d in all_points_2d:
-                                    draw.ellipse((points_2d[0]-5, points_2d[1]-5, points_2d[0]+5, points_2d[1]+5), 
-                                                                                                      fill=color)
+                                if 'car' in single_object['class']:
+                                    color = (255, 0, 0, 0)
+                                elif 'traffic_light' in single_object['class'] or 'stop' in single_object['class']:
+                                    color = (0, 255, 0, 0)
+                                elif 'landmark' in single_object['class']:
+                                    color = (0, 0, 255, 0)
+                                else:
+                                    color = (0, 0, 0, 0)
+                                if all_points_2d is not None:
+                                    top_left_point = min(all_points_2d, key=lambda p: (p[0], p[1]))
+                                    
+                                    for points_2d in all_points_2d:
+                                        draw.ellipse((points_2d[0]-5, points_2d[1]-5, points_2d[0]+5, points_2d[1]+5), 
+                                                    fill=color)
+                                    
+                                    if 'type_id' in single_object:
+                                        draw.text((top_left_point[0] + 5, top_left_point[1] - 10),  # 文字位置稍微偏移
+                                                str(single_object['type_id']), 
+                                                fill=color)
+                    annotated_image_path = f'{anno_img_path}/{int(frame_number):05d}.png'
+                    image.save(annotated_image_path)
                 
                 # Save QA data
                 file_name = f'{self.output_graph_examples_directory}/graphs/' \
-                            f'{scenario_name}/{route_number}/{frame_number}.json'
+                            f'{scenario_name}/{int(frame_number):05d}.json'
                 with open(file_name, 'w', encoding='utf-8') as f:
                     json.dump(qas, f, sort_keys=True, indent=4)
 
