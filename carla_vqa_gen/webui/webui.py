@@ -18,6 +18,11 @@ rel_path = ""
 selected_number = None
 content = {}
 json_content = {}
+filter_dict = {
+    "anno_json": [],
+    "appendix_json": [],
+    "qa_json": [],
+}
 
 from flask import send_from_directory
 
@@ -34,8 +39,8 @@ class RelPathForm(FlaskForm):
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = RelPathForm()
-    global json_content
-    global content
+    global rel_path, selected_number, content, json_content, filter_dict
+    
     json_content = {
         "anno_json": "not exist",
         "appendix_json": "not exist",
@@ -50,7 +55,6 @@ def index():
     }
 
     if request.method == "POST":
-        global rel_path
         rel_path = form.rel_path.data
         qa_dir = os.path.join(qa_path, rel_path)
 
@@ -64,7 +68,6 @@ def index():
         else:
             form.json_number.choices = []
 
-        global selected_number
         selected_number = form.json_number.data
 
         # Load the selected data if a number is chosen
@@ -86,11 +89,15 @@ def index():
     # Render JSON with json2html if available
     for key in ["anno_json", "appendix_json", "qa_json"]:
         if isinstance(json_content[key], (dict, list)):
-            content[key] = json2html.convert(json=json_content[key])
+            content[key] = filter_json_tree(json_content[key], filter_dict[key])
+            content[key] = json2html.convert(json=content[key])
 
     return render_template("index.html", form=form, selected_number=selected_number, content=content)
 
 def filter_json_tree(json_data, filter_keywords):
+    if (filter_keywords is None or len(filter_keywords) == 0):
+        return json_data
+
     filter_keywords = [kw.lower() for kw in filter_keywords]
 
     def recursive_filter(obj):
@@ -113,7 +120,10 @@ def filter_json_tree(json_data, filter_keywords):
                     result.append(filtered_item)
             return result if result else None
         else:
-            return None
+            if any(keyword in str(obj).lower() for keyword in filter_keywords):
+                return obj
+            else:
+                return None
 
     filtered_data = recursive_filter(json_data)
 
@@ -122,24 +132,26 @@ def filter_json_tree(json_data, filter_keywords):
 
 @app.route("/filter", methods=["POST"])
 def filter_json():
+    global json_content, filter_dict
+
     data = request.json
     filter_keywords = data.get("keywords", [])
     json_key = data.get("key")
-    global json_content
-    print(json_content)
+    # print(json_content)
 
     if json_key not in json_content:
         return "Invalid JSON key", 400
 
     # 过滤指定的 JSON
-    if isinstance(json_content[json_key], (dict, list)):
+    if isinstance(filter_dict[json_key], (dict, list)):
+        filter_dict[json_key] = filter_keywords
         filtered_json = filter_json_tree(json_content[json_key], filter_keywords)
         html_response = json2html.convert(json=filtered_json)
     else:
         html_response = "<p>not exist</p>"
 
-    print(json_key)
-    print(html_response)
+    # print(json_key)
+    # print(html_response)
     return html_response
 
 def load_json(json_path):
