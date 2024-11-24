@@ -79,6 +79,8 @@ def project_all_corners(obj, K):
     Returns:
         tuple: (np.ndarray of 2D projected points, np.ndarray of 3D corner points)
     """
+    K = np.array(K)
+
     pos = obj['position']
     if 'extent' not in obj:
         extent = [0.15,0.15,0.15]
@@ -109,19 +111,27 @@ def project_all_corners(obj, K):
     # translate bbox
     corners = corners + np.array(pos)
     all_points_2d = []
-    for corner in  corners:
+    valid_corners = []  # 用于存储可投影的3D点
+    
+    for corner in corners:
+        # 转换到相机坐标系
         pos_3d = np.array([corner[1], -corner[2], corner[0]])
+        if pos_3d[2] <= 0:  # 如果点位于相机后方，跳过
+            continue
+        
+        # 定义相机外参和内参
         rvec = np.zeros((3, 1), np.float32) 
         tvec = np.array([[0.0, 2.0, 1.5]], np.float32)
-        # Define the distortion coefficients 
         dist_coeffs = np.zeros((5, 1), np.float32) 
-        points_2d, _ = cv2.projectPoints(pos_3d, 
-                            rvec, tvec, 
-                            K, 
-                            dist_coeffs)
-        all_points_2d.append(points_2d[0][0])
         
-    return np.array(all_points_2d), np.array(corners)
+        # 投影点
+        points_2d, _ = cv2.projectPoints(
+            pos_3d, rvec, tvec, K, dist_coeffs
+        )
+        all_points_2d.append(points_2d[0][0])
+        valid_corners.append(corner)  # 保存有效的3D点
+    
+    return np.array(all_points_2d), np.array(valid_corners)
 
 
 def light_state_to_word(light_state):

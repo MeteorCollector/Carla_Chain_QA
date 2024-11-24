@@ -52,7 +52,19 @@ class QAsGenerator():
         self.output_graph_examples_directory = args.output_graph_examples_directory
 
         # Build camera projection matrix
-        # should modify
+        self.CAMERA_MATRIX = None
+        self.CAM_INTRINSIC_FRONT = None
+        self.CAM_INTRINSIC_FRONT_LEFT = None
+        self.CAM_INTRINSIC_FRONT_RIGHT = None
+        self.CAM_INTRINSIC_BACK = None
+        self.CAM_INTRINSIC_BACK_LEFT = None
+        self.CAM_INTRINSIC_BACK_RIGHT = None
+        self.WORLD2CAM_FRONT = None
+        self.WORLD2CAM_FRONT_LEFT = None
+        self.WORLD2CAM_FRONT_RIGHT = None
+        self.WORLD2CAM_BACK = None
+        self.WORLD2CAM_BACK_LEFT = None
+        self.WORLD2CAM_BACK_RIGHT = None
         self.CAMERA_MATRIX = build_projection_matrix(self.ORIGINAL_IMAGE_SIZE[0],
                                                      self.ORIGINAL_IMAGE_SIZE[1],
                                                      self.ORIGINAL_FOV)
@@ -241,6 +253,36 @@ class QAsGenerator():
 
             # Get perception questions
             # print("generation reached here") # debug
+                
+            sensor_data = data['sensors']
+
+            # Read all camera datas
+            if 'CAM_FRONT' in sensor_data:
+                self.CAMERA_FRONT = sensor_data['CAM_FRONT']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_FRONT']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_FRONT']['world2cam']
+                self.CAMERA_MATRIX = self.CAM_INTRINSIC_FRONT
+            if 'CAM_FRONT_LEFT' in sensor_data:
+                self.CAMERA_FRONT_LEFT = sensor_data['CAM_FRONT_LEFT']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_FRONT_LEFT']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_FRONT_LEFT']['world2cam']
+            if 'CAM_FRONT_RIGHT' in sensor_data:
+                self.CAMERA_FRONT_RIGHT = sensor_data['CAM_FRONT_RIGHT']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_FRONT_RIGHT']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_FRONT_RIGHT']['world2cam']
+            if 'CAM_BACK' in sensor_data:
+                self.CAMERA_BACK = sensor_data['CAM_BACK']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK']['world2cam']
+            if 'CAM_BACK_LEFT' in sensor_data:
+                self.CAMERA_BACK_LEFT = sensor_data['CAM_BACK_LEFT']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK_LEFT']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK_LEFT']['world2cam']
+            if 'CAM_BACK_RIGHT' in sensor_data:
+                self.CAMERA_BACK_RIGHT = sensor_data['CAM_BACK_RIGHT']
+                self.CAM_INTRINSIC_FRONT = sensor_data['CAM_BACK_RIGHT']['intrinsic']
+                self.WORLD2CAM_FRONT = sensor_data['CAM_BACK_RIGHT']['world2cam']
+
             image_path = path.replace('anno', 'camera/rgb_front').replace('.json.gz', '.jpg')
             relative_image_path = image_path
 
@@ -270,16 +312,13 @@ class QAsGenerator():
                 
                 # Draw a point for each object (e.g, car, traffic light, ...) on the image
                 if self.visualize_projection:
-                    world2ego = None
-                    for single_object in data['bounding_boxes']:
-                        if 'ego' in single_object['class']:
-                            world2ego = single_object['world2ego']
+                    # print(data)
                     
-                    if world2ego is not None:
+                    if self.WORLD2CAM_FRONT is not None:
                         for single_object in data['bounding_boxes']:
                             # print(single_object)
                             if 'position' in single_object:
-                                single_object['location'] = transform_to_ego_coordinates(single_object['position'], world2ego)
+                                single_object['location'] = transform_to_ego_coordinates(single_object['position'], self.WORLD2CAM_FRONT)
                                 
                                 if single_object['class'] == 'ego_car':
                                     continue
@@ -293,7 +332,7 @@ class QAsGenerator():
                                     color = (0, 0, 255, 0)
                                 else:
                                     color = (0, 0, 0, 0)
-                                if all_points_2d is not None:
+                                if all_points_2d is not None and len(all_points_2d) > 0:
                                     top_left_point = min(all_points_2d, key=lambda p: (p[0], p[1]))
                                     
                                     for points_2d in all_points_2d:
@@ -2255,22 +2294,7 @@ class QAsGenerator():
 
         # print(f"[debug] generating perception questions, path = {self.current_measurement_path}") # debug
         scene_data = measurements['bounding_boxes']
-        sensor_data = measurements['sensors']
-
-        # read all camera datas
-        if 'CAM_FRONT' in sensor_data:
-            self.CAMERA_FRONT = sensor_data['CAM_FRONT']
-        if 'CAM_FRONT_LEFT' in sensor_data:
-            self.CAMERA_FRONT_LEFT = sensor_data['CAM_FRONT_LEFT']
-        if 'CAM_FRONT_RIGHT' in sensor_data:
-            self.CAMERA_FRONT_RIGHT = sensor_data['CAM_FRONT_RIGHT']
-        if 'CAM_BACK' in sensor_data:
-            self.CAMERA_BACK = sensor_data['CAM_BACK']
-        if 'CAM_BACK_LEFT' in sensor_data:
-            self.CAMERA_BACK_LEFT = sensor_data['CAM_BACK_LEFT']
-        if 'CAM_BACK_RIGHT' in sensor_data:
-            self.CAMERA_BACK_RIGHT = sensor_data['CAM_BACK_RIGHT']
-
+        
         ego_measurements = {k: v for k, v in measurements.items() if k != 'sensors'}
         # Initialize lists to store different types of objectss
         static_cars = []
