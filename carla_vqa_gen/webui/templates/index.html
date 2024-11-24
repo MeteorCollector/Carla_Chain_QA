@@ -2,32 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug WebUI</title>
+    <title>WebUI Debug</title>
+    <style>
+        .images {
+            display: flex;
+            gap: 10px;
+        }
+        .json-container {
+            margin-top: 20px;
+            overflow-x: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1>Debug WebUI</h1>
+    <h1>WebUI Debug</h1>
     <form method="post">
         {{ form.hidden_tag() }}
-        <label for="rel_path">Relative Path:</label>
-        {{ form.rel_path(size=50) }}
-        <br><br>
-        <label for="json_number">JSON Number:</label>
-        {{ form.json_number() }}
-        <br><br>
-        <button type="submit">Load</button>
+        <p>
+            {{ form.rel_path.label }}<br>
+            {{ form.rel_path(size=50) }}
+        </p>
+        <p>
+            {{ form.json_number.label }}<br>
+            {{ form.json_number() }}
+        </p>
+        <p>{{ form.submit() }}</p>
     </form>
 
     {% if selected_number %}
     <h2>Selected Number: {{ selected_number }}</h2>
-    <h3>Files:</h3>
-    <ul>
-        <li>RGB Front Image: {{ content.rgb_front }}</li>
-        <li>RGB Top Down Image: {{ content.rgb_top_down }}</li>
-        <li>Annotation JSON: {{ content.anno_json }}</li>
-        <li>Appendix JSON: {{ content.appendix_json }}</li>
-        <li>QA JSON: {{ content.qa_json }}</li>
-    </ul>
+
+    <div class="images">
+        {% if content.rgb_front != "not exist" %}
+            <img src="/media/{{ content.rgb_front }}" alt="RGB Front Image" style="max-width: 45%; height: auto;">
+        {% else %}
+            <p>RGB Front Image not found.</p>
+        {% endif %}
+
+        {% if content.rgb_top_down != "not exist" %}
+            <img src="/media/{{ content.rgb_top_down }}" alt="RGB Top-down Image" style="max-width: 45%; height: auto;">
+        {% else %}
+            <p>RGB Top-down Image not found.</p>
+        {% endif %}
+    </div>
+
+    <div class="json-container">
+        <h3>Annotation JSON:</h3>
+        {{ content.anno_json | safe }}
+
+        <h3>Appendix JSON:</h3>
+        {{ content.appendix_json | safe }}
+
+        <h3>QA JSON:</h3>
+        {{ content.qa_json | safe }}
+    </div>
     {% endif %}
 </body>
 </html>
