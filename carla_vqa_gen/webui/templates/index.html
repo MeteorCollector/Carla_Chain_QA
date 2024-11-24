@@ -104,33 +104,35 @@
     {% endif %}
 
     <script>
-        function filterJson(jsonType, filterInputId) {
-            const input = document.getElementById(filterInputId);
-            const filterKeywords = input.value.split(' ').map(keyword => keyword.trim()).filter(keyword => keyword);
+        function filterJson(jsonKey, inputId) {
+            const inputElement = document.getElementById(inputId);
+            const filterKeywords = inputElement.value.trim().split(/\s+/); // 按空格分隔关键字
 
-            // 构建请求的 URL，包含过滤关键字作为查询参数
-            let url = `/get_json/${jsonType}`;
-            if (filterKeywords.length > 0) {
-                url += `?filter=${filterKeywords.join(' ')}`;  // 将过滤条件传递给后端
-            }
-
-            // 向后端请求过滤后的 JSON 数据
-            fetch(url)
-                .then(response => response.json())
-                .then(jsonContent => {
-                    // 如果返回的数据是 "not exist"，则不进行处理
-                    if (jsonContent === "not exist") {
-                        alert(`${jsonType} not found.`);
-                        return;
-                    }
-
-                    // 更新显示
-                    displayJson(jsonContent, jsonType);
-                })
-                .catch(error => {
-                    console.error('Error fetching JSON:', error);
-                });
+            fetch("/filter", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    keywords: filterKeywords,
+                    key: jsonKey, // 告诉后端要处理哪个 JSON
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text(); // 后端返回 HTML 内容
+            })
+            .then(htmlContent => {
+                const targetDiv = document.getElementById(jsonKey.replace('_', '-')); // 动态找到对应的容器
+                targetDiv.innerHTML = htmlContent; // 更新内容
+            })
+            .catch(error => {
+                console.error("Error filtering JSON:", error);
+            });
         }
+
 
         // 递归过滤 JSON
         function filterJsonRecursive(obj, filterKeywords, parentKey = '') {
@@ -166,6 +168,8 @@
         // 显示 JSON
         function displayJson(filteredJson, jsonId) {
             const jsonContainer = document.getElementById(jsonId);
+            console.debug(jsonId)
+            console.debug(jsonContainer)
             jsonContainer.innerHTML = '';  // 清空当前内容
 
             if (filteredJson) {

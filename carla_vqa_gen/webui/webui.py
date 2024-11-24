@@ -13,8 +13,11 @@ app.secret_key = "okitasouji"
 b2d_data_path = "/media/telkwevr/22729A30729A08A5/Project_/Bench2Drive-rep"
 appendix_path = "/media/telkwevr/22729A30729A08A5/Project_/Carla_Chain_QA/carla_vqa_gen/vqa_dataset/outgraph/appendix"
 qa_path = "/media/telkwevr/22729A30729A08A5/Project_/Carla_Chain_QA/carla_vqa_gen/vqa_dataset/outgraph"
+
 rel_path = ""
 selected_number = None
+content = {}
+json_content = {}
 
 from flask import send_from_directory
 
@@ -31,6 +34,13 @@ class RelPathForm(FlaskForm):
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = RelPathForm()
+    global json_content
+    global content
+    json_content = {
+        "anno_json": "not exist",
+        "appendix_json": "not exist",
+        "qa_json": "not exist",
+    }
     content = {
         "rgb_front": "not exist",
         "rgb_top_down": "not exist",
@@ -67,22 +77,20 @@ def index():
 
             content["rgb_front"] = rgb_front_path if os.path.exists(rgb_front_path) else "not exist"
             content["rgb_top_down"] = rgb_top_down_path if os.path.exists(rgb_top_down_path) else "not exist"
-            content["anno_json"] = (
+            json_content["anno_json"] = (
                 load_gzip_json(anno_json_path) if os.path.exists(anno_json_path) else "not exist"
             )
-            content["appendix_json"] = load_json(appendix_json_path) if os.path.exists(appendix_json_path) else "not exist"
-            content["qa_json"] = load_json(qa_json_path) if os.path.exists(qa_json_path) else "not exist"
+            json_content["appendix_json"] = load_json(appendix_json_path) if os.path.exists(appendix_json_path) else "not exist"
+            json_content["qa_json"] = load_json(qa_json_path) if os.path.exists(qa_json_path) else "not exist"
 
     # Render JSON with json2html if available
     for key in ["anno_json", "appendix_json", "qa_json"]:
-        if isinstance(content[key], (dict, list)):
-            content[key] = json2html.convert(json=content[key])
+        if isinstance(json_content[key], (dict, list)):
+            content[key] = json2html.convert(json=json_content[key])
 
     return render_template("index.html", form=form, selected_number=selected_number, content=content)
 
-import json
-
-def filter_json(json_data, filter_keywords):
+def filter_json_tree(json_data, filter_keywords):
     filter_keywords = [kw.lower() for kw in filter_keywords]
 
     def recursive_filter(obj):
@@ -112,34 +120,27 @@ def filter_json(json_data, filter_keywords):
     return filtered_data
 
 
-@app.route('/get_json/<json_type>', methods=['GET'])
-def get_json(json_type):
-    print(f"getting json, json_type = {json_type}")
-    filter_keywords = request.args.get('filter', '').split()
+@app.route("/filter", methods=["POST"])
+def filter_json():
+    data = request.json
+    filter_keywords = data.get("keywords", [])
+    json_key = data.get("key")
+    global json_content
+    print(json_content)
 
-    global rel_path, selected_number
-    
-    anno_json_path = os.path.join(b2d_data_path, rel_path, "anno", f"{selected_number}.json.gz")
-    appendix_json_path = os.path.join(appendix_path, rel_path, f"{selected_number}.json")
-    qa_json_path = os.path.join(qa_path, rel_path, f"{selected_number}.json")
-    print(anno_json_path)
-    print(appendix_json_path)
-    print(qa_json_path)
-    
-    if json_type == "anno_json":
-        json_data = load_gzip_json(anno_json_path) if os.path.exists(anno_json_path) else "not exist"
-    elif json_type == "appendix_json":
-        json_data = load_json(appendix_json_path) if os.path.exists(appendix_json_path) else "not exist"
-    elif json_type == "qa_json":
-        json_data = load_json(qa_json_path) if os.path.exists(qa_json_path) else "not exist"
+    if json_key not in json_content:
+        return "Invalid JSON key", 400
+
+    # 过滤指定的 JSON
+    if isinstance(json_content[json_key], (dict, list)):
+        filtered_json = filter_json_tree(json_content[json_key], filter_keywords)
+        html_response = json2html.convert(json=filtered_json)
     else:
-        json_data = {"error": "Invalid JSON type"}
+        html_response = "<p>not exist</p>"
 
-    if json_data != "not exist":
-        json_data = filter_json(json_data, filter_keywords)
-
-    # print(json_data)
-    return jsonify(json_data)
+    print(json_key)
+    print(html_response)
+    return html_response
 
 def load_json(json_path):
     try:
