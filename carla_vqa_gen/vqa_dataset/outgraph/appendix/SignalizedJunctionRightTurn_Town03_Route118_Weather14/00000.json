@@ -16,7 +16,8 @@
         ],
         "class": "ego_vehicle",
         "color": "0,0,0",
-        "distance_to_junction": 34.00000120995349,
+        "distance_to_junction": 34.0,
+        "distance_to_junction_ego": 34.0,
         "ego_lane_number": 0,
         "extent": [
             2.44619083404541,
@@ -29,6 +30,7 @@
         "hazard_detected_40": false,
         "id": "109",
         "is_in_junction": false,
+        "junction_id": -1,
         "lane_change": 0,
         "lane_change_str": "NONE",
         "lane_id": 1,
@@ -42,6 +44,20 @@
             -46.15864562988281,
             -135.76046752929688,
             -0.0051775360479950905
+        ],
+        "next_junction_id": 1221,
+        "next_junction_id_ego": 1221,
+        "next_next_road_ids": [
+            28
+        ],
+        "next_next_road_ids_ego": [
+            28
+        ],
+        "next_road_ids": [
+            1301
+        ],
+        "next_road_ids_ego": [
+            1301
         ],
         "num_lanes_opposite_direction": 1,
         "num_lanes_same_direction": 1,
@@ -74,6 +90,7 @@
         "sidewalk_right": true,
         "speed": 1.3036220742339718e-06,
         "type_id": "vehicle.lincoln.mkz_2020",
+        "virtual_steer": 0.007288170542933549,
         "world2ego": [
             [
                 0.9997705817222595,
@@ -141,7 +158,8 @@
                 -136.73114013671875,
                 -0.0014891880564391613
             ]
-        ]
+        ],
+        "yaw": 0.021419769277399085
     },
     "measuerments": {
         "acceleration": [
@@ -172,7 +190,8 @@
                 ],
                 "class": "ego_vehicle",
                 "color": "0,0,0",
-                "distance_to_junction": 34.00000120995349,
+                "distance_to_junction": 34.0,
+                "distance_to_junction_ego": 34.0,
                 "ego_lane_number": 0,
                 "extent": [
                     2.44619083404541,
@@ -185,6 +204,7 @@
                 "hazard_detected_40": false,
                 "id": "109",
                 "is_in_junction": false,
+                "junction_id": -1,
                 "lane_change": 0,
                 "lane_change_str": "NONE",
                 "lane_id": 1,
@@ -198,6 +218,20 @@
                     -46.15864562988281,
                     -135.76046752929688,
                     -0.0051775360479950905
+                ],
+                "next_junction_id": 1221,
+                "next_junction_id_ego": 1221,
+                "next_next_road_ids": [
+                    28
+                ],
+                "next_next_road_ids_ego": [
+                    28
+                ],
+                "next_road_ids": [
+                    1301
+                ],
+                "next_road_ids_ego": [
+                    1301
                 ],
                 "num_lanes_opposite_direction": 1,
                 "num_lanes_same_direction": 1,
@@ -230,6 +264,7 @@
                 "sidewalk_right": true,
                 "speed": 1.3036220742339718e-06,
                 "type_id": "vehicle.lincoln.mkz_2020",
+                "virtual_steer": 0.007288170542933549,
                 "world2ego": [
                     [
                         0.9997705817222595,
@@ -297,7 +332,8 @@
                         -136.73114013671875,
                         -0.0014891880564391613
                     ]
-                ]
+                ],
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": false,
@@ -352,7 +388,8 @@
                     0.0,
                     270.00030517578125
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": true,
@@ -407,7 +444,8 @@
                     0.0,
                     89.99993133544922
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": false,
@@ -462,7 +500,8 @@
                     0.0,
                     180.0000457763672
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": false,
@@ -517,7 +556,8 @@
                     0.0,
                     0.0
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": false,
@@ -572,7 +612,8 @@
                     0.0,
                     270.00006103515625
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             },
             {
                 "affects_ego": false,
@@ -627,11 +668,13 @@
                     0.0,
                     90.00007629394531
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 0.021419769277399085
             }
         ],
         "brake": 0.0,
         "changed_route": false,
+        "command": 4,
         "command_far": 2,
         "command_near": 4,
         "control_brake": false,
@@ -1615,6 +1658,10 @@
         "should_brake": false,
         "speed": 1.3036220742339718e-06,
         "steer": 0.0,
+        "target_point": [
+            -13.436118125915527,
+            -135.05937194759684
+        ],
         "theta": 1.59221613407135,
         "throttle": 1.0,
         "weather": {
@@ -1656,7 +1703,8 @@
             ],
             "class": "ego_vehicle",
             "color": "0,0,0",
-            "distance_to_junction": 34.00000120995349,
+            "distance_to_junction": 34.0,
+            "distance_to_junction_ego": 34.0,
             "ego_lane_number": 0,
             "extent": [
                 2.44619083404541,
@@ -1669,6 +1717,7 @@
             "hazard_detected_40": false,
             "id": "109",
             "is_in_junction": false,
+            "junction_id": -1,
             "lane_change": 0,
             "lane_change_str": "NONE",
             "lane_id": 1,
@@ -1682,6 +1731,20 @@
                 -46.15864562988281,
                 -135.76046752929688,
                 -0.0051775360479950905
+            ],
+            "next_junction_id": 1221,
+            "next_junction_id_ego": 1221,
+            "next_next_road_ids": [
+                28
+            ],
+            "next_next_road_ids_ego": [
+                28
+            ],
+            "next_road_ids": [
+                1301
+            ],
+            "next_road_ids_ego": [
+                1301
             ],
             "num_lanes_opposite_direction": 1,
             "num_lanes_same_direction": 1,
@@ -1714,6 +1777,7 @@
             "sidewalk_right": true,
             "speed": 1.3036220742339718e-06,
             "type_id": "vehicle.lincoln.mkz_2020",
+            "virtual_steer": 0.007288170542933549,
             "world2ego": [
                 [
                     0.9997705817222595,
@@ -1781,7 +1845,8 @@
                     -136.73114013671875,
                     -0.0014891880564391613
                 ]
-            ]
+            ],
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": false,
@@ -1836,7 +1901,8 @@
                 0.0,
                 270.00030517578125
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": true,
@@ -1891,7 +1957,8 @@
                 0.0,
                 89.99993133544922
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": false,
@@ -1946,7 +2013,8 @@
                 0.0,
                 180.0000457763672
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": false,
@@ -2001,7 +2069,8 @@
                 0.0,
                 0.0
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": false,
@@ -2056,7 +2125,8 @@
                 0.0,
                 270.00006103515625
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         },
         {
             "affects_ego": false,
@@ -2111,7 +2181,8 @@
                 0.0,
                 90.00007629394531
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 0.021419769277399085
         }
     ]
 }

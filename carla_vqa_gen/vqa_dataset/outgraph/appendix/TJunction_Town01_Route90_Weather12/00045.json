@@ -22,7 +22,8 @@
         ],
         "class": "ego_vehicle",
         "color": "0,0,0",
-        "distance_to_junction": 50.75990816342244,
+        "distance_to_junction": null,
+        "distance_to_junction_ego": null,
         "ego_lane_number": 0,
         "extent": [
             2.44619083404541,
@@ -35,6 +36,7 @@
         "hazard_detected_40": true,
         "id": "1091",
         "is_in_junction": false,
+        "junction_id": -1,
         "lane_change": 0,
         "lane_change_str": "NONE",
         "lane_id": 1,
@@ -48,6 +50,20 @@
             392.3580627441406,
             304.178955078125,
             -0.007330054882913828
+        ],
+        "next_junction_id": -1,
+        "next_junction_id_ego": -1,
+        "next_next_road_ids": [
+            7
+        ],
+        "next_next_road_ids_ego": [
+            7
+        ],
+        "next_road_ids": [
+            14
+        ],
+        "next_road_ids_ego": [
+            14
         ],
         "num_lanes_opposite_direction": 1,
         "num_lanes_same_direction": 1,
@@ -80,6 +96,7 @@
         "sidewalk_right": true,
         "speed": 4.991187913734884,
         "type_id": "vehicle.lincoln.mkz_2020",
+        "virtual_steer": 7.045733857156856e-05,
         "world2ego": [
             [
                 0.00608377531170845,
@@ -147,7 +164,8 @@
                 301.7210693359375,
                 -0.03400755301117897
             ]
-        ]
+        ],
+        "yaw": 1.5647120689685015
     },
     "measuerments": {
         "acceleration": [
@@ -184,7 +202,8 @@
                 ],
                 "class": "ego_vehicle",
                 "color": "0,0,0",
-                "distance_to_junction": 50.75990816342244,
+                "distance_to_junction": null,
+                "distance_to_junction_ego": null,
                 "ego_lane_number": 0,
                 "extent": [
                     2.44619083404541,
@@ -197,6 +216,7 @@
                 "hazard_detected_40": true,
                 "id": "1091",
                 "is_in_junction": false,
+                "junction_id": -1,
                 "lane_change": 0,
                 "lane_change_str": "NONE",
                 "lane_id": 1,
@@ -210,6 +230,20 @@
                     392.3580627441406,
                     304.178955078125,
                     -0.007330054882913828
+                ],
+                "next_junction_id": -1,
+                "next_junction_id_ego": -1,
+                "next_next_road_ids": [
+                    7
+                ],
+                "next_next_road_ids_ego": [
+                    7
+                ],
+                "next_road_ids": [
+                    14
+                ],
+                "next_road_ids_ego": [
+                    14
                 ],
                 "num_lanes_opposite_direction": 1,
                 "num_lanes_same_direction": 1,
@@ -242,6 +276,7 @@
                 "sidewalk_right": true,
                 "speed": 4.991187913734884,
                 "type_id": "vehicle.lincoln.mkz_2020",
+                "virtual_steer": 7.045733857156856e-05,
                 "world2ego": [
                     [
                         0.00608377531170845,
@@ -309,7 +344,8 @@
                         301.7210693359375,
                         -0.03400755301117897
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "base_type": "car",
@@ -326,19 +362,34 @@
                 ],
                 "class": "vehicle",
                 "color": "16,16,16",
+                "color_name": null,
+                "color_rgb": null,
                 "distance": 33.648309950579055,
+                "distance_to_junction": null,
                 "extent": [
                     2.4508416652679443,
                     1.0641621351242065,
                     0.7553732395172119
                 ],
                 "id": "1130",
+                "is_in_junction": false,
+                "junction_id": -1,
                 "lane_id": -1,
+                "lane_relative_to_ego": null,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
                 "light_state": "131",
                 "location": [
                     371.6612854003906,
                     330.70916748046875,
                     0.034098587930202484
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [
+                    8
+                ],
+                "next_road_ids": [
+                    14
                 ],
                 "num_points": 18,
                 "position": [
@@ -352,12 +403,15 @@
                     0.0008667449001222849,
                     0.023321349173784256
                 ],
+                "same_direction_as_ego": false,
+                "same_road_as_ego": false,
                 "section_id": 0,
                 "semantic_tags": [
                     14
                 ],
                 "speed": 7.792417382291631,
                 "state": "dynamic",
+                "steer": -0.0004420090812109782,
                 "type_id": "vehicle.lincoln.mkz_2017",
                 "vehicle_cuts_in": false,
                 "world2vehicle": [
@@ -427,7 +481,8 @@
                         329.6440124511719,
                         -0.0015364252030849457
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "base_type": "car",
@@ -444,19 +499,34 @@
                 ],
                 "class": "vehicle",
                 "color": "85,0,0",
+                "color_name": null,
+                "color_rgb": null,
                 "distance": 30.34647788665835,
+                "distance_to_junction": null,
                 "extent": [
                     2.358762502670288,
                     0.947413444519043,
                     0.650469958782196
                 ],
                 "id": "1129",
+                "is_in_junction": false,
+                "junction_id": -1,
                 "lane_id": 1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
                 "light_state": "131",
                 "location": [
                     392.2410888671875,
                     273.83270263671875,
                     -0.005717582534998655
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [
+                    7
+                ],
+                "next_road_ids": [
+                    14
                 ],
                 "num_points": 0,
                 "position": [
@@ -470,12 +540,15 @@
                     8.488378080073744e-05,
                     90.0549545288086
                 ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
                 "section_id": 0,
                 "semantic_tags": [
                     14
                 ],
                 "speed": 2.4583899806668024,
                 "state": "dynamic",
+                "steer": -0.0010313972620966379,
                 "type_id": "vehicle.ford.mustang",
                 "vehicle_cuts_in": true,
                 "world2vehicle": [
@@ -545,7 +618,8 @@
                         271.5069885253906,
                         -0.00649526622146368
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "base_type": "car",
@@ -562,19 +636,34 @@
                 ],
                 "class": "vehicle",
                 "color": "12,42,12",
+                "color_name": null,
+                "color_rgb": null,
                 "distance": 13.476867801207314,
+                "distance_to_junction": null,
                 "extent": [
                     2.782914400100708,
                     1.0749834775924683,
                     1.0225735902786255
                 ],
                 "id": "1128",
+                "is_in_junction": false,
+                "junction_id": -1,
                 "lane_id": 1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
                 "light_state": "131",
                 "location": [
                     392.254638671875,
                     290.7024841308594,
                     0.002514419611543417
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [
+                    7
+                ],
+                "next_road_ids": [
+                    14
                 ],
                 "num_points": 243,
                 "position": [
@@ -588,12 +677,15 @@
                     0.005268237087875605,
                     90.80583953857422
                 ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
                 "section_id": 0,
                 "semantic_tags": [
                     14
                 ],
                 "speed": 0.7069021328008916,
                 "state": "dynamic",
+                "steer": -0.041352434698177704,
                 "type_id": "vehicle.nissan.patrol_2021",
                 "vehicle_cuts_in": true,
                 "world2vehicle": [
@@ -663,7 +755,8 @@
                         287.96337890625,
                         -0.010931434109807014
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "base_type": "car",
@@ -680,19 +773,34 @@
                 ],
                 "class": "vehicle",
                 "color": "0,0,0",
+                "color_name": null,
+                "color_rgb": null,
                 "distance": 15.973872600291823,
+                "distance_to_junction": null,
                 "extent": [
                     2.44619083404541,
                     0.9183566570281982,
                     0.7451388239860535
                 ],
                 "id": "1127",
+                "is_in_junction": false,
+                "junction_id": -1,
                 "lane_id": -1,
+                "lane_relative_to_ego": null,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
                 "light_state": "131",
                 "location": [
                     391.8878173828125,
                     320.1459045410156,
                     -0.006977958604693413
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [
+                    144
+                ],
+                "next_road_ids": [
+                    7
                 ],
                 "num_points": 81,
                 "position": [
@@ -706,12 +814,15 @@
                     -0.6886290907859802,
                     95.68258666992188
                 ],
+                "same_direction_as_ego": false,
+                "same_road_as_ego": false,
                 "section_id": 0,
                 "semantic_tags": [
                     14
                 ],
                 "speed": 7.8003310176665765,
                 "state": "dynamic",
+                "steer": 1.1035052737924784,
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "vehicle_cuts_in": false,
                 "world2vehicle": [
@@ -781,7 +892,8 @@
                         317.7965393066406,
                         -0.03230873867869377
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "base_type": "car",
@@ -798,19 +910,34 @@
                 ],
                 "class": "vehicle",
                 "color": "16,16,16",
+                "color_name": null,
+                "color_rgb": null,
                 "distance": 30.143310593343326,
+                "distance_to_junction": 26.0,
                 "extent": [
                     2.4508416652679443,
                     1.0641621351242065,
                     0.7553732395172119
                 ],
                 "id": "1126",
+                "is_in_junction": false,
+                "junction_id": -1,
                 "lane_id": 1,
+                "lane_relative_to_ego": null,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
                 "light_state": "131",
                 "location": [
                     372.1212463378906,
                     326.519287109375,
                     0.03432407230138779
+                ],
+                "next_junction_id": 143,
+                "next_next_road_ids": [
+                    19
+                ],
+                "next_road_ids": [
+                    144
                 ],
                 "num_points": 55,
                 "position": [
@@ -824,12 +951,15 @@
                     -0.00015258786152116954,
                     -179.8565673828125
                 ],
+                "same_direction_as_ego": false,
+                "same_road_as_ego": false,
                 "section_id": 0,
                 "semantic_tags": [
                     14
                 ],
                 "speed": 7.252153414574666,
                 "state": "dynamic",
+                "steer": -0.004197854867808532,
                 "type_id": "vehicle.lincoln.mkz_2017",
                 "vehicle_cuts_in": false,
                 "world2vehicle": [
@@ -899,7 +1029,8 @@
                         327.5895690917969,
                         -0.00022117793560028076
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -954,7 +1085,8 @@
                     0.0,
                     89.99979400634766
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1009,7 +1141,8 @@
                     0.0,
                     179.9999542236328
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1064,7 +1197,8 @@
                     0.0,
                     270.0003662109375
                 ],
-                "type_id": "traffic.traffic_light"
+                "type_id": "traffic.traffic_light",
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1144,7 +1278,8 @@
                         0.0,
                         1.0
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1224,7 +1359,8 @@
                         0.0,
                         1.0
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1304,7 +1440,8 @@
                         0.0,
                         1.0
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             },
             {
                 "affects_ego": false,
@@ -1384,11 +1521,13 @@
                         0.0,
                         1.0
                     ]
-                ]
+                ],
+                "yaw": 1.5647120689685015
             }
         ],
         "brake": 0.0,
         "changed_route": false,
+        "command": 4,
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
@@ -2372,6 +2511,10 @@
         "should_brake": false,
         "speed": 4.991187913734884,
         "steer": 0.0,
+        "target_point": [
+            374.0799865722656,
+            326.6099853509511
+        ],
         "theta": 3.1355135440826416,
         "throttle": 1.0,
         "weather": {
@@ -2419,7 +2562,8 @@
             ],
             "class": "ego_vehicle",
             "color": "0,0,0",
-            "distance_to_junction": 50.75990816342244,
+            "distance_to_junction": null,
+            "distance_to_junction_ego": null,
             "ego_lane_number": 0,
             "extent": [
                 2.44619083404541,
@@ -2432,6 +2576,7 @@
             "hazard_detected_40": true,
             "id": "1091",
             "is_in_junction": false,
+            "junction_id": -1,
             "lane_change": 0,
             "lane_change_str": "NONE",
             "lane_id": 1,
@@ -2445,6 +2590,20 @@
                 392.3580627441406,
                 304.178955078125,
                 -0.007330054882913828
+            ],
+            "next_junction_id": -1,
+            "next_junction_id_ego": -1,
+            "next_next_road_ids": [
+                7
+            ],
+            "next_next_road_ids_ego": [
+                7
+            ],
+            "next_road_ids": [
+                14
+            ],
+            "next_road_ids_ego": [
+                14
             ],
             "num_lanes_opposite_direction": 1,
             "num_lanes_same_direction": 1,
@@ -2477,6 +2636,7 @@
             "sidewalk_right": true,
             "speed": 4.991187913734884,
             "type_id": "vehicle.lincoln.mkz_2020",
+            "virtual_steer": 7.045733857156856e-05,
             "world2ego": [
                 [
                     0.00608377531170845,
@@ -2544,7 +2704,8 @@
                     301.7210693359375,
                     -0.03400755301117897
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "base_type": "car",
@@ -2561,19 +2722,34 @@
             ],
             "class": "vehicle",
             "color": "16,16,16",
+            "color_name": null,
+            "color_rgb": null,
             "distance": 33.648309950579055,
+            "distance_to_junction": null,
             "extent": [
                 2.4508416652679443,
                 1.0641621351242065,
                 0.7553732395172119
             ],
             "id": "1130",
+            "is_in_junction": false,
+            "junction_id": -1,
             "lane_id": -1,
+            "lane_relative_to_ego": null,
+            "lane_type": 2,
+            "lane_type_str": "Driving",
             "light_state": "131",
             "location": [
                 371.6612854003906,
                 330.70916748046875,
                 0.034098587930202484
+            ],
+            "next_junction_id": -1,
+            "next_next_road_ids": [
+                8
+            ],
+            "next_road_ids": [
+                14
             ],
             "num_points": 18,
             "position": [
@@ -2587,12 +2763,15 @@
                 0.0008667449001222849,
                 0.023321349173784256
             ],
+            "same_direction_as_ego": false,
+            "same_road_as_ego": false,
             "section_id": 0,
             "semantic_tags": [
                 14
             ],
             "speed": 7.792417382291631,
             "state": "dynamic",
+            "steer": -0.0004420090812109782,
             "type_id": "vehicle.lincoln.mkz_2017",
             "vehicle_cuts_in": false,
             "world2vehicle": [
@@ -2662,7 +2841,8 @@
                     329.6440124511719,
                     -0.0015364252030849457
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "base_type": "car",
@@ -2679,19 +2859,34 @@
             ],
             "class": "vehicle",
             "color": "85,0,0",
+            "color_name": null,
+            "color_rgb": null,
             "distance": 30.34647788665835,
+            "distance_to_junction": null,
             "extent": [
                 2.358762502670288,
                 0.947413444519043,
                 0.650469958782196
             ],
             "id": "1129",
+            "is_in_junction": false,
+            "junction_id": -1,
             "lane_id": 1,
+            "lane_relative_to_ego": 0,
+            "lane_type": 2,
+            "lane_type_str": "Driving",
             "light_state": "131",
             "location": [
                 392.2410888671875,
                 273.83270263671875,
                 -0.005717582534998655
+            ],
+            "next_junction_id": -1,
+            "next_next_road_ids": [
+                7
+            ],
+            "next_road_ids": [
+                14
             ],
             "num_points": 0,
             "position": [
@@ -2705,12 +2900,15 @@
                 8.488378080073744e-05,
                 90.0549545288086
             ],
+            "same_direction_as_ego": true,
+            "same_road_as_ego": true,
             "section_id": 0,
             "semantic_tags": [
                 14
             ],
             "speed": 2.4583899806668024,
             "state": "dynamic",
+            "steer": -0.0010313972620966379,
             "type_id": "vehicle.ford.mustang",
             "vehicle_cuts_in": true,
             "world2vehicle": [
@@ -2780,7 +2978,8 @@
                     271.5069885253906,
                     -0.00649526622146368
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "base_type": "car",
@@ -2797,19 +2996,34 @@
             ],
             "class": "vehicle",
             "color": "12,42,12",
+            "color_name": null,
+            "color_rgb": null,
             "distance": 13.476867801207314,
+            "distance_to_junction": null,
             "extent": [
                 2.782914400100708,
                 1.0749834775924683,
                 1.0225735902786255
             ],
             "id": "1128",
+            "is_in_junction": false,
+            "junction_id": -1,
             "lane_id": 1,
+            "lane_relative_to_ego": 0,
+            "lane_type": 2,
+            "lane_type_str": "Driving",
             "light_state": "131",
             "location": [
                 392.254638671875,
                 290.7024841308594,
                 0.002514419611543417
+            ],
+            "next_junction_id": -1,
+            "next_next_road_ids": [
+                7
+            ],
+            "next_road_ids": [
+                14
             ],
             "num_points": 243,
             "position": [
@@ -2823,12 +3037,15 @@
                 0.005268237087875605,
                 90.80583953857422
             ],
+            "same_direction_as_ego": true,
+            "same_road_as_ego": true,
             "section_id": 0,
             "semantic_tags": [
                 14
             ],
             "speed": 0.7069021328008916,
             "state": "dynamic",
+            "steer": -0.041352434698177704,
             "type_id": "vehicle.nissan.patrol_2021",
             "vehicle_cuts_in": true,
             "world2vehicle": [
@@ -2898,7 +3115,8 @@
                     287.96337890625,
                     -0.010931434109807014
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "base_type": "car",
@@ -2915,19 +3133,34 @@
             ],
             "class": "vehicle",
             "color": "0,0,0",
+            "color_name": null,
+            "color_rgb": null,
             "distance": 15.973872600291823,
+            "distance_to_junction": null,
             "extent": [
                 2.44619083404541,
                 0.9183566570281982,
                 0.7451388239860535
             ],
             "id": "1127",
+            "is_in_junction": false,
+            "junction_id": -1,
             "lane_id": -1,
+            "lane_relative_to_ego": null,
+            "lane_type": 2,
+            "lane_type_str": "Driving",
             "light_state": "131",
             "location": [
                 391.8878173828125,
                 320.1459045410156,
                 -0.006977958604693413
+            ],
+            "next_junction_id": -1,
+            "next_next_road_ids": [
+                144
+            ],
+            "next_road_ids": [
+                7
             ],
             "num_points": 81,
             "position": [
@@ -2941,12 +3174,15 @@
                 -0.6886290907859802,
                 95.68258666992188
             ],
+            "same_direction_as_ego": false,
+            "same_road_as_ego": false,
             "section_id": 0,
             "semantic_tags": [
                 14
             ],
             "speed": 7.8003310176665765,
             "state": "dynamic",
+            "steer": 1.1035052737924784,
             "type_id": "vehicle.lincoln.mkz_2020",
             "vehicle_cuts_in": false,
             "world2vehicle": [
@@ -3016,7 +3252,8 @@
                     317.7965393066406,
                     -0.03230873867869377
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "base_type": "car",
@@ -3033,19 +3270,34 @@
             ],
             "class": "vehicle",
             "color": "16,16,16",
+            "color_name": null,
+            "color_rgb": null,
             "distance": 30.143310593343326,
+            "distance_to_junction": 26.0,
             "extent": [
                 2.4508416652679443,
                 1.0641621351242065,
                 0.7553732395172119
             ],
             "id": "1126",
+            "is_in_junction": false,
+            "junction_id": -1,
             "lane_id": 1,
+            "lane_relative_to_ego": null,
+            "lane_type": 2,
+            "lane_type_str": "Driving",
             "light_state": "131",
             "location": [
                 372.1212463378906,
                 326.519287109375,
                 0.03432407230138779
+            ],
+            "next_junction_id": 143,
+            "next_next_road_ids": [
+                19
+            ],
+            "next_road_ids": [
+                144
             ],
             "num_points": 55,
             "position": [
@@ -3059,12 +3311,15 @@
                 -0.00015258786152116954,
                 -179.8565673828125
             ],
+            "same_direction_as_ego": false,
+            "same_road_as_ego": false,
             "section_id": 0,
             "semantic_tags": [
                 14
             ],
             "speed": 7.252153414574666,
             "state": "dynamic",
+            "steer": -0.004197854867808532,
             "type_id": "vehicle.lincoln.mkz_2017",
             "vehicle_cuts_in": false,
             "world2vehicle": [
@@ -3134,7 +3389,8 @@
                     327.5895690917969,
                     -0.00022117793560028076
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3189,7 +3445,8 @@
                 0.0,
                 89.99979400634766
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3244,7 +3501,8 @@
                 0.0,
                 179.9999542236328
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3299,7 +3557,8 @@
                 0.0,
                 270.0003662109375
             ],
-            "type_id": "traffic.traffic_light"
+            "type_id": "traffic.traffic_light",
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3379,7 +3638,8 @@
                     0.0,
                     1.0
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3459,7 +3719,8 @@
                     0.0,
                     1.0
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3539,7 +3800,8 @@
                     0.0,
                     1.0
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         },
         {
             "affects_ego": false,
@@ -3619,7 +3881,8 @@
                     0.0,
                     1.0
                 ]
-            ]
+            ],
+            "yaw": 1.5647120689685015
         }
     ]
 }

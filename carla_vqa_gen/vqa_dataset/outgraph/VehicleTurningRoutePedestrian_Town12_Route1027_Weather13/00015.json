@@ -1,122 +1,116 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
-            "Category": "Traffic element",
-            "Status": null,
-            "Visual_description": "Junction",
-            "2d_bbox": null
-        },
-        "<c2,CAM_FRONT,861.7,382.5>": {
+        "<c1,CAM_FRONT,934.9,306.8>": {
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "red traffic light",
             "2d_bbox": [
                 [
-                    859.2,
-                    373.5
+                    927.2,
+                    286.9
                 ],
                 [
-                    864.2,
-                    391.5
+                    942.6,
+                    326.7
                 ]
             ],
             "3d_bbox": [
                 [
-                    32.3,
-                    3.6,
-                    5.6
+                    31.7,
+                    4.0,
+                    3.4
                 ],
                 [
-                    32.7,
-                    3.6,
-                    5.6
+                    31.5,
+                    3.7,
+                    3.4
                 ],
                 [
-                    32.7,
-                    3.9,
-                    5.6
+                    31.7,
+                    3.5,
+                    3.4
                 ],
                 [
-                    32.3,
-                    3.9,
-                    5.6
+                    31.9,
+                    3.8,
+                    3.4
                 ],
                 [
-                    32.3,
-                    3.6,
-                    6.6
+                    31.7,
+                    4.0,
+                    4.5
                 ],
                 [
-                    32.7,
-                    3.6,
-                    6.6
+                    31.5,
+                    3.7,
+                    4.5
                 ],
                 [
-                    32.7,
-                    3.9,
-                    6.6
+                    31.7,
+                    3.5,
+                    4.5
                 ],
                 [
-                    32.3,
-                    3.9,
-                    6.6
+                    31.9,
+                    3.8,
+                    4.5
                 ]
             ]
         },
-        "<c3,CAM_FRONT,933.4,455.1>": {
+        "<c2,CAM_FRONT,1096.0,484.4>": {
             "Category": "Pedestrian",
             "Status": null,
             "Visual_description": "Pedestrian",
             "2d_bbox": [
                 [
-                    928.9,
-                    436.8
+                    1085.7,
+                    443.8
                 ],
                 [
-                    938.0,
-                    473.4
+                    1106.3,
+                    525.1
                 ]
             ],
             "3d_bbox": [
                 [
-                    26.9,
-                    6.6,
-                    0.8
-                ],
-                [
-                    27.3,
-                    6.6,
-                    0.8
-                ],
-                [
-                    27.3,
+                    26.5,
                     7.0,
-                    0.8
+                    0.1
                 ],
                 [
-                    26.9,
+                    26.5,
                     7.0,
-                    0.8
+                    -1.7
                 ],
                 [
-                    26.9,
+                    26.5,
                     6.6,
-                    2.7
+                    0.1
                 ],
                 [
-                    27.3,
+                    26.5,
                     6.6,
-                    2.7
+                    -1.7
                 ],
                 [
-                    27.3,
+                    26.1,
                     7.0,
-                    2.7
+                    0.1
                 ],
                 [
-                    26.9,
+                    26.1,
                     7.0,
-                    2.7
+                    -1.7
+                ],
+                [
+                    26.1,
+                    6.6,
+                    0.1
+                ],
+                [
+                    26.1,
+                    6.6,
+                    -1.7
                 ]
             ]
         }
@@ -125,21 +119,20 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the red traffic light and the pedestrian to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are the red traffic light and the pedestrian to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>",
-                    "<c2,CAM_FRONT,861.7,382.5>",
-                    "<c3,CAM_FRONT,933.4,455.1>"
+                    "<c1,CAM_FRONT,934.9,306.8>",
+                    "<c2,CAM_FRONT,1096.0,484.4>"
                 ]
             },
             {
                 "Q": "Is the ego vehicle at a junction?",
-                "A": "The ego vehicle is right before a junction.",
+                "A": "No, the ego vehicle is not at a junction.",
                 "C": null,
                 "con_up": [
                     [
@@ -371,7 +364,7 @@
                 "cluster": 2,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,861.7,382.5>"
+                    "<c1,CAM_FRONT,934.9,306.8>"
                 ]
             },
             {
@@ -388,7 +381,7 @@
                 "cluster": 5,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,933.4,455.1>"
+                    "<c2,CAM_FRONT,1096.0,484.4>"
                 ]
             },
             {
@@ -555,7 +548,7 @@
                 "cluster": 2,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,861.7,382.5>"
+                    "<c1,CAM_FRONT,934.9,306.8>"
                 ]
             }
         ],
@@ -622,7 +615,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,861.7,382.5>"
+                    "<c1,CAM_FRONT,934.9,306.8>"
                 ]
             },
             {
@@ -644,7 +637,7 @@
                 "cluster": 2,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,861.7,382.5>"
+                    "<c1,CAM_FRONT,934.9,306.8>"
                 ]
             },
             {

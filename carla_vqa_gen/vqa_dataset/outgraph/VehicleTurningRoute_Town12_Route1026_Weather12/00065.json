@@ -1,65 +1,122 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
+        "<c1,CAM_FRONT,1540.5,501.6>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "car",
+            "2d_bbox": [
+                [
+                    1354.5,
+                    450.7
+                ],
+                [
+                    1726.5,
+                    552.5
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    19.9,
+                    9.7,
+                    -0.1
+                ],
+                [
+                    19.9,
+                    9.7,
+                    -1.6
+                ],
+                [
+                    18.0,
+                    9.7,
+                    -0.1
+                ],
+                [
+                    18.0,
+                    9.7,
+                    -1.6
+                ],
+                [
+                    20.1,
+                    14.7,
+                    -0.0
+                ],
+                [
+                    20.1,
+                    14.7,
+                    -1.6
+                ],
+                [
+                    18.2,
+                    14.7,
+                    -0.0
+                ],
+                [
+                    18.2,
+                    14.7,
+                    -1.6
+                ]
+            ]
+        },
+        "<c2,CAM_FRONT>": {
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c2,CAM_FRONT,923.4,314.8>": {
+        "<c3,CAM_FRONT,1087.8,143.4>": {
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "red traffic light",
             "2d_bbox": [
                 [
-                    918.2,
-                    297.5
+                    1073.7,
+                    101.7
                 ],
                 [
-                    928.6,
-                    332.2
+                    1101.9,
+                    185.0
                 ]
             ],
             "3d_bbox": [
                 [
-                    16.6,
-                    3.9,
-                    5.9
-                ],
-                [
-                    16.9,
-                    3.9,
-                    5.9
-                ],
-                [
-                    16.9,
+                    16.0,
                     4.2,
-                    5.9
+                    3.8
                 ],
                 [
-                    16.6,
+                    15.7,
+                    4.0,
+                    3.8
+                ],
+                [
+                    15.9,
+                    3.8,
+                    3.8
+                ],
+                [
+                    16.2,
+                    4.0,
+                    3.8
+                ],
+                [
+                    16.0,
                     4.2,
-                    5.9
+                    4.8
                 ],
                 [
-                    16.6,
-                    3.9,
-                    6.9
+                    15.7,
+                    4.0,
+                    4.8
                 ],
                 [
-                    16.9,
-                    3.9,
-                    6.9
+                    15.9,
+                    3.8,
+                    4.8
                 ],
                 [
-                    16.9,
-                    4.2,
-                    6.9
-                ],
-                [
-                    16.6,
-                    4.2,
-                    6.9
+                    16.2,
+                    4.0,
+                    4.8
                 ]
             ]
         }
@@ -68,15 +125,54 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the red traffic light.",
+                "A": "The important objects in the scene are a junction, the red traffic light and the car to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>",
-                    "<c2,CAM_FRONT,923.4,314.8>"
+                    "<c1,CAM_FRONT,1540.5,501.6>",
+                    "<c2,CAM_FRONT>",
+                    "<c3,CAM_FRONT,1087.8,143.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the car that is to the front right of the ego vehicle located?",
+                "A": "The car is on the right side of the junction and is pointing in an unknown direction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c1,CAM_FRONT,1540.5,501.6>"
                 ]
             },
             {
@@ -313,7 +409,7 @@
                 "cluster": 2,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,923.4,314.8>"
+                    "<c3,CAM_FRONT,1087.8,143.4>"
                 ]
             },
             {
@@ -368,6 +464,50 @@
             }
         ],
         "prediction": [
+            {
+                "Q": "Where is the car that is to the front right of the ego vehicle going?",
+                "A": "The car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c1,CAM_FRONT,1540.5,501.6>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the car that is to the front right of the ego vehicle?",
+                "A": "The car is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c1,CAM_FRONT,1540.5,501.6>"
+                ]
+            },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should watch out for traffic coming from the oncoming lane.",
@@ -495,11 +635,45 @@
                 "cluster": 2,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,923.4,314.8>"
+                    "<c3,CAM_FRONT,1087.8,143.4>"
                 ]
             }
         ],
         "planning": [
+            {
+                "Q": "The ego vehicle follows the road. Is the car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c1,CAM_FRONT,1540.5,501.6>"
+                ]
+            },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "No, the ego vehicle can stay on its current lane.",
@@ -562,7 +736,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,923.4,314.8>"
+                    "<c3,CAM_FRONT,1087.8,143.4>"
                 ]
             },
             {
@@ -584,7 +758,7 @@
                 "cluster": 2,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,923.4,314.8>"
+                    "<c3,CAM_FRONT,1087.8,143.4>"
                 ]
             },
             {

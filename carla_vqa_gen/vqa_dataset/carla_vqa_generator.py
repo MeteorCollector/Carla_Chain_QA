@@ -738,10 +738,11 @@ class QAsGenerator():
     def get_key_of_key_object(self, key_object_infos, object_dict=None):
         if object_dict is not None:
             projected_points, _ = project_all_corners(object_dict, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
-            two_d_box = self.generate_2d_box_from_projected_points(projected_points)
-            keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
+            if projected_points is not None and len(projected_points) > 0:
+                two_d_box = self.generate_2d_box_from_projected_points(projected_points)
+                keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
-            return keys
+                return keys
         
         return []
 
@@ -1425,12 +1426,13 @@ class QAsGenerator():
                         relevant_obj = relevant_objects[0]
                         projected_points, projected_points_meters = project_all_corners(relevant_obj, 
                                                                                         self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
-                        two_d_box = self.generate_2d_box_from_projected_points(projected_points)
-                        keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
+                        if projected_points is not None and len(projected_points) > 0:
+                            two_d_box = self.generate_2d_box_from_projected_points(projected_points)
+                            keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
-                        assert len(keys)==1, keys
+                            assert len(keys)==1, keys
 
-                        object_tags = keys
+                            object_tags = keys
                         
                     elif 'VehicleOpensDoorTwoWays' in scenario_name:
                         assert len(relevant_objects), relevant_objects
@@ -1438,10 +1440,11 @@ class QAsGenerator():
                         relevant_obj = relevant_objects[0]
                         projected_points, projected_points_meters = project_all_corners(relevant_obj, 
                                                                                         self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
-                        two_d_box = self.generate_2d_box_from_projected_points(projected_points)
-                        keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
+                        if projected_points is not None and len(projected_points) > 0:
+                            two_d_box = self.generate_2d_box_from_projected_points(projected_points)
+                            keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
-                        object_tags = keys
+                            object_tags = keys
                         
                     if changed_route:
                         if 'InvadingTurn' == scenario_name:
