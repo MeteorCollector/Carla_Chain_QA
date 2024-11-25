@@ -1831,13 +1831,13 @@ class QAsGenerator():
             steer = other_vehicle['steer']
 
             # Determine trajectory based on steer angle
-            if steer < -0.1:
+            if steer < -0.2:
                 answer = f"The {other_vehicle_description} is turning left."
-            elif steer < -0.03:
+            elif steer < -0.05:
                 answer = f"The {other_vehicle_description} is turning slightly left."
-            elif steer > 0.1:
+            elif steer > 0.2:
                 answer = f"The {other_vehicle_description} is turning right."
-            elif steer > 0.03:
+            elif steer > 0.05:
                 answer = f"The {other_vehicle_description} is turning slightly right."
             else:
                 answer = f"The {other_vehicle_description} is going straight."
@@ -2326,7 +2326,6 @@ class QAsGenerator():
 
         # Find ego vehicle first
         for actor in scene_data:
-            # print(actor) # debug
             if actor['class'] == 'ego_vehicle':
                 ego_vehicle = actor
                 ego = actor
@@ -2343,7 +2342,7 @@ class QAsGenerator():
                 for key, value in other_vehicles_info.items():
                     if key not in actor:
                         actor[key] = value
-                actor['steer'] = get_steer_by_future(self.current_measurement_path, 4, actor['id'])
+                actor['steer'] = get_steer_by_future(self.current_measurement_path, actor['id'])
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
@@ -2384,6 +2383,7 @@ class QAsGenerator():
             if key not in ego:
                 ego[key] = value
 
+        ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False
         affected_by_vehicle_10, hazard_actor_10 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
         # print(f"[debug] affected_by_vehicle_10 = {affected_by_vehicle_10}") # debug

@@ -894,9 +894,9 @@ def get_acceleration_by_future(path, k):
         # print("[debug] vehicle status is Constant")  # debug
         return "Constant"
 
-def get_steer_by_future(path, k, id):
+def get_steer_by_future(path, id, k=5):
     """
-    Calculate steer trend by future k measurements
+    Calculate steer trend by future k measurements based on angle and distance.
 
     Args:
         path (str): Path to the current measurement file.
@@ -904,70 +904,59 @@ def get_steer_by_future(path, k, id):
         id (int): id attribute of vehicle.
 
     Returns:
-        float: Estimated steer value (negative for left, positive for right, zero for straight).
+        float: Estimated steer curvature (negative for left, positive for right, zero for straight).
     """
+    # we use 1 / curvative radius as steer
+    # negative means left, positive means right
+
     dir_name, file_name = os.path.split(path)
     base_name, _ = os.path.splitext(file_name)
     base_name, _ = os.path.splitext(base_name)
     ext = ".json.gz"
     initial_index = int(base_name)
 
-    locations = []
-    rotations = []
-    for i in range(k + 1):
-        file_index = f"{initial_index + i:05d}"
-        file_path = os.path.join(dir_name, f"{file_index}{ext}")
+    # Load current and future measurement
+    current_file = os.path.join(dir_name, f"{initial_index:05d}{ext}")
+    future_file = os.path.join(dir_name, f"{initial_index + k:05d}{ext}")
 
-        if not os.path.exists(file_path):
-            break
+    if not (os.path.exists(current_file) and os.path.exists(future_file)):
+        return 0.0  # If not enough data, return 0.0
 
-        data = load_measurement(file_path)
-        location, rotation = find_location_by_id(data, id)
-        if location is not None and rotation is not None:
-            locations.append(np.array(location))
-            rotations.append(np.radians(rotation[2]))  # Use yaw angle (rotation around Z-axis)
+    # Get locations and rotations
+    current_data = load_measurement(current_file)
+    future_data = load_measurement(future_file)
 
-    if len(locations) < 3:
-        # Not enough points to determine trajectory
-        return 0.0
+    current_location, current_rotation = find_location_by_id(current_data, id)
+    future_location, future_rotation = find_location_by_id(future_data, id)
 
-    # Calculate direction vectors between consecutive points
-    directions = []
-    filtered_locations = [locations[0]]
-    for i in range(len(locations) - 1):
-        direction = locations[i + 1] - locations[i]
-        distance = np.linalg.norm(direction)
-        if distance > 1e-3:  # Filter out points that are too close
-            directions.append(direction / distance)
-            filtered_locations.append(locations[i + 1])
+    if current_location is None or future_location is None:
+        return 0.0  # If locations are missing, return 0.0
 
-    if len(directions) < 2:
-        # Not enough valid direction vectors
-        return 0.0
+    # Convert locations to numpy arrays
+    current_location = np.array(current_location)
+    future_location = np.array(future_location)
 
-    # Calculate angle changes between consecutive direction vectors
-    angles = []
-    for i in range(len(directions) - 1):
-        dot_product = np.dot(directions[i], directions[i + 1])
-        cross_product = np.cross(directions[i], directions[i + 1])
-        angle = np.arctan2(cross_product[2], dot_product)  # Use Z-axis component of cross product
-        angles.append(angle)
+    # Calculate distance and angle change
+    distance = np.linalg.norm(future_location - current_location)
+    current_angle = np.radians(current_rotation[2])  # Convert yaw to radians
+    future_angle = np.radians(future_rotation[2])  # Convert yaw to radians
+    angle_change = future_angle - current_angle
 
-    # Estimate curvature: average angle change divided by distance
-    curvatures = []
-    for i in range(len(angles)):
-        distance = np.linalg.norm(filtered_locations[i + 1] - filtered_locations[i])
-        if distance > 1e-3:  # Avoid division by zero
-            curvatures.append(angles[i] / distance)
+    # Normalize angle to range [-pi, pi]
+    angle_change = np.arctan2(np.sin(angle_change), np.cos(angle_change))
 
-    if not curvatures:
-        return 0.0
+    if distance < 1e-3 or (-1e-6 < angle_change < 1e-6):
+         return 0.0  # Straight path
 
-    # Use the mean curvature as an indicator of steer
-    mean_curvature = np.mean(curvatures)
-    steer = mean_curvature * 100  # TODO: determine scale
+    # Calculate curvature radius and its inverse
+    curvature_radius = distance / abs(angle_change)
+    curvature = 10.0 / curvature_radius
+
+    # Determine sign based on angle change
+    steer = curvature if angle_change > 0 else -curvature
 
     return steer
+
 
 
 
