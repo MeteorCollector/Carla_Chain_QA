@@ -131,6 +131,7 @@ def project_all_corners(obj, K, extrinsics):
     for corner in camera_corners:
         pos_3d = np.array([corner[1], -corner[2], corner[0]])
         if pos_3d[2] <= 0:  # skip if behind cam
+            valid_corners.append(corner)
             continue
         
         rvec = np.zeros((3, 1), np.float32) 

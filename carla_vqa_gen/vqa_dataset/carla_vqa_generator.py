@@ -325,6 +325,13 @@ class QAsGenerator():
                                 all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
                                 if 'car' in single_object['class']:
+                                    # for debug
+                                    all_points_2d = []
+                                    projected_corners, visibility = get_vehicle_projected_corners(self.camera_front, single_object)
+                                    for idx, is_visible in enumerate(visibility):
+                                        if is_visible:
+                                            all_points_2d.append(projected_corners[idx])
+                                    # debug section ends
                                     color = (255, 0, 0, 0)
                                 elif 'traffic_light' in single_object['class'] or 'stop' in single_object['class']:
                                     color = (0, 255, 0, 0)
@@ -340,7 +347,7 @@ class QAsGenerator():
                                                     fill=color)
                                     
                                     if 'type_id' in single_object:
-                                        draw.text((top_left_point[0] + 5, top_left_point[1] - 10),  # 文字位置稍微偏移
+                                        draw.text((top_left_point[0] + 5, top_left_point[1] - 10),
                                                 str(single_object['type_id']), 
                                                 fill=color)
                     annotated_image_path = f'{anno_img_path}/{int(frame_number):05d}.png'
@@ -480,7 +487,7 @@ class QAsGenerator():
         }
 
         # Add the 2D bounding box coordinates, if available
-        if projected_points is not None:
+        if projected_points is not None and len(projected_points) > 0:
             object_info['2d_bbox'] = self.generate_2d_box_from_projected_points(projected_points)
             object_info['3d_bbox'] = projected_points_meters.round(1).tolist()
 
@@ -489,7 +496,7 @@ class QAsGenerator():
             center_y = float(mean[1])
 
         # Generate a unique key for the object
-        if projected_points is not None:
+        if projected_points is not None and len(projected_points) > 0:
             object_key = f"<c{object_count + 1},CAM_FRONT,{center_x},{center_y}>"
         else:
             object_key = f"<c{object_count + 1},CAM_FRONT>"
@@ -2196,16 +2203,18 @@ class QAsGenerator():
                 vehicle_type = vehicle['base_type']
 
             # Determine the color of the vehicle
-            color_str = vehicle["color_name"] + ' ' if vehicle["color_name"] is not None \
-                                                        and vehicle["color_name"] != 'None' else ''
-            if vehicle['color_rgb'] == [0, 28, 0] or vehicle['color_rgb'] == [12, 42, 12]:
-                color_str = 'dark green '
-            elif vehicle['color_rgb'] == [211, 142, 0]:
-                color_str = 'yellow '
-            elif vehicle['color_rgb'] == [145, 255, 181]:
-                color_str = 'blue '
-            elif vehicle['color_rgb'] == [215, 88, 0]:
-                color_str = 'orange '
+            color_str = vehicle.get('color_name') + ' ' if vehicle.get('color_name') is not None \
+                                                        and vehicle.get('color_name') != 'None' else ''
+            if vehicle.get('color_rgb') is not None and vehicle.get('color_rgb') != 'None':
+                color_str = rgb_to_color_name(vehicle['color_rgb'])
+                if vehicle['color_rgb'] == [0, 28, 0] or vehicle['color_rgb'] == [12, 42, 12]:
+                    color_str = 'dark green '
+                elif vehicle['color_rgb'] == [211, 142, 0]:
+                    color_str = 'yellow '
+                elif vehicle['color_rgb'] == [145, 255, 181]:
+                    color_str = 'blue '
+                elif vehicle['color_rgb'] == [215, 88, 0]:
+                    color_str = 'orange '
 
             # Construct a string description of the vehicle
             description = vehicle_type
@@ -2321,6 +2330,7 @@ class QAsGenerator():
         for actor in scene_data:
             # relative position
             actor['position'] = transform_to_ego_coordinates(actor['location'], ego['world2ego'])
+            actor['yaw'] = math.radians(ego_vehicle["rotation"][2])
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
