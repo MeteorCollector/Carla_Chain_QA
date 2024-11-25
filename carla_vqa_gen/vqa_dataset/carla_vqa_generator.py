@@ -346,9 +346,13 @@ class QAsGenerator():
                                         draw.ellipse((points_2d[0]-5, points_2d[1]-5, points_2d[0]+5, points_2d[1]+5), 
                                                     fill=color)
                                     
+                                    label = ""
                                     if 'type_id' in single_object:
-                                        draw.text((top_left_point[0] + 5, top_left_point[1] - 10),
-                                                str(single_object['type_id']), 
+                                        label = f"{label}{str(single_object['type_id'])}"
+                                    if 'id' in single_object:
+                                        label = f"{label}, id={str(single_object['id'])}"
+
+                                    draw.text((top_left_point[0] + 5, top_left_point[1] - 10), label, 
                                                 fill=color)
                     annotated_image_path = f'{anno_img_path}/{int(frame_number):05d}.png'
                     image.save(annotated_image_path)

@@ -923,7 +923,6 @@ def get_steer_by_future(path, k, id):
 
         data = load_measurement(file_path)
         location, rotation = find_location_by_id(data, id)
-        # print(f"location = {location}, rotation = {rotation}")
         if location is not None and rotation is not None:
             locations.append(np.array(location))
             rotations.append(np.radians(rotation[2]))  # Use yaw angle (rotation around Z-axis)
@@ -933,8 +932,18 @@ def get_steer_by_future(path, k, id):
         return 0.0
 
     # Calculate direction vectors between consecutive points
-    directions = [locations[i + 1] - locations[i] for i in range(len(locations) - 1)]
-    directions = [d / np.linalg.norm(d) for d in directions if np.linalg.norm(d) > 0]
+    directions = []
+    filtered_locations = [locations[0]]
+    for i in range(len(locations) - 1):
+        direction = locations[i + 1] - locations[i]
+        distance = np.linalg.norm(direction)
+        if distance > 1e-3:  # Filter out points that are too close
+            directions.append(direction / distance)
+            filtered_locations.append(locations[i + 1])
+
+    if len(directions) < 2:
+        # Not enough valid direction vectors
+        return 0.0
 
     # Calculate angle changes between consecutive direction vectors
     angles = []
@@ -945,13 +954,21 @@ def get_steer_by_future(path, k, id):
         angles.append(angle)
 
     # Estimate curvature: average angle change divided by distance
-    curvatures = [angles[i] / np.linalg.norm(locations[i + 1] - locations[i]) for i in range(len(angles))]
+    curvatures = []
+    for i in range(len(angles)):
+        distance = np.linalg.norm(filtered_locations[i + 1] - filtered_locations[i])
+        if distance > 1e-3:  # Avoid division by zero
+            curvatures.append(angles[i] / distance)
+
+    if not curvatures:
+        return 0.0
 
     # Use the mean curvature as an indicator of steer
     mean_curvature = np.mean(curvatures)
-    steer = mean_curvature * 1  # TODO: adequate scale
+    steer = mean_curvature * 100  # TODO: determine scale
 
     return steer
+
 
 
 

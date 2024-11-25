@@ -41,6 +41,11 @@
         .json-input-filter {
             margin-bottom: 10px;
         }
+        .topbar {
+            position: sticky;
+            top: 12px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -60,20 +65,20 @@
 
     {% if selected_number %}
     <h2>Selected Number: {{ selected_number }}</h2>
-    <p>
+    <p class="topbar">
         <button type="button" onclick="changeNumber('prev')">Prev</button>
         <button type="button" onclick="changeNumber('next')">Next</button>
     </p>
 
     <div class="images">
         {% if content.rgb_front != "not exist" %}
-            <img src="/media/{{ content.rgb_front }}" alt="RGB Front Image" style="max-width: 45%; height: auto;">
+            <img src="/media/{{ content.rgb_front }}" alt="RGB Front Image" style="max-width: 49%; height: auto;">
         {% else %}
             <p>RGB Front Image not found.</p>
         {% endif %}
 
         {% if content.rgb_top_down != "not exist" %}
-            <img src="/media/{{ content.rgb_top_down }}" alt="RGB Top-down Image" style="max-width: 45%; height: auto;">
+            <img src="/media/{{ content.rgb_top_down }}" alt="RGB Top-down Image" style="max-width: 49%; height: auto;">
         {% else %}
             <p>RGB Top-down Image not found.</p>
         {% endif %}

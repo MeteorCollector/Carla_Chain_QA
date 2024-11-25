@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired
@@ -6,6 +6,7 @@ from json2html import json2html
 import os
 import json
 import gzip
+import re
 
 app = Flask(__name__)
 app.secret_key = "okitasouji"
@@ -13,6 +14,7 @@ app.secret_key = "okitasouji"
 b2d_data_path = "/media/telkwevr/22729A30729A08A5/Project_/Bench2Drive-rep"
 appendix_path = "/media/telkwevr/22729A30729A08A5/Project_/Carla_Chain_QA/carla_vqa_gen/vqa_dataset/outgraph/appendix"
 qa_path = "/media/telkwevr/22729A30729A08A5/Project_/Carla_Chain_QA/carla_vqa_gen/vqa_dataset/outgraph"
+anno_image_path = "/media/telkwevr/22729A30729A08A5/Project_/Carla_Chain_QA/carla_vqa_gen/vqa_dataset/outexample/anno_images"
 
 rel_path = ""
 selected_number = None
@@ -26,8 +28,6 @@ filter_dict = {
 json_files = []
 json_numbers = []
 
-from flask import send_from_directory
-
 @app.route(f'/media/<path:filename>')
 def media_files(filename):
     return send_from_directory('/.', filename)
@@ -39,7 +39,7 @@ class RelPathForm(FlaskForm):
 
 def update_content():
     global json_content, content, filter_dict, selected_number, rel_path
-    rgb_front_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_front", f"{selected_number}.jpg")
+    rgb_front_path = os.path.join(anno_image_path, rel_path, f"{selected_number}.png")
     rgb_top_down_path = os.path.join(b2d_data_path, rel_path, "camera/rgb_top_down", f"{selected_number}.jpg")
     anno_json_path = os.path.join(b2d_data_path, rel_path, "anno", f"{selected_number}.json.gz")
     appendix_json_path = os.path.join(appendix_path, rel_path, f"{selected_number}.json")
@@ -107,12 +107,13 @@ def filter_json_tree(json_data, filter_keywords):
         return json_data
 
     filter_keywords = [kw.lower() for kw in filter_keywords]
+    filter_regex = [re.compile(pattern, re.IGNORECASE) for pattern in filter_keywords]
 
     def recursive_filter(obj):
         if isinstance(obj, dict):
             result = {}
             for key, value in obj.items():
-                if any(keyword in key.lower() for keyword in filter_keywords):
+                if any(regex.fullmatch(key) for regex in filter_regex):
                     result[key] = value
                 else:
                     filtered_value = recursive_filter(value)
@@ -128,7 +129,7 @@ def filter_json_tree(json_data, filter_keywords):
                     result.append(filtered_item)
             return result if result else None
         else:
-            if any(keyword in str(obj).lower() for keyword in filter_keywords):
+            if any(regex.fullmatch(str(obj)) for regex in filter_regex):
                 return obj
             else:
                 return None
