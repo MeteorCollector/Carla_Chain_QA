@@ -236,10 +236,10 @@ def project_point_to_camera(intrinsic_matrix, world2cam_matrix, point, image_wid
         Tuple ([u, v], is_in_view) - Projection coordinate (u, v), bool indicates whether it is in camera's view
     """
 
-    point_cam_location = world2cam_matrix @ np.append(point, 1)
-
-    pos_3d = np.array([point_cam_location[1], -point_cam_location[2], point_cam_location[0]])
+    point_cam_location = (world2cam_matrix @ np.append(point, 1)).T[:3]
     
+    pos_3d = np.array([point_cam_location[1], -point_cam_location[2], point_cam_location[0]])
+
     rvec = np.zeros((3, 1), np.float32) 
     tvec = np.array([[0.0, 0.0, 0.0]], np.float32)
     dist_coeffs = np.zeros((5, 1), np.float32) 
@@ -249,7 +249,7 @@ def project_point_to_camera(intrinsic_matrix, world2cam_matrix, point, image_wid
     )
     u, v = points_2d[0][0]
 
-    is_in_view = (pos_3d[2] <= 0) and (0 <= u < image_width and 0 <= v < image_height)
+    is_in_view = (pos_3d[2] > 0) and (0 <= u < image_width and 0 <= v < image_height)
 
     return [u, v], is_in_view
 
@@ -389,8 +389,39 @@ def get_lane_info(map, vehicle_location):
     # most left should be always the smallest number
     ego_lane_number = abs(waypoint.lane_id - lane_id_left_most_lane_same_direction)
     
-    # print(f"[debug] lanes at the same direction: {num_lanes_same_direction}, opposite direction: {num_lanes_opposite_direction}")
+    ego_wp = waypoint
+    # how far is next junction
+    next_wps = wps_next_until_lane_end(ego_wp)
+    try:
+        next_lane_wps_ego = next_wps[-1].next(1)
+        if len(next_lane_wps_ego) == 0:
+            next_lane_wps_ego = [next_wps[-1]]
+    except:
+        next_lane_wps_ego = []
+    if ego_wp.is_junction:
+        distance_to_junction_ego = 0.0
+        # get distance to ego vehicle
+    elif len(next_lane_wps_ego)>0 and next_lane_wps_ego[0].is_junction:
+        distance_to_junction_ego = next_lane_wps_ego[0].transform.location.distance(ego_wp.transform.location)
+    else:
+        distance_to_junction_ego = None
         
+    next_road_ids_ego = []
+    next_next_road_ids_ego = []
+    for i, wp in enumerate(next_lane_wps_ego):
+            next_road_ids_ego.append(wp.road_id)
+            next_next_wps = wps_next_until_lane_end(wp)
+            try:
+                next_next_lane_wps_ego = next_next_wps[-1].next(1)
+                if len(next_next_lane_wps_ego) == 0:
+                    next_next_lane_wps_ego = [next_next_wps[-1]]
+            except:
+                next_next_lane_wps_ego = []
+            for j, wp2 in enumerate(next_next_lane_wps_ego):
+                if wp2.road_id not in next_next_road_ids_ego:
+                    next_next_road_ids_ego.append(wp2.road_id)
+
+    
     lane_info = {
         "num_lanes_same_direction": num_lanes_same_direction,
         "num_lanes_opposite_direction": num_lanes_opposite_direction,
@@ -410,11 +441,21 @@ def get_lane_info(map, vehicle_location):
         "shoulder_left": shoulder_left,
         "parking_left": parking_left,
         "sidewalk_left": sidewalk_left,
-        "bikelane_left": bikelane_left,
+        "bike_lane_left": bikelane_left,
         "shoulder_right": shoulder_right,
         "parking_right": parking_right,
         "sidewalk_right": sidewalk_right,
-        "bikelane_right": bikelane_right
+        "bike_lane_right": bikelane_right,
+        'is_in_junction': ego_wp.is_junction,
+        'junction_id': ego_wp.junction_id,
+        'distance_to_junction': distance_to_junction_ego,
+        'next_junction_id': next_lane_wps_ego[0].junction_id,
+        'next_road_ids': next_road_ids_ego,
+        'next_next_road_ids': next_next_road_ids_ego,
+        'distance_to_junction_ego': distance_to_junction_ego,
+        'next_junction_id_ego': next_lane_wps_ego[0].junction_id,
+        'next_road_ids_ego': next_road_ids_ego,
+        'next_next_road_ids_ego': next_next_road_ids_ego,
     }
 
     return lane_info
@@ -807,6 +848,12 @@ def load_measurement(file_path):
     with gzip.open(file_path, 'rt', encoding='utf-8') as f:
         return json.load(f)
 
+def find_location_by_id(data, target_id):
+    for obj in data.get('bounding_boxes', []):
+        if obj.get('id') == target_id:
+            return obj.get('location'), obj.get('rotation')
+    return None, None
+
 def get_acceleration_by_future(path, k):
     """
     Calculate acceleration trend by future k measurements
@@ -846,6 +893,66 @@ def get_acceleration_by_future(path, k):
     else:
         # print("[debug] vehicle status is Constant")  # debug
         return "Constant"
+
+def get_steer_by_future(path, k, id):
+    """
+    Calculate steer trend by future k measurements
+
+    Args:
+        path (str): Path to the current measurement file.
+        k (int): Number of future measurements to consider.
+        id (int): id attribute of vehicle.
+
+    Returns:
+        float: Estimated steer value (negative for left, positive for right, zero for straight).
+    """
+    dir_name, file_name = os.path.split(path)
+    base_name, _ = os.path.splitext(file_name)
+    base_name, _ = os.path.splitext(base_name)
+    ext = ".json.gz"
+    initial_index = int(base_name)
+
+    locations = []
+    rotations = []
+    for i in range(k + 1):
+        file_index = f"{initial_index + i:05d}"
+        file_path = os.path.join(dir_name, f"{file_index}{ext}")
+
+        if not os.path.exists(file_path):
+            break
+
+        data = load_measurement(file_path)
+        location, rotation = find_location_by_id(data, id)
+        # print(f"location = {location}, rotation = {rotation}")
+        if location is not None and rotation is not None:
+            locations.append(np.array(location))
+            rotations.append(np.radians(rotation[2]))  # Use yaw angle (rotation around Z-axis)
+
+    if len(locations) < 3:
+        # Not enough points to determine trajectory
+        return 0.0
+
+    # Calculate direction vectors between consecutive points
+    directions = [locations[i + 1] - locations[i] for i in range(len(locations) - 1)]
+    directions = [d / np.linalg.norm(d) for d in directions if np.linalg.norm(d) > 0]
+
+    # Calculate angle changes between consecutive direction vectors
+    angles = []
+    for i in range(len(directions) - 1):
+        dot_product = np.dot(directions[i], directions[i + 1])
+        cross_product = np.cross(directions[i], directions[i + 1])
+        angle = np.arctan2(cross_product[2], dot_product)  # Use Z-axis component of cross product
+        angles.append(angle)
+
+    # Estimate curvature: average angle change divided by distance
+    curvatures = [angles[i] / np.linalg.norm(locations[i + 1] - locations[i]) for i in range(len(angles))]
+
+    # Use the mean curvature as an indicator of steer
+    mean_curvature = np.mean(curvatures)
+    steer = mean_curvature * 1  # TODO: adequate scale
+
+    return steer
+
 
 
 def get_affect_flags(bbox_data):

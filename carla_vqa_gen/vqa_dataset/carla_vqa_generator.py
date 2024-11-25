@@ -320,17 +320,17 @@ class QAsGenerator():
                             if 'location' in single_object:
                                 single_object['position'] = transform_to_ego_coordinates(single_object['center'], self.WORLD2CAM_FRONT)
                                 
-                                if single_object['class'] == 'ego_car':
+                                if single_object['class'] == 'ego_vehicle':
                                     continue
                                 all_points_2d, _ = project_all_corners(single_object, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
-                                if 'car' in single_object['class']:
+                                if 'vehicle' in single_object['class']:
                                     # for debug
-                                    all_points_2d = []
-                                    projected_corners, visibility = get_vehicle_projected_corners(self.camera_front, single_object)
-                                    for idx, is_visible in enumerate(visibility):
-                                        if is_visible:
-                                            all_points_2d.append(projected_corners[idx])
+                                    # all_points_2d = []
+                                    # projected_corners, visibility = get_vehicle_projected_corners(self.CAMERA_FRONT, single_object)
+                                    # for idx, is_visible in enumerate(visibility):
+                                    #     if is_visible:
+                                    #         all_points_2d.append(projected_corners[idx])
                                     # debug section ends
                                     color = (255, 0, 0, 0)
                                 elif 'traffic_light' in single_object['class'] or 'stop' in single_object['class']:
@@ -1649,9 +1649,9 @@ class QAsGenerator():
             if ego_vehicle['hazard_detected_20']:
                 # If the car in front is in an intersection this might not work perfectly, however, given the labels
                 # it can't be improved
-                if ego_vehicle['affects_ego_10']:
+                if ego_vehicle['hazard_detected_10']:
                     actor_in_front = vehicles_by_id[ego_vehicle['affects_ego_10']]
-                elif ego_vehicle['affects_ego_15']:
+                elif ego_vehicle['hazard_detected_15']:
                     actor_in_front = vehicles_by_id[ego_vehicle['affects_ego_15']]
                 else:
                     actor_in_front = vehicles_by_id[ego_vehicle['affects_ego_20']]
@@ -1824,19 +1824,19 @@ class QAsGenerator():
             question = f"Where is {other_vehicle_location_description} going?"
             answer = "TODO: we don't have steer, so should use future to predict other vehicle's trajetory"
 
-            # steer = other_vehicle['steer']
+            steer = other_vehicle['steer']
 
-            # # Determine trajectory based on steer angle
-            # if steer < -0.1:
-            #     answer = f"The {other_vehicle_description} is turning left."
-            # elif steer < -0.03:
-            #     answer = f"The {other_vehicle_description} is turning slightly left."
-            # elif steer > 0.1:
-            #     answer = f"The {other_vehicle_description} is turning right."
-            # elif steer > 0.03:
-            #     answer = f"The {other_vehicle_description} is turning slightly right."
-            # else:
-            #     answer = f"The {other_vehicle_description} is going straight."
+            # Determine trajectory based on steer angle
+            if steer < -0.1:
+                answer = f"The {other_vehicle_description} is turning left."
+            elif steer < -0.03:
+                answer = f"The {other_vehicle_description} is turning slightly left."
+            elif steer > 0.1:
+                answer = f"The {other_vehicle_description} is turning right."
+            elif steer > 0.03:
+                answer = f"The {other_vehicle_description} is turning slightly right."
+            else:
+                answer = f"The {other_vehicle_description} is going straight."
 
             # Check if the other vehicle is cutting into the ego vehicle's lane
             if 'vehicle_cuts_in' in other_vehicle:
@@ -2339,6 +2339,7 @@ class QAsGenerator():
                 for key, value in other_vehicles_info.items():
                     if key not in actor:
                         actor[key] = value
+                actor['steer'] = get_steer_by_future(self.current_measurement_path, 4, actor['id'])
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
@@ -2371,33 +2372,13 @@ class QAsGenerator():
         important_objects = []
         key_object_infos = {}
         
-        _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
-        ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
+        # _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
+        # ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
 
         lane_info = get_lane_info(self.map, ego_location)
-        ego['num_lanes_same_direction'] = lane_info['num_lanes_same_direction']
-        ego['num_lanes_opposite_direction'] = lane_info['num_lanes_opposite_direction']
-        ego['ego_lane_number'] = lane_info['ego_lane_number']
-        ego['lane_type'] = lane_info['lane_type']
-        ego['lane_change'] = lane_info['lane_change']
-        ego['left_lane_marking_color'] = lane_info['left_lane_marking_color']
-        ego['left_lane_marking_type'] = lane_info['left_lane_marking_type']
-        ego['right_lane_marking_color'] = lane_info['right_lane_marking_color']
-        ego['right_lane_marking_type'] = lane_info['right_lane_marking_type']
-        ego['lane_type_str'] = lane_info['lane_type_str']
-        ego['lane_change_str'] = lane_info['lane_change_str']
-        ego['left_lane_marking_color_str'] = lane_info['left_lane_marking_color_str']
-        ego['left_lane_marking_type_str'] = lane_info['left_lane_marking_type_str']
-        ego['right_lane_marking_color_str'] = lane_info['right_lane_marking_color_str']
-        ego['right_lane_marking_type_str'] = lane_info['right_lane_marking_type_str']
-        ego['shoulder_left'] = lane_info['shoulder_left']
-        ego['parking_left'] = lane_info['parking_left']
-        ego['sidewalk_left'] = lane_info['sidewalk_left']
-        ego['bike_lane_left'] = lane_info['bikelane_left']
-        ego['shoulder_right'] = lane_info['shoulder_right']
-        ego['parking_right'] = lane_info['parking_right']
-        ego['sidewalk_right'] = lane_info['sidewalk_right']
-        ego['bike_lane_right'] = lane_info['bikelane_right']
+        for key, value in lane_info.items():
+            if key not in ego:
+                ego[key] = value
 
         ego['hazard_detected_10'] = False
         affected_by_vehicle_10, hazard_actor_10 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
@@ -3164,7 +3145,6 @@ class QAsGenerator():
                 else:
                     answer = f"The ego vehicle should pay particular attention to traffic in the right-hand lane " +\
                                                                             f"and wait for a gap to change lanes."
-
             if ego_vehicle_info['bike_lane_left'] and ego_vehicle_info['num_lanes_opposite_direction'] == 0 and \
                                                                             ego_vehicle_info['ego_lane_number'] == 0:
                 # no oncoming traffic and ego is on left most lane
