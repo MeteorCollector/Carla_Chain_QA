@@ -5,6 +5,7 @@ import gzip
 import os
 import json
 from shapely.geometry import Polygon, Point
+import cv2
 
 # math utils
 
@@ -192,16 +193,22 @@ def project_point_to_camera(intrinsic_matrix, world2cam_matrix, point, image_wid
     Returns:
         Tuple ([u, v], is_in_view) - Projection coordinate (u, v), bool indicates whether it is in camera's view
     """
+
     point_cam_location = world2cam_matrix @ np.append(point, 1)
 
-    uv = intrinsic_matrix @ (point_cam_location[:3] / point_cam_location[2])
-    u, v = uv[0], uv[1]
+    pos_3d = np.array([point_cam_location[1], -point_cam_location[2], point_cam_location[0]])
+    
+    rvec = np.zeros((3, 1), np.float32) 
+    tvec = np.array([[0.0, 0.0, 0.0]], np.float32)
+    dist_coeffs = np.zeros((5, 1), np.float32) 
+    
+    points_2d, _ = cv2.projectPoints(
+        pos_3d, rvec, tvec, intrinsic_matrix, dist_coeffs
+    )
+    u, v = points_2d[0][0]
 
-    # z <= 0. point is behind the camera
-    if point_cam_location[2] <= 0:
-        return [u, v], False
+    is_in_view = (pos_3d[2] <= 0) and (0 <= u < image_width and 0 <= v < image_height)
 
-    is_in_view = 0 <= u < image_width and 0 <= v < image_height
     return [u, v], is_in_view
 
 def get_vehicle_projected_corners(camera, vehicle):
