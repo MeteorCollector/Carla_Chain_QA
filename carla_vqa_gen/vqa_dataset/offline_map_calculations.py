@@ -377,6 +377,29 @@ def get_lane_info(map, vehicle_location):
 
     return lane_info
 
+def get_other_vehicle_lane_info(map, vehicle_location, ego_vehicle_location):
+    """
+    Get information keys of current lane
+    """
+    vehicle_wp = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    ego_wp = map.get_waypoint(ego_vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    if not (vehicle_wp or ego_wp):
+        return {}
+
+    vehicle_lane_id = vehicle_wp.lane_id
+    vehicle_road_id = vehicle_wp.road_id
+
+    ego_lane_id = ego_wp.lane_id
+    ego_road_id = ego_wp.road_id
+        
+    lane_info = {
+        "same_road_as_ego" : vehicle_road_id == ego_road_id,
+        "same_direction_as_ego": vehicle_road_id == ego_road_id and vehicle_lane_id * ego_lane_id > 0,
+        "is_in_junction": is_vehicle_in_junction(map, vehicle_location)
+    }
+
+    return lane_info
+
 def is_changing_lane(x, y, theta, map):
     """
     Judge whether the object is changing its lane by its position

@@ -2327,10 +2327,19 @@ class QAsGenerator():
                 ego = actor
 
         # Preprocess, add some keys
+        ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
+
         for actor in scene_data:
             # relative position
             actor['position'] = transform_to_ego_coordinates(actor['location'], ego['world2ego'])
             actor['yaw'] = math.radians(ego_vehicle["rotation"][2])
+            if actor['class'] == 'vehicle':
+                actor_location = carla.Location(x=actor['location'][0], y=actor['location'][1], z=actor['location'][2])
+                other_vehicles_info = get_other_vehicle_lane_info(self.map, actor_location, ego_location)
+                actor['same_road_as_ego'] = other_vehicles_info['same_road_as_ego']
+                actor['same_direction_as_ego'] = other_vehicles_info['same_direction_as_ego']
+                actor['is_in_junction'] = other_vehicles_info['is_in_junction']
+
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
@@ -2362,9 +2371,6 @@ class QAsGenerator():
 
         important_objects = []
         key_object_infos = {}
-
-        # Append missing keys
-        ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
         
         _, ego['distance_to_junction'] = find_first_junction_in_direction(self.map, ego_location)
         ego['is_in_junction'] = is_vehicle_in_junction(self.map, ego_location)
