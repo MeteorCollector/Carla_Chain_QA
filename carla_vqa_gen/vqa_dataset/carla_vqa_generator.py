@@ -1820,22 +1820,23 @@ class QAsGenerator():
                 None
             """
 
+            # TODO: use future to predict!
             question = f"Where is {other_vehicle_location_description} going?"
-            answer = ''
+            answer = "TODO: we don't have steer, so should use future to predict other vehicle's trajetory"
 
-            steer = other_vehicle['steer']
+            # steer = other_vehicle['steer']
 
-            # Determine trajectory based on steer angle
-            if steer < -0.1:
-                answer = f"The {other_vehicle_description} is turning left."
-            elif steer < -0.03:
-                answer = f"The {other_vehicle_description} is turning slightly left."
-            elif steer > 0.1:
-                answer = f"The {other_vehicle_description} is turning right."
-            elif steer > 0.03:
-                answer = f"The {other_vehicle_description} is turning slightly right."
-            else:
-                answer = f"The {other_vehicle_description} is going straight."
+            # # Determine trajectory based on steer angle
+            # if steer < -0.1:
+            #     answer = f"The {other_vehicle_description} is turning left."
+            # elif steer < -0.03:
+            #     answer = f"The {other_vehicle_description} is turning slightly left."
+            # elif steer > 0.1:
+            #     answer = f"The {other_vehicle_description} is turning right."
+            # elif steer > 0.03:
+            #     answer = f"The {other_vehicle_description} is turning slightly right."
+            # else:
+            #     answer = f"The {other_vehicle_description} is going straight."
 
             # Check if the other vehicle is cutting into the ego vehicle's lane
             if 'vehicle_cuts_in' in other_vehicle:
@@ -2334,12 +2335,10 @@ class QAsGenerator():
             actor['position'] = transform_to_ego_coordinates(actor['location'], ego['world2ego'])
             actor['yaw'] = math.radians(ego_vehicle["rotation"][2])
             if actor['class'] == 'vehicle':
-                actor_location = carla.Location(x=actor['location'][0], y=actor['location'][1], z=actor['location'][2])
-                other_vehicles_info = get_other_vehicle_lane_info(self.map, actor_location, ego_location)
-                actor['same_road_as_ego'] = other_vehicles_info['same_road_as_ego']
-                actor['same_direction_as_ego'] = other_vehicles_info['same_direction_as_ego']
-                actor['is_in_junction'] = other_vehicles_info['is_in_junction']
-
+                other_vehicles_info = get_other_vehicle_info(self.map, actor, ego)
+                for key, value in other_vehicles_info.items():
+                    if key not in actor:
+                        actor[key] = value
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
@@ -2451,6 +2450,8 @@ class QAsGenerator():
         # original only raise this flag when ego vehicle overcomes an obstacle
         measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
         measurements['control_brake'] = measurements['should_brake']
+        measurements['command'] = measurements['command_near']
+        measurements['target_point'] = [measurements['x_target'], measurements['y_target']]
 
         append_dict = {
             'ego': ego,

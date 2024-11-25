@@ -6,6 +6,24 @@ import os
 import json
 from shapely.geometry import Polygon, Point
 import cv2
+from scipy.spatial import KDTree
+from webcolors import (
+    CSS2_HEX_TO_NAMES,
+    hex_to_rgb,
+)
+def convert_rgb_to_names(rgb_tuple):
+    
+    # a dictionary of all the hex and their respective names in css3
+    css3_db = CSS2_HEX_TO_NAMES
+    names = []
+    rgb_values = []
+    for color_hex, color_name in css3_db.items():
+        names.append(color_name)
+        rgb_values.append(hex_to_rgb(color_hex))
+    
+    kdt_db = KDTree(rgb_values)
+    distance, index = kdt_db.query(rgb_tuple)
+    return f'{names[index]}'
 
 # math utils
 
@@ -131,15 +149,39 @@ def rgb_to_color_name(rgb_str):
         r, g, b = map(int, rgb_str.split(","))
     except ValueError:
         return "unknown"
+    
+    return convert_rgb_to_names((r, g, b))
 
-    def euclidean_distance(rgb1, rgb2):
-        return math.sqrt(sum((c1 - c2) ** 2 for c1, c2 in zip(rgb1, rgb2)))
+    # def euclidean_distance(rgb1, rgb2):
+    #     return math.sqrt(sum((c1 - c2) ** 2 for c1, c2 in zip(rgb1, rgb2)))
 
-    closest_color = min(color_mapping, key=lambda color: euclidean_distance((r, g, b), color_mapping[color]))
+    # closest_color = min(color_mapping, key=lambda color: euclidean_distance((r, g, b), color_mapping[color]))
 
-    return closest_color
+    # return closest_color
 
 # calculation functions
+
+def wps_next_until_lane_end(wp):
+    try:
+        road_id_cur = wp.road_id
+        lane_id_cur = wp.lane_id
+        road_id_next = road_id_cur
+        lane_id_next = lane_id_cur
+        curr_wp = [wp]
+        next_wps = []
+        # https://github.com/carla-simulator/carla/issues/2511#issuecomment-597230746
+        while road_id_cur == road_id_next and lane_id_cur == lane_id_next:
+            next_wp = curr_wp[0].next(1)
+            if len(next_wp) == 0:
+                break
+            curr_wp = next_wp
+            next_wps.append(next_wp[0])
+            road_id_next = next_wp[0].road_id
+            lane_id_next = next_wp[0].lane_id
+    except:
+        next_wps = []
+        
+    return next_wps
 
 def print_waypoint_info(waypoint):
     """
@@ -377,25 +419,109 @@ def get_lane_info(map, vehicle_location):
 
     return lane_info
 
-def get_other_vehicle_lane_info(map, vehicle_location, ego_vehicle_location):
+def get_other_vehicle_info(map, vehicle, ego):
     """
-    Get information keys of current lane
+    Get information keys of other vehicle
     """
-    vehicle_wp = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
-    ego_wp = map.get_waypoint(ego_vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
-    if not (vehicle_wp or ego_wp):
-        return {}
+    
+    vehicle_location = carla.Location(x=vehicle['location'][0], y=vehicle['location'][1], z=vehicle['location'][2])
+    ego_location = carla.Location(x=ego['location'][0], y=ego['location'][1], z=ego['location'][2])
 
-    vehicle_lane_id = vehicle_wp.lane_id
-    vehicle_road_id = vehicle_wp.road_id
-
-    ego_lane_id = ego_wp.lane_id
-    ego_road_id = ego_wp.road_id
+    vehicle_wp = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.libcarla.LaneType.Any)
+    ego_wp = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.libcarla.LaneType.Any)
+    same_road_as_ego = False
+    lane_relative_to_ego = None
+    same_direction_as_ego = False
+    
+    next_wps = wps_next_until_lane_end(vehicle_wp)
+    next_lane_wps = next_wps[-1].next(1)
+    if len(next_lane_wps) == 0:
+        next_lane_wps = [next_wps[-1]]
+    
+    next_next_wps = []
+    for i, wp in enumerate(next_lane_wps):
+        next_next_wps = wps_next_until_lane_end(wp)
+    
+    try:
+        next_next_lane_wps = next_next_wps[-1].next(1)
+        if len(next_next_lane_wps) == 0:
+            next_next_lane_wps = [next_next_wps[-1]]
+    except:
+        next_next_lane_wps = []
+    
+    if vehicle_wp.is_junction:
+        distance_to_junction = 0.0
+        # get distance to ego vehicle
+    elif next_lane_wps[0].is_junction:
+        distance_to_junction = next_lane_wps[0].transform.location.distance(vehicle_wp.transform.location)
+    else:
+        distance_to_junction = None
         
+    next_road_ids = []
+    for i, wp in enumerate(next_lane_wps):
+        if wp.road_id not in next_road_ids:
+            next_road_ids.append(wp.road_id)
+    
+    next_next_road_ids = []
+    for i, wp in enumerate(next_next_lane_wps):
+        if wp.road_id not in next_next_road_ids:
+            next_next_road_ids.append(wp.road_id)
+    
+    left_wp, right_wp = ego_wp.get_left_lane(), ego_wp.get_right_lane()
+    left_decreasing_lane_id = left_wp is not None and left_wp.lane_id < ego_wp.lane_id or right_wp is not None and right_wp.lane_id > ego_wp.lane_id
+
+    remove_lanes_for_lane_relative_to_ego = 1
+    wp = ego_wp
+    is_opposite = False
+    while True:
+        flag = ego_wp.lane_id > 0 and left_decreasing_lane_id or ego_wp.lane_id < 0 and not left_decreasing_lane_id
+        if is_opposite:
+            flag = not flag
+        wp = wp.get_left_lane() if flag else wp.get_right_lane()
+            
+        if wp is None or wp.lane_type == carla.LaneType.Driving and ego_wp.lane_id * wp.lane_id < 0:
+            break
+        
+        is_opposite = ego_wp.lane_id * wp.lane_id < 0
+        
+        if wp.lane_type != carla.LaneType.Driving:
+            remove_lanes_for_lane_relative_to_ego += 1
+    
+    if vehicle_wp.road_id == ego_wp.road_id:
+        same_road_as_ego = True
+
+        if vehicle_wp.lane_id * ego_wp.lane_id > 0:
+            same_direction_as_ego = True
+
+        lane_relative_to_ego = vehicle_wp.lane_id - ego_wp.lane_id
+        lane_relative_to_ego *= -1 if left_decreasing_lane_id else 1
+        
+        if not same_direction_as_ego:
+            lane_relative_to_ego += remove_lanes_for_lane_relative_to_ego * (1 if lane_relative_to_ego < 0 else -1)
+        
+        lane_relative_to_ego = -lane_relative_to_ego
+
+    try:
+        rgb = tuple(map(int, vehicle.attributes['color'].split(',')))
+        color_name = convert_rgb_to_names(rgb)
+    except:
+        rgb = None
+        color_name = None
+            
     lane_info = {
-        "same_road_as_ego" : vehicle_road_id == ego_road_id,
-        "same_direction_as_ego": vehicle_road_id == ego_road_id and vehicle_lane_id * ego_lane_id > 0,
-        "is_in_junction": is_vehicle_in_junction(map, vehicle_location)
+        'color_rgb': rgb,
+        'color_name': color_name,
+        'lane_type': vehicle_wp.lane_type,
+        'lane_type_str': str(vehicle_wp.lane_type),
+        'is_in_junction': vehicle_wp.is_junction,
+        'junction_id': vehicle_wp.junction_id,
+        'distance_to_junction': distance_to_junction,
+        'next_junction_id': next_lane_wps[0].junction_id,
+        'next_road_ids': next_road_ids,
+        'next_next_road_ids': next_next_road_ids,
+        'same_road_as_ego': same_road_as_ego,
+        'same_direction_as_ego': same_direction_as_ego,
+        'lane_relative_to_ego': lane_relative_to_ego
     }
 
     return lane_info
