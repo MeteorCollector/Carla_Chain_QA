@@ -32,11 +32,11 @@
 		return []
 	```
 	
-5. lane_change 值的计算，好像是允许变的道？
+5. lane_change 值的计算，好像是允许变的道？ 对 这个没错
 
 6. Is there an obstacle on the current road? Accident_Town03_Route101_Weather23 就识别不到
 
-7. QA 里面，为什么没有提到颜色？
+7. QA 里面，为什么没有提到颜色？ 已经修复
 
 8. cutting into the lane of the ego vehicle 判定有点宽
 

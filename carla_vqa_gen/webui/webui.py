@@ -103,19 +103,30 @@ def index():
 
 
 def filter_json_tree(json_data, filter_keywords):
-    if (filter_keywords is None or len(filter_keywords) == 0):
+    if not filter_keywords:
         return json_data
 
-    filter_keywords = [kw.lower() for kw in filter_keywords]
-    filter_regex = [re.compile(pattern, re.IGNORECASE) for pattern in filter_keywords]
+    def matches_keyword(value, keyword):
+        if keyword.startswith("*") and keyword.endswith("*"):
+            return keyword[1:-1] in value
+        elif keyword.startswith("*"):
+            return value.endswith(keyword[1:])
+        elif keyword.endswith("*"):
+            return value.startswith(keyword[:-1])
+        else:
+            return value == keyword
+
+    def matches_any_keyword(value):
+        return any(matches_keyword(value, keyword) for keyword in filter_keywords)
 
     def recursive_filter(obj):
         if isinstance(obj, dict):
             result = {}
             for key, value in obj.items():
-                if any(regex.fullmatch(key) for regex in filter_regex):
+                if matches_any_keyword(key):
                     result[key] = value
                 else:
+                    # 递归过滤值
                     filtered_value = recursive_filter(value)
                     if filtered_value is not None:
                         result[key] = filtered_value
@@ -123,20 +134,18 @@ def filter_json_tree(json_data, filter_keywords):
         elif isinstance(obj, list):
             result = []
             for item in obj:
-                
                 filtered_item = recursive_filter(item)
                 if filtered_item is not None:
                     result.append(filtered_item)
             return result if result else None
         else:
-            if any(regex.fullmatch(str(obj)) for regex in filter_regex):
+            if matches_any_keyword(str(obj)):
                 return obj
             else:
                 return None
 
-    filtered_data = recursive_filter(json_data)
+    return recursive_filter(json_data)
 
-    return filtered_data
 
 @app.route("/change_number", methods=["POST"])
 def change_number():

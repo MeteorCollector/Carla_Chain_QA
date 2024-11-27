@@ -1342,14 +1342,14 @@ class QAsGenerator():
                     # Determine the color of the vehicle
                     color_str = relevant_obj["color_name"] + ' ' if relevant_obj.get("color_name") is not None \
                                                                 and relevant_obj["color_name"] != 'None' else ''
-                    if relevant_obj.get('color_rgb') is not None:
-                        if relevant_obj['color_rgb'] == [0, 28, 0] or relevant_obj['color_rgb'] == [12, 42, 12]:
+                    if relevant_obj.get('color') is not None:
+                        if relevant_obj['color'] == [0, 28, 0] or relevant_obj['color'] == [12, 42, 12]:
                             color_str = 'dark green '
-                        elif relevant_obj['color_rgb'] == [211, 142, 0]:
+                        elif relevant_obj['color'] == [211, 142, 0]:
                             color_str = 'yellow '
-                        elif relevant_obj['color_rgb'] == [145, 255, 181]:
+                        elif relevant_obj['color'] == [145, 255, 181]:
                             color_str = 'blue '
-                        elif relevant_obj['color_rgb'] == [215, 88, 0]:
+                        elif relevant_obj['color'] == [215, 88, 0]:
                             color_str = 'orange '
 
                     category = "Vehicle"
@@ -2213,15 +2213,15 @@ class QAsGenerator():
             # Determine the color of the vehicle
             color_str = vehicle.get('color_name') + ' ' if vehicle.get('color_name') is not None \
                                                         and vehicle.get('color_name') != 'None' else ''
-            if vehicle.get('color_rgb') is not None and vehicle.get('color_rgb') != 'None':
-                color_str = rgb_to_color_name(vehicle['color_rgb'])
-                if vehicle['color_rgb'] == [0, 28, 0] or vehicle['color_rgb'] == [12, 42, 12]:
+            if vehicle.get('color') is not None and vehicle.get('color') != 'None':
+                color_str = rgb_to_color_name(vehicle['color']) + ' '
+                if vehicle['color'] == [0, 28, 0] or vehicle['color'] == [12, 42, 12]:
                     color_str = 'dark green '
-                elif vehicle['color_rgb'] == [211, 142, 0]:
+                elif vehicle['color'] == [211, 142, 0]:
                     color_str = 'yellow '
-                elif vehicle['color_rgb'] == [145, 255, 181]:
+                elif vehicle['color'] == [145, 255, 181]:
                     color_str = 'blue '
-                elif vehicle['color_rgb'] == [215, 88, 0]:
+                elif vehicle['color'] == [215, 88, 0]:
                     color_str = 'orange '
 
             # Construct a string description of the vehicle

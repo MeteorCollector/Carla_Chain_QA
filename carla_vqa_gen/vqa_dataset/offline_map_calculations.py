@@ -123,28 +123,6 @@ def rgb_to_color_name(rgb_str):
         str: The corresponding natural language color description.
     """
 
-    # Predefined common colors with their RGB values
-    color_mapping = {
-        "red": (255, 0, 0),
-        "green": (0, 255, 0),
-        "dark green": (0, 28, 0),
-        "dark green ": (12, 42, 12),
-        "blue": (0, 0, 255),
-        "blue ": (145, 255, 181),
-        "yellow": (255, 255, 0),
-        "yellow ": (211, 142, 0),
-        "cyan": (0, 255, 255),
-        "magenta": (255, 0, 255),
-        "black": (0, 0, 0),
-        "white": (255, 255, 255),
-        "gray": (128, 128, 128),
-        "orange": (255, 165, 0),
-        "orange ": (215, 88, 0),
-        "pink": (255, 192, 203),
-        "brown": (165, 42, 42),
-        "purple": (128, 0, 128),
-    }
-
     try:
         r, g, b = map(int, rgb_str.split(","))
     except ValueError:
