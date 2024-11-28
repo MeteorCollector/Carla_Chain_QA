@@ -1511,8 +1511,7 @@ class QAsGenerator():
                         elif scenario_name == 'InvadingTurn':
                             answer = f"The ego vehicle must shift slightly to the right side to avoid {obstacle}."
 
-                            answer2 = f'Yes, there might be invading vehicles from the opposite lane on " \
-                                                "the current road.'
+                            answer2 = f'Yes, there might be invading vehicles from the opposite lane on the current road.'
                         # 'AccidentTwoWays', 'ConstructionObstacleTwoWays', 'HazardAtSideLaneTwoWays', 
                         # 'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays'
                         else: 

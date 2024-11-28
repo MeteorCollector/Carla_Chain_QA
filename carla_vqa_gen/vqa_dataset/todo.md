@@ -43,8 +43,8 @@
 Accident_Town03_Route101_Weather23 识别不到
 AccidentTwoWays_Town12_Route1102_Weather10 识别不到
 BlockedIntersection_Town03_Route134_Weather3 没有障碍
-ConstructionObstacle_Town03_Route60_Weather8 识别不到 static.prop.trafficwarning 
-ConstructionObstacleTwoWays_Town12_Route1080_Weather14 识别不到 trafficwarning 其实在真正的 warning 之前还有 static.prop.warningconstruction，DriveLM 并没有处理，也要弄一下的
+ConstructionObstacle_Town03_Route60_Weather8 识别不到  [已解决] static.prop.trafficwarning 
+ConstructionObstacleTwoWays_Town12_Route1080_Weather14 识别不到 [已解决] trafficwarning 其实在真正的 warning 之前还有 static.prop.warningconstruction，DriveLM 并没有处理，也要弄一下的
 ControlLoss_Town04_Route169_Weather13 不算 obstacle, 但是有 static.prop.dirtdebris01
 CrossingBicycleFlow_Town12_Route1011_Weather23 过路口的时候 bicycle flow 已经过去了，建搞一个会挡住的情形
 DynamicObjectCrossing_Town01_Route1_Weather1 识别不到  walker.pedestrian
