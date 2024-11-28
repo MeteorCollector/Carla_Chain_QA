@@ -56,7 +56,7 @@ HighwayCutIn_Town06_Route298_Weather20 没有障碍
 HighwayExit_Town06_Route291_Weather5 没有障碍
 InterurbanActorFlow_Town06_Route294_Weather8 没有障碍
 InterurbanAdvancedActorFlow_Town06_Route301_Weather15 没有障碍
-InvadingTurn_Town02_Route95_Weather9 没有障碍（？）
+InvadingTurn_Town02_Route95_Weather9 [已解决]
 LaneChange_Town06_Route277_Weather9 没有障碍，为什么要变道？
 MergerIntoSlowTraffic_Town06_Route317_Weather5 有比较碍事的车辆
 NonSignalizedJunctionLeftTurnEnterFlow_Town12_Route1022_Weather8 没有障碍
@@ -89,3 +89,5 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 9. 根本没有 `behaviour` 问题类，要不要用 LLM 打标
 
 10. 没有天气 复杂情况理解等等
+
+11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样

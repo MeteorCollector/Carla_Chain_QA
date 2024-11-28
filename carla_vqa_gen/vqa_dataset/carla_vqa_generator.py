@@ -932,7 +932,7 @@ class QAsGenerator():
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
-                        answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
+                        answer = "The ego vehicle should stop because it must invade the nearby lane, which is " \
                                                     "occupied, in order to bypass the vehicle with the opened doors."
                     elif hazardous and 'HazardAtSideLaneTwoWays' in scenario_type \
                             and measurements['speed_reduced_by_obj_id'] in vehicles:
@@ -1296,16 +1296,16 @@ class QAsGenerator():
             scenario_name = scenario_name.split('_')[0]
 
             if 'ConstructionObstacle' in scenario_name:
-                print(f"[debug] static_objects = {static_objects}") # debug
                 relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
                                                                 and x['distance'] < 40 
                                                                 and x['position'][0] > 0.6 and is_vehicle_in_camera(self.CAMERA_FRONT, x)]
-                print(f"[debug] relevant_objects = {relevant_objects}") # debug
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
-                relevant_objects = [v for v in vehicles_by_id.values() if v.get('next_action') is None 
-                                and v['position'][0] > -0.2 
-                                and (float(v['distance']) < 10 or v['distance']/max(1e-6, measurements['speed']) < 3)]
+                relevant_objects = [v for v in vehicles_by_id.values() if v['type_id'] == 'vehicle.mercedes.coupe_2020' 
+                                    and v['position'][0] > 0
+                                    and v['position'][1] > 0.5 
+                                    and (float(v['distance']) < 40 and measurements['speed'] < 0.1) and is_vehicle_in_camera(self.CAMERA_FRONT, v)]
+                print(f"[debug] relevant_objects = {relevant_objects}") # debug
                 
             elif 'InvadingTurn' in scenario_name:
                 relevant_objects = list(filter(lambda x: x['type_id'] == 'static.prop.constructioncone' \
@@ -1359,7 +1359,8 @@ class QAsGenerator():
                     category = "Vehicle"
                     visual_description = f"{color_str}vehicle"
 
-                    if 'VehicleOpensDoorTwoWays' in scenario_name:
+                    if 'VehicleOpensDoorTwoWays' in scenario_name and relevant_obj['distance'] <= 25.0:
+                        # vehicle opens door at roughly 25m away
                         important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
                     else:
                         important_object_str = f'the {color_str}vehicle, parking {rough_pos_str}'
@@ -1459,18 +1460,21 @@ class QAsGenerator():
                         if 'InvadingTurn' == scenario_name:
                             answer = f"The ego vehicle has already shifted to the side to avoid {obstacle}."
                         else:
-                            route_start = np.array(measurements['route_original'][0])
-                            route_end = np.array(measurements['route_original'][1])
+                            print("[debug] TODO: line 1463: lane_change related, has to be implemented.")
+                            # route_start = np.array(measurements['route_original'][0])
+                            # route_end = np.array(measurements['route_original'][1])
                             
-                            route_vector = route_end - route_start
-                            ego_to_route_start = route_start  # Assuming ego vehicle is at [0, 0]
+                            # route_vector = route_end - route_start
+                            # ego_to_route_start = route_start  # Assuming ego vehicle is at [0, 0]
 
-                            # Calculate the projection of ego_to_route_start onto route_vector
-                            projection_length = np.dot(route_vector, ego_to_route_start) / np.linalg.norm(route_vector)
+                            # # Calculate the projection of ego_to_route_start onto route_vector
+                            # projection_length = np.dot(route_vector, ego_to_route_start) / np.linalg.norm(route_vector)
                             
-                            # Calculate lateral distance using Pythagorean theorem
-                            distance_to_route_start = np.linalg.norm(ego_to_route_start)
-                            lateral_distance = np.sqrt(distance_to_route_start**2 - projection_length**2)
+                            # # Calculate lateral distance using Pythagorean theorem
+                            # distance_to_route_start = np.linalg.norm(ego_to_route_start)
+                            # lateral_distance = np.sqrt(distance_to_route_start**2 - projection_length**2)
+
+                            lateral_distance = 2
 
                             # usually roads in carla are 3.5 wide
                             changing_or_has_changed = "has already changed" if lateral_distance > 3.5/2. else "is "\
@@ -1478,7 +1482,7 @@ class QAsGenerator():
                             answer = f"The ego vehicle {changing_or_has_changed} to another lane to "\
                                         f"circumvent the {obstacle}."
                     else:
-                        keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle']
+                        keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle', 'VehicleOpensDoor']
                         if any(keyword in scenario_name for keyword in keywords):
                             print("[debug] final answer modification")
                             if ego_data['lane_change'] == 1:
@@ -2364,7 +2368,7 @@ class QAsGenerator():
             actor['position'] = transform_to_ego_coordinates(actor['location'], ego['world2ego'])
             actor['yaw'] = math.radians(ego_vehicle["rotation"][2])
             if actor['class'] == 'vehicle':
-                other_vehicles_info = get_other_vehicle_info(self.map, actor, ego)
+                other_vehicles_info = get_other_vehicle_info(self.current_measurement_path, self.map, actor, ego)
                 for key, value in other_vehicles_info.items():
                     if key not in actor:
                         actor[key] = value
@@ -2458,7 +2462,7 @@ class QAsGenerator():
     
         for actor in scene_data:
             if actor['class'] == 'vehicle':
-                actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map)
+                actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map, self.current_measurement_path)
 
         # original only raise this flag when ego vehicle overcomes an obstacle
         measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)

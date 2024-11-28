@@ -438,7 +438,7 @@ def get_lane_info(map, vehicle_location):
 
     return lane_info
 
-def get_other_vehicle_info(map, vehicle, ego):
+def get_other_vehicle_info(path, map, vehicle, ego):
     """
     Get information keys of other vehicle
     """
@@ -722,7 +722,7 @@ def is_ego_changing_lane_due_to_obstacle(vehicle_data, map, bbox_list):
     
     return False
 
-def is_vehicle_cutting_in(ego_data, vehicle_data, map):
+def is_vehicle_cutting_in(ego_data, vehicle_data, map, path):
     """
     Judge whether the car is cutting in ego's lane
     
@@ -732,71 +732,150 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map):
         carla_map (carla.Map): CARLA map
     """
 
-    if is_vehicle_changing_lane(vehicle_data, map) is False:
+    vehicle_id = vehicle_data['id']
+
+    new_lane_id, old_lane_id, vehicle_is_changing_lane = detect_lane_change_by_time(map, vehicle_id, path)
+    
+    if vehicle_is_changing_lane is False:
         return False
+    # if is_vehicle_changing_lane(vehicle_data, map) is False:
+    #     return False
 
-    vehicle_location = carla.Location(x=vehicle_data['location'][0], y=vehicle_data['location'][1])
-    vehicle_theta = vehicle_data['rotation'][1]
-    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
-    lane_direction = waypoint.transform.rotation.yaw
+    # vehicle_location = carla.Location(x=vehicle_data['location'][0], y=vehicle_data['location'][1])
+    # vehicle_theta = vehicle_data['rotation'][1]
+    # waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    # lane_direction = waypoint.transform.rotation.yaw
     
-    angle_diff = (vehicle_theta - lane_direction) % 360
-    if angle_diff > 180:
-        angle_diff -= 360
+    # angle_diff = (vehicle_theta - lane_direction) % 360
+    # if angle_diff > 180:
+    #     angle_diff -= 360
     
-    lane_change_direction = None
-    angle_threshold = 10.0
-    if angle_diff > angle_threshold:
-        lane_change_direction = 'right'
-    elif angle_diff < -angle_threshold:
-        lane_change_direction = 'left'
-    else:
-        return False
+    # lane_change_direction = None
+    # angle_threshold = 10.0
+    # if angle_diff > angle_threshold:
+    #     lane_change_direction = 'right'
+    # elif angle_diff < -angle_threshold:
+    #     lane_change_direction = 'left'
+    # else:
+    #     return False
 
-    left_waypoint = waypoint.get_left_lane()
-    right_waypoint = waypoint.get_right_lane()
+    # left_waypoint = waypoint.get_left_lane()
+    # right_waypoint = waypoint.get_right_lane()
     
-    def calculate_distance_to_waypoint(wp):
-        return math.sqrt((vehicle_location.x - wp.transform.location.x) ** 2 +
-                         (vehicle_location.y - wp.transform.location.y) ** 2)
+    # def calculate_distance_to_waypoint(wp):
+    #     return math.sqrt((vehicle_location.x - wp.transform.location.x) ** 2 +
+    #                      (vehicle_location.y - wp.transform.location.y) ** 2)
     
-    nearest_lane = None
-    nearest_lane_distance = 1000 # max value
+    # nearest_lane = None
+    # nearest_lane_distance = 1000 # max value
     
-    if left_waypoint:
-        left_distance = calculate_distance_to_waypoint(left_waypoint)
-        if left_distance < nearest_lane_distance:
-            nearest_lane = left_waypoint
-            nearest_lane_distance = left_distance
+    # if left_waypoint:
+    #     left_distance = calculate_distance_to_waypoint(left_waypoint)
+    #     if left_distance < nearest_lane_distance:
+    #         nearest_lane = left_waypoint
+    #         nearest_lane_distance = left_distance
 
-    if right_waypoint:
-        right_distance = calculate_distance_to_waypoint(right_waypoint)
-        if right_distance < nearest_lane_distance:
-            nearest_lane = right_waypoint
-            nearest_lane_distance = right_distance
+    # if right_waypoint:
+    #     right_distance = calculate_distance_to_waypoint(right_waypoint)
+    #     if right_distance < nearest_lane_distance:
+    #         nearest_lane = right_waypoint
+    #         nearest_lane_distance = right_distance
     
-    if nearest_lane is None:
-        return False # there is no other lane!
+    # if nearest_lane is None:
+    #     return False # there is no other lane!
     
-    if lane_change_direction is 'left':
-        if nearest_lane == left_waypoint:
-            target_lane = left_waypoint
-            original_lane = waypoint
-        else:
-            target_lane = waypoint
-            original_lane = right_waypoint
-    elif lane_change_direction is 'right':
-        if nearest_lane == right_waypoint:
-            target_lane = right_waypoint
-            original_lane = waypoint
-        else:
-            target_lane = waypoint
+    # if lane_change_direction is 'left':
+    #     if nearest_lane == left_waypoint:
+    #         target_lane = left_waypoint
+    #         original_lane = waypoint
+    #     else:
+    #         target_lane = waypoint
+    #         original_lane = right_waypoint
+    # elif lane_change_direction is 'right':
+    #     if nearest_lane == right_waypoint:
+    #         target_lane = right_waypoint
+    #         original_lane = waypoint
+    #     else:
+    #         target_lane = waypoint
     
     ego_location = carla.Location(x=ego_data['location'][0], y=ego_data['location'][1])
     ego_waypoint = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
 
-    return target_lane.road_id == ego_waypoint.road_id and target_lane.lane_id == ego_waypoint.lane_id
+    return vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id
 
+def detect_lane_change_by_time(map, id, path, k=20):
+    """
+    Detect lane change by comparing lane_id and road_id across k frames.
+
+    Args:
+        path (str): Path to the current measurement file.
+        k (int): Number of frames to consider before and after.
+
+    Returns:
+        tuple: (original_lane, new_lane, has_changed)
+            original_lane: lane_id from k frames before (or earliest available).
+            new_lane: lane_id from k frames after (or latest available).
+            has_changed: bool, True if a lane change is detected, False otherwise.
+    """
+    dir_name, file_name = os.path.split(path)
+    base_name, _ = os.path.splitext(file_name)
+    base_name, _ = os.path.splitext(base_name)
+    ext = ".json.gz"
+    initial_index = int(base_name)
+
+    def get_valid_measurement(index_offset):
+        """Retrieve valid measurement at the given offset."""
+        if index_offset < 0:
+            offsets = range(index_offset, 0)
+        else:
+            offsets = range(index_offset, 0, -1)
+
+        for offset in offsets:
+            file_index = f"{initial_index + offset:05d}"
+            file_path = os.path.join(dir_name, f"{file_index}{ext}")
+            if os.path.exists(file_path):
+                data = load_measurement(file_path)
+                return data
+
+    # Get earliest available (k frames before)
+    original_data = get_valid_measurement(-k)
+    if original_data is None:
+        return None, None, False
+
+    # Get latest available (k frames after)
+    new_data = get_valid_measurement(k)
+    if new_data is None:
+        return None, None, False
+
+    now_data = load_measurement(path)
+    if now_data is None:
+        return None, None, False
+
+    # Extract lane_id and road_id
+    vehicle_past = find_dict_by_id(original_data, id)
+    vehicle_future = find_dict_by_id(new_data, id)
+    vehicle_now = find_dict_by_id(now_data, id)
+
+    if vehicle_past is None or vehicle_future is None:
+        return None, None, False
+
+    original_lane = vehicle_past['lane_id']
+    original_road = vehicle_past['road_id']
+    new_lane = vehicle_future['lane_id']
+    new_road = vehicle_future['road_id']
+
+    # Check current waypoint's junction status
+    now_location = carla.Location(x=vehicle_now['location'][0], y=vehicle_now['location'][1], z=vehicle_now['location'][2])
+    if is_vehicle_in_junction(map, now_location):
+        return None, None, False
+
+    # Determine if lane change occurred
+    has_changed = (
+        original_lane != new_lane and
+        original_road == new_road
+    )
+
+    return original_lane, new_lane, has_changed
 
 def get_acceleration_by_imu(speed, theta, acceleration):
     """
@@ -831,6 +910,12 @@ def find_location_by_id(data, target_id):
         if obj.get('id') == target_id:
             return obj.get('location'), obj.get('rotation')
     return None, None
+
+def find_dict_by_id(data, target_id):
+    for obj in data.get('bounding_boxes', []):
+        if obj.get('id') == target_id:
+            return obj
+    return None
 
 def get_acceleration_by_future(path, k):
     """
