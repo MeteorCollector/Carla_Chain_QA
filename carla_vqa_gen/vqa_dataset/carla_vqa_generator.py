@@ -1293,12 +1293,14 @@ class QAsGenerator():
             multiple_cones = False
             relevant_obj = None
             object_tags = []
+            scenario_name = scenario_name.split('_')[0]
 
             if 'ConstructionObstacle' in scenario_name:
                 print(f"[debug] static_objects = {static_objects}") # debug
-                relevant_objects = [x for x in static_objects if x['class'] == 'static_trafficwarning' 
+                relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
                                                                 and x['distance'] < 40 
-                                                                and x['position'][0] > 0.6]
+                                                                and x['position'][0] > 0.6 and is_vehicle_in_camera(self.CAMERA_FRONT, x)]
+                print(f"[debug] relevant_objects = {relevant_objects}") # debug
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
                 relevant_objects = [v for v in vehicles_by_id.values() if v.get('next_action') is None 
@@ -1308,7 +1310,7 @@ class QAsGenerator():
             elif 'InvadingTurn' in scenario_name:
                 relevant_objects = list(filter(lambda x: x['type_id'] == 'static.prop.constructioncone' \
                                             and x['position'][0] >= 1.5 \
-                                            and x['distance'] <= 40, static_objects))
+                                            and x['distance'] <= 40 and is_vehicle_in_camera(self.CAMERA_FRONT, x), static_objects))
             elif 'ParkingExit' == scenario_name:
                 if ego_data['lane_type_str'] == 'Parking':
                     relevant_objects = [x for x in vehicles_by_id.values() if x['lane_type_str']=='Parking' 
@@ -1329,6 +1331,7 @@ class QAsGenerator():
 
                 # Determine the type of vehicle based on its type_id
                 if 'ConstructionObstacle' in scenario_name:
+                    print("[debug] construction_obstacle") # debug
                     important_object_str = f'the construction warning {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction warning"
@@ -1366,7 +1369,7 @@ class QAsGenerator():
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
                                      'ParkingExit', 'VehicleOpensDoorTwoWays']:
                     projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
-
+                    print("[debug] 1") # debug
                     # Generate a unique key and value for the vehicle object
                     key, value = self.generate_object_key_value(
                         category=category,
@@ -1378,6 +1381,7 @@ class QAsGenerator():
                     key_object_infos[key] = value
                     object_tags = [key]
 
+            print("[debug] 2") # debug
             question = "Does the ego vehicle need to change lanes or deviate from the lane center due to an "\
                         "upcoming obstruction?"
             answer = "No, the ego vehicle can stay on its current lane."
@@ -1385,10 +1389,13 @@ class QAsGenerator():
             question2 = 'Is there an obstacle on the current road?'
             answer2 = 'No, there is no obstacle on the current route.'
 
+            print(f"[debug] scenario_name = {scenario_name}") # debug
+            
             if scenario_name in ['Accident', 'AccidentTwoWays', 'ConstructionObstacle', 'ConstructionObstacleTwoWays',
                                     'InvadingTurn', 'HazardAtSideLane', 'HazardAtSideLaneTwoWays', 'ParkedObstacle',
                                     'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays']:
                 
+                print("[debug] 3") # debug
                 obstacle = {'Accident': 'accident',
                             'AccidentTwoWays': 'accident', 
                             'ConstructionObstacle': 'construction warning', 
@@ -1415,6 +1422,7 @@ class QAsGenerator():
                                                                         and float(v['distance']) < 40]
                 
                 relevant_objects.sort(key = lambda x: float(x['distance']))
+                print(f"[debug] in second branch, relevant_objects = {relevant_objects}")
 
                 if relevant_objects:
                     if 'Accident' in scenario_name: 
@@ -1470,8 +1478,9 @@ class QAsGenerator():
                             answer = f"The ego vehicle {changing_or_has_changed} to another lane to "\
                                         f"circumvent the {obstacle}."
                     else:
-                        if scenario_name in ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', \
-                                                'ParkedObstacle']:
+                        keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle']
+                        if any(keyword in scenario_name for keyword in keywords):
+                            print("[debug] final answer modification")
                             if ego_data['lane_change'] == 1:
                                 side = 'the right lane'
                             elif ego_data['lane_change'] == 2:
@@ -1482,9 +1491,23 @@ class QAsGenerator():
                             if ego_data['lane_change'] in [1, 2, 3]:
                                 answer = f"The ego vehicle must change to {side} to circumvent the {obstacle}."
 
-                            obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
-                            obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
-                            answer2 = f'Yes, there {obstacle2} on the current road.'
+                                obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
+                                answer2 = f'Yes, there {obstacle2} on the current road.'
+                            elif ego_data['lane_change'] in [0]:
+                                if 'TwoWays' in scenario_name:
+                                    answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
+                                
+                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
+                                    answer2 = f'Yes, there {obstacle2} on the current road.'
+                                else:
+                                    answer = f"The ego vehicle must stop because there's no way to circumvent the {obstacle}."
+                                
+                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
+                                    answer2 = f'Yes, there {obstacle2} on the current road.'
+
                         elif scenario_name == 'InvadingTurn':
                             answer = f"The ego vehicle must shift slightly to the right side to avoid {obstacle}."
 
@@ -2350,6 +2373,7 @@ class QAsGenerator():
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
+                
         for actor in scene_data:
             if actor['class'] == 'vehicle':
                 other_vehicles.append(actor)
@@ -2371,9 +2395,10 @@ class QAsGenerator():
                 if 'stop' in actor['type_id']:
                     # print("[debug] we have a stop sign here.") # debug
                     stop_signs.append(actor)
-
+                if 'static' in actor['type_id']:
+                    static_objects.append(actor)
                 # pdm_lite only has stop sign, we have to fix this. (IMPORTANT)
-            elif actor['class'] == 'static' or actor['class'] == 'static_trafficwarning':
+            elif 'static' in actor['class']:
                 static_objects.append(actor)
 
         important_objects = []
