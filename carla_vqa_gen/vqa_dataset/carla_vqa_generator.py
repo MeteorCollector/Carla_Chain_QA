@@ -1295,6 +1295,7 @@ class QAsGenerator():
             object_tags = []
 
             if 'ConstructionObstacle' in scenario_name:
+                print(f"[debug] static_objects = {static_objects}") # debug
                 relevant_objects = [x for x in static_objects if x['class'] == 'static_trafficwarning' 
                                                                 and x['distance'] < 40 
                                                                 and x['position'][0] > 0.6]
