@@ -28,9 +28,9 @@
         ],
         "class": "ego_vehicle",
         "color": "0,0,0",
-        "distance_to_junction": 183.01055908203125,
-        "distance_to_junction_ego": 183.01055908203125,
-        "ego_lane_number": 0,
+        "distance_to_junction": 183.01060485839844,
+        "distance_to_junction_ego": 183.01060485839844,
+        "ego_lane_number": 1,
         "extent": [
             2.44619083404541,
             0.9183566570281982,
@@ -46,10 +46,10 @@
         "lane_change": 0,
         "lane_change_str": "NONE",
         "lane_id": -1,
-        "lane_type": 2,
-        "lane_type_str": "Driving",
-        "left_lane_marking_color": 4,
-        "left_lane_marking_color_str": "Yellow",
+        "lane_type": 256,
+        "lane_type_str": "Parking",
+        "left_lane_marking_color": 0,
+        "left_lane_marking_color_str": "White",
         "left_lane_marking_type": 2,
         "left_lane_marking_type_str": "Solid",
         "location": [
@@ -72,9 +72,9 @@
             18684
         ],
         "num_lanes_opposite_direction": 1,
-        "num_lanes_same_direction": 1,
+        "num_lanes_same_direction": 2,
         "parking_left": true,
-        "parking_right": true,
+        "parking_right": false,
         "position": [
             4.1095991036854684e-05,
             9.625333950680215e-05,
@@ -82,8 +82,8 @@
         ],
         "right_lane_marking_color": 0,
         "right_lane_marking_color_str": "White",
-        "right_lane_marking_type": 2,
-        "right_lane_marking_type_str": "Solid",
+        "right_lane_marking_type": 10,
+        "right_lane_marking_type_str": "NONE",
         "road_id": 876,
         "rotation": [
             0.890007734298706,
@@ -214,9 +214,9 @@
                 ],
                 "class": "ego_vehicle",
                 "color": "0,0,0",
-                "distance_to_junction": 183.01055908203125,
-                "distance_to_junction_ego": 183.01055908203125,
-                "ego_lane_number": 0,
+                "distance_to_junction": 183.01060485839844,
+                "distance_to_junction_ego": 183.01060485839844,
+                "ego_lane_number": 1,
                 "extent": [
                     2.44619083404541,
                     0.9183566570281982,
@@ -232,10 +232,10 @@
                 "lane_change": 0,
                 "lane_change_str": "NONE",
                 "lane_id": -1,
-                "lane_type": 2,
-                "lane_type_str": "Driving",
-                "left_lane_marking_color": 4,
-                "left_lane_marking_color_str": "Yellow",
+                "lane_type": 256,
+                "lane_type_str": "Parking",
+                "left_lane_marking_color": 0,
+                "left_lane_marking_color_str": "White",
                 "left_lane_marking_type": 2,
                 "left_lane_marking_type_str": "Solid",
                 "location": [
@@ -258,9 +258,9 @@
                     18684
                 ],
                 "num_lanes_opposite_direction": 1,
-                "num_lanes_same_direction": 1,
+                "num_lanes_same_direction": 2,
                 "parking_left": true,
-                "parking_right": true,
+                "parking_right": false,
                 "position": [
                     4.1095991036854684e-05,
                     9.625333950680215e-05,
@@ -268,8 +268,8 @@
                 ],
                 "right_lane_marking_color": 0,
                 "right_lane_marking_color_str": "White",
-                "right_lane_marking_type": 2,
-                "right_lane_marking_type_str": "Solid",
+                "right_lane_marking_type": 10,
+                "right_lane_marking_type_str": "NONE",
                 "road_id": 876,
                 "rotation": [
                     0.890007734298706,
@@ -562,7 +562,7 @@
                 "state": "dynamic",
                 "steer": -0.10882782812217208,
                 "type_id": "vehicle.mercedes.coupe_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.18672257661819458,
@@ -699,7 +699,7 @@
                 "state": "dynamic",
                 "steer": -0.008254024004185038,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16775599122047424,
@@ -836,7 +836,7 @@
                 "state": "dynamic",
                 "steer": -0.0009321782766973753,
                 "type_id": "vehicle.dodge.charger_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16417723894119263,
@@ -973,7 +973,7 @@
                 "state": "dynamic",
                 "steer": 0.0021975839363127317,
                 "type_id": "vehicle.dodge.charger_police_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16208690404891968,
@@ -1110,7 +1110,7 @@
                 "state": "dynamic",
                 "steer": 0.0,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16295596957206726,
@@ -1247,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": 0.0,
                 "type_id": "vehicle.mercedes.coupe_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.1629560887813568,
@@ -1380,7 +1380,7 @@
                 "state": "static",
                 "steer": 0.0,
                 "type_id": "/Game/Carla/Static/Car/4Wheeled/ParkedVehicles/TeslaM3/SM_TeslaM3_parked.SM_TeslaM3_parked",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16304244101047516,
@@ -1513,7 +1513,7 @@
                 "state": "static",
                 "steer": 0.0,
                 "type_id": "/Game/Carla/Static/Car/4Wheeled/ParkedVehicles/Charger/SM_ChargerParked.SM_ChargerParked",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.16304896771907806,
@@ -3308,9 +3308,9 @@
             ],
             "class": "ego_vehicle",
             "color": "0,0,0",
-            "distance_to_junction": 183.01055908203125,
-            "distance_to_junction_ego": 183.01055908203125,
-            "ego_lane_number": 0,
+            "distance_to_junction": 183.01060485839844,
+            "distance_to_junction_ego": 183.01060485839844,
+            "ego_lane_number": 1,
             "extent": [
                 2.44619083404541,
                 0.9183566570281982,
@@ -3326,10 +3326,10 @@
             "lane_change": 0,
             "lane_change_str": "NONE",
             "lane_id": -1,
-            "lane_type": 2,
-            "lane_type_str": "Driving",
-            "left_lane_marking_color": 4,
-            "left_lane_marking_color_str": "Yellow",
+            "lane_type": 256,
+            "lane_type_str": "Parking",
+            "left_lane_marking_color": 0,
+            "left_lane_marking_color_str": "White",
             "left_lane_marking_type": 2,
             "left_lane_marking_type_str": "Solid",
             "location": [
@@ -3352,9 +3352,9 @@
                 18684
             ],
             "num_lanes_opposite_direction": 1,
-            "num_lanes_same_direction": 1,
+            "num_lanes_same_direction": 2,
             "parking_left": true,
-            "parking_right": true,
+            "parking_right": false,
             "position": [
                 4.1095991036854684e-05,
                 9.625333950680215e-05,
@@ -3362,8 +3362,8 @@
             ],
             "right_lane_marking_color": 0,
             "right_lane_marking_color_str": "White",
-            "right_lane_marking_type": 2,
-            "right_lane_marking_type_str": "Solid",
+            "right_lane_marking_type": 10,
+            "right_lane_marking_type_str": "NONE",
             "road_id": 876,
             "rotation": [
                 0.890007734298706,
@@ -3656,7 +3656,7 @@
             "state": "dynamic",
             "steer": -0.10882782812217208,
             "type_id": "vehicle.mercedes.coupe_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.18672257661819458,
@@ -3793,7 +3793,7 @@
             "state": "dynamic",
             "steer": -0.008254024004185038,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16775599122047424,
@@ -3930,7 +3930,7 @@
             "state": "dynamic",
             "steer": -0.0009321782766973753,
             "type_id": "vehicle.dodge.charger_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16417723894119263,
@@ -4067,7 +4067,7 @@
             "state": "dynamic",
             "steer": 0.0021975839363127317,
             "type_id": "vehicle.dodge.charger_police_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16208690404891968,
@@ -4204,7 +4204,7 @@
             "state": "dynamic",
             "steer": 0.0,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16295596957206726,
@@ -4341,7 +4341,7 @@
             "state": "dynamic",
             "steer": 0.0,
             "type_id": "vehicle.mercedes.coupe_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.1629560887813568,
@@ -4474,7 +4474,7 @@
             "state": "static",
             "steer": 0.0,
             "type_id": "/Game/Carla/Static/Car/4Wheeled/ParkedVehicles/TeslaM3/SM_TeslaM3_parked.SM_TeslaM3_parked",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16304244101047516,
@@ -4607,7 +4607,7 @@
             "state": "static",
             "steer": 0.0,
             "type_id": "/Game/Carla/Static/Car/4Wheeled/ParkedVehicles/Charger/SM_ChargerParked.SM_ChargerParked",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.16304896771907806,

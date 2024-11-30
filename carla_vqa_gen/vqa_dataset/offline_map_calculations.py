@@ -284,7 +284,7 @@ def get_lane_info(map, vehicle_location):
     """
     Get information keys of current lane
     """
-    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+    waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.libcarla.LaneType.Any)
     
     if not waypoint:
         return {}

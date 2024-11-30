@@ -1307,17 +1307,17 @@ class QAsGenerator():
                                     and v['position'][0] > 0
                                     and v['position'][1] > 0.5 
                                     and (float(v['distance']) < 40 and v['speed'] < 0.1) and is_vehicle_in_camera(self.CAMERA_FRONT, v)]
-                # print(f"[debug] relevant_objects = {relevant_objects}") # debug
                 
             elif 'InvadingTurn' in scenario_name:
                 relevant_objects = list(filter(lambda x: x['type_id'] == 'static.prop.constructioncone' \
                                             and x['position'][0] >= 1.5 \
                                             and x['distance'] <= 40 and is_vehicle_in_camera(self.CAMERA_FRONT, x), static_objects))
-            elif 'ParkingExit' == scenario_name:
+            
+            elif 'ParkingExit' in scenario_name:
                 if ego_data['lane_type_str'] == 'Parking':
                     relevant_objects = [x for x in vehicles_by_id.values() if x['lane_type_str']=='Parking' 
                                         and x['position'][0]>0]
-                    assert len(relevant_objects) == 1
+                    print(f"[debug] relevant_objects = {relevant_objects}") # debug
 
             if relevant_objects:
                 relevant_objects.sort(key=lambda x: x['distance'])
@@ -1549,7 +1549,9 @@ class QAsGenerator():
                         and scenario_name != 'ParkingExit':
                     answer = "The ego vehicle must change back to the original lane after passing the obstruction."
 
-            elif scenario_name == 'ParkingExit':
+            elif 'ParkingExit' in scenario_name:
+                print("[debug] in ParkingExit branch") # debug
+                print(f"[debug] lane_type_str = {ego_data['lane_type_str']}")
                 if ego_data['lane_type_str'] == 'Parking':
                     answer = "The ego vehicle must change to the left to exit the parking lot."
 
@@ -2433,6 +2435,7 @@ class QAsGenerator():
         for key, value in lane_info.items():
             if key not in ego:
                 ego[key] = value
+                print(f'[debug] ego[{key}] = {value}')
 
         ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False
