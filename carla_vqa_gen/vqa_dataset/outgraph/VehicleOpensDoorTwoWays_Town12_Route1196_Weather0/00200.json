@@ -56,20 +56,78 @@
                     -1.6
                 ]
             ]
+        },
+        "<c2,CAM_FRONT,1438.6,486.4>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "maroon car",
+            "2d_bbox": [
+                [
+                    1395.6,
+                    456.9
+                ],
+                [
+                    1481.6,
+                    515.8
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    32.5,
+                    19.0,
+                    -0.2
+                ],
+                [
+                    32.5,
+                    19.0,
+                    -1.6
+                ],
+                [
+                    33.3,
+                    17.4,
+                    -0.2
+                ],
+                [
+                    33.3,
+                    17.4,
+                    -1.6
+                ],
+                [
+                    28.4,
+                    16.9,
+                    -0.2
+                ],
+                [
+                    28.3,
+                    16.9,
+                    -1.6
+                ],
+                [
+                    29.2,
+                    15.3,
+                    -0.2
+                ],
+                [
+                    29.2,
+                    15.3,
+                    -1.6
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important object in the scene is the black car to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are the black car and the maroon vehicle parking to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1252.8,508.0>"
+                    "<c1,CAM_FRONT,1252.8,508.0>",
+                    "<c2,CAM_FRONT,1438.6,486.4>"
                 ]
             },
             {
@@ -373,7 +431,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,1438.6,486.4>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -623,7 +683,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,1438.6,486.4>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

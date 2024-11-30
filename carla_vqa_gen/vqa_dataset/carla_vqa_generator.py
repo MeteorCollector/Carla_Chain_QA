@@ -682,7 +682,6 @@ class QAsGenerator():
                     else:
                         state = "unknown"
                         continue
-                    # print(f'[debug] state is {state}') # debug
                     # state = state[:1].lower() + state[1:]
                     traffic_light_affects_ego = True
                     traffic_light_info = traffic_light
@@ -1295,17 +1294,20 @@ class QAsGenerator():
             object_tags = []
             scenario_name = scenario_name.split('_')[0]
 
+            print(f'[debug] path = {self.current_measurement_path}')
+
             if 'ConstructionObstacle' in scenario_name:
                 relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
                                                                 and x['distance'] < 40 
                                                                 and x['position'][0] > 0.6 and is_vehicle_in_camera(self.CAMERA_FRONT, x)]
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
+
                 relevant_objects = [v for v in vehicles_by_id.values() if v['type_id'] == 'vehicle.mercedes.coupe_2020' 
                                     and v['position'][0] > 0
                                     and v['position'][1] > 0.5 
-                                    and (float(v['distance']) < 40 and measurements['speed'] < 0.1) and is_vehicle_in_camera(self.CAMERA_FRONT, v)]
-                print(f"[debug] relevant_objects = {relevant_objects}") # debug
+                                    and (float(v['distance']) < 40 and v['speed'] < 0.1) and is_vehicle_in_camera(self.CAMERA_FRONT, v)]
+                # print(f"[debug] relevant_objects = {relevant_objects}") # debug
                 
             elif 'InvadingTurn' in scenario_name:
                 relevant_objects = list(filter(lambda x: x['type_id'] == 'static.prop.constructioncone' \
@@ -1331,7 +1333,7 @@ class QAsGenerator():
 
                 # Determine the type of vehicle based on its type_id
                 if 'ConstructionObstacle' in scenario_name:
-                    print("[debug] construction_obstacle") # debug
+                    # print("[debug] construction_obstacle") # debug
                     important_object_str = f'the construction warning {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction warning"
@@ -1344,9 +1346,10 @@ class QAsGenerator():
                     visual_description = "construction cone"
                 elif 'VehicleOpensDoorTwoWays' in scenario_name or 'ParkingExit' in scenario_name:
                     # Determine the color of the vehicle
-                    color_str = relevant_obj["color_name"] + ' ' if relevant_obj.get("color_name") is not None \
-                                                                and relevant_obj["color_name"] != 'None' else ''
+                    # color_str = relevant_obj["color_name"] + ' ' if relevant_obj.get("color_name") is not None \
+                    #                                             and relevant_obj["color_name"] != 'None' else ''
                     if relevant_obj.get('color') is not None:
+                        color_str = rgb_to_color_name(relevant_obj['color']) + ' '
                         if relevant_obj['color'] == [0, 28, 0] or relevant_obj['color'] == [12, 42, 12]:
                             color_str = 'dark green '
                         elif relevant_obj['color'] == [211, 142, 0]:
@@ -1357,13 +1360,13 @@ class QAsGenerator():
                             color_str = 'orange '
 
                     category = "Vehicle"
-                    visual_description = f"{color_str}vehicle"
+                    visual_description = f"{color_str}{relevant_obj['base_type']}"
 
-                    if 'VehicleOpensDoorTwoWays' in scenario_name and relevant_obj['distance'] <= 25.0:
-                        # vehicle opens door at roughly 25m away
+                    if 'VehicleOpensDoorTwoWays' in scenario_name and relevant_obj['distance'] <= 22.0:
+                        # vehicle opens door at roughly 22m away
                         important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
                     else:
-                        important_object_str = f'the {color_str}vehicle, parking {rough_pos_str}'
+                        important_object_str = f'the {color_str}vehicle parking {rough_pos_str}'
 
                 important_objects.append(important_object_str)
 
@@ -1474,7 +1477,7 @@ class QAsGenerator():
                             # distance_to_route_start = np.linalg.norm(ego_to_route_start)
                             # lateral_distance = np.sqrt(distance_to_route_start**2 - projection_length**2)
 
-                            lateral_distance = 2
+                            lateral_distance = 0
 
                             # usually roads in carla are 3.5 wide
                             changing_or_has_changed = "has already changed" if lateral_distance > 3.5/2. else "is "\
@@ -1482,7 +1485,7 @@ class QAsGenerator():
                             answer = f"The ego vehicle {changing_or_has_changed} to another lane to "\
                                         f"circumvent the {obstacle}."
                     else:
-                        keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle', 'VehicleOpensDoor']
+                        keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle']
                         if any(keyword in scenario_name for keyword in keywords):
                             print("[debug] final answer modification")
                             if ego_data['lane_change'] == 1:
@@ -1493,12 +1496,16 @@ class QAsGenerator():
                                 side = 'either side'
                             
                             if ego_data['lane_change'] in [1, 2, 3]:
+                                print('[debug] lane_change in [1, 2, 3]') # debug
                                 answer = f"The ego vehicle must change to {side} to circumvent the {obstacle}."
 
                                 obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
                                 obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                 answer2 = f'Yes, there {obstacle2} on the current road.'
+
+                                print(f'[debug] anSwer1 = {answer}, answer2 = {answer2}') # debug
                             elif ego_data['lane_change'] in [0]:
+                                print('[debug] lane_change in [0]') # debug
                                 if 'TwoWays' in scenario_name:
                                     answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
                                 
@@ -1512,6 +1519,18 @@ class QAsGenerator():
                                     obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                     answer2 = f'Yes, there {obstacle2} on the current road.'
 
+                        elif 'VehicleOpensDoor' in scenario_name:
+                                print(f"[debug] open door, distance = {relevant_obj['distance']}")
+                                if relevant_obj['distance'] > 22:
+                                    print('[debug] detected vehicle, but door not open') # debug
+                                    answer = "No, the ego vehicle can stay on its current lane."
+                                    answer2 = 'No, there is no obstacle on the current route.'
+                                else:
+                                    answer = f"The ego vehicle must change to the left lane to circumvent the {obstacle}."
+
+                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
+                                    answer2 = f'Yes, there {obstacle2} on the current road.'
                         elif scenario_name == 'InvadingTurn':
                             answer = f"The ego vehicle must shift slightly to the right side to avoid {obstacle}."
 

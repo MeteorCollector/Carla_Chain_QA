@@ -341,13 +341,70 @@
                     -1.6
                 ]
             ]
+        },
+        "<c7,CAM_FRONT,915.9,479.5>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    876.7,
+                    451.1
+                ],
+                [
+                    955.1,
+                    507.9
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    34.0,
+                    4.1,
+                    -0.0
+                ],
+                [
+                    34.0,
+                    4.1,
+                    -1.5
+                ],
+                [
+                    34.1,
+                    2.3,
+                    -0.0
+                ],
+                [
+                    34.1,
+                    2.3,
+                    -1.5
+                ],
+                [
+                    29.4,
+                    4.0,
+                    -0.0
+                ],
+                [
+                    29.4,
+                    4.0,
+                    -1.5
+                ],
+                [
+                    29.4,
+                    2.2,
+                    -0.0
+                ],
+                [
+                    29.4,
+                    2.2,
+                    -1.5
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the 2 maroon cars to the front right of the ego vehicle and the maroon car, the 2 black cars and the olive car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are the 2 maroon cars and the silver vehicle parking to the front right of the ego vehicle and the maroon car, the 2 black cars and the olive car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -359,7 +416,8 @@
                     "<c3,CAM_FRONT,77.9,667.4>",
                     "<c4,CAM_FRONT,675.2,481.3>",
                     "<c5,CAM_FRONT,-289.1,617.5>",
-                    "<c6,CAM_FRONT,554.9,478.8>"
+                    "<c6,CAM_FRONT,554.9,478.8>",
+                    "<c7,CAM_FRONT,915.9,479.5>"
                 ]
             },
             {
@@ -853,7 +911,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c7,CAM_FRONT,915.9,479.5>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -1477,7 +1537,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "The ego vehicle must change back to the original lane after passing the obstruction.",
+                "A": "The ego vehicle is changing to another lane to circumvent the vehicle with the opened door.",
                 "C": null,
                 "con_up": [
                     [
@@ -1493,7 +1553,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c7,CAM_FRONT,915.9,479.5>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

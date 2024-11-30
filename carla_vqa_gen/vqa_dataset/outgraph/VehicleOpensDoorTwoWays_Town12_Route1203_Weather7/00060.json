@@ -113,13 +113,70 @@
                     -1.6
                 ]
             ]
+        },
+        "<c3,CAM_FRONT,959.9,529.8>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    862.4,
+                    456.1
+                ],
+                [
+                    1057.4,
+                    603.4
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    16.4,
+                    2.7,
+                    -0.1
+                ],
+                [
+                    16.4,
+                    2.7,
+                    -1.6
+                ],
+                [
+                    16.5,
+                    0.9,
+                    -0.1
+                ],
+                [
+                    16.5,
+                    0.9,
+                    -1.5
+                ],
+                [
+                    11.8,
+                    2.7,
+                    -0.1
+                ],
+                [
+                    11.8,
+                    2.6,
+                    -1.6
+                ],
+                [
+                    11.8,
+                    0.8,
+                    -0.1
+                ],
+                [
+                    11.8,
+                    0.8,
+                    -1.5
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the navy SUV to the front left of the ego vehicle and the silver car to the front of the ego vehicle.",
+                "A": "The important objects in the scene are the navy SUV to the front left of the ego vehicle and the silver car and the silver vehicle with the open doors to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -127,7 +184,8 @@
                 "layer": 0,
                 "object_tags": [
                     "<c1,CAM_FRONT,-429.2,731.1>",
-                    "<c2,CAM_FRONT,959.9,529.8>"
+                    "<c2,CAM_FRONT,959.9,529.8>",
+                    "<c3,CAM_FRONT,959.9,529.8>"
                 ]
             },
             {
@@ -458,7 +516,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a vehicle with the opened door on the current road.",
                 "C": null,
                 "con_up": [
                     [
@@ -469,7 +527,10 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,959.9,529.8>",
+                    "<c3,CAM_FRONT,959.9,529.8>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -781,7 +842,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "The ego vehicle must change to the left lane to circumvent the vehicle with the opened door.",
                 "C": null,
                 "con_up": [
                     [
@@ -797,7 +858,10 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,959.9,529.8>",
+                    "<c3,CAM_FRONT,959.9,529.8>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

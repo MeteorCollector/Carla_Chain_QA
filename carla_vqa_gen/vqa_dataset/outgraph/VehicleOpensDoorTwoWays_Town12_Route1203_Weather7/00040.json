@@ -113,13 +113,70 @@
                     -1.6
                 ]
             ]
+        },
+        "<c3,CAM_FRONT,914.3,479.8>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    876.4,
+                    448.8
+                ],
+                [
+                    952.2,
+                    510.7
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    32.4,
+                    4.1,
+                    0.0
+                ],
+                [
+                    32.4,
+                    4.0,
+                    -1.4
+                ],
+                [
+                    32.5,
+                    2.2,
+                    0.0
+                ],
+                [
+                    32.5,
+                    2.2,
+                    -1.4
+                ],
+                [
+                    27.7,
+                    3.7,
+                    -0.0
+                ],
+                [
+                    27.7,
+                    3.7,
+                    -1.5
+                ],
+                [
+                    27.8,
+                    1.9,
+                    0.0
+                ],
+                [
+                    27.8,
+                    1.9,
+                    -1.4
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the navy SUV to the front of the ego vehicle and the silver car to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are the navy SUV to the front of the ego vehicle and the silver car and the silver vehicle parking to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -127,7 +184,8 @@
                 "layer": 0,
                 "object_tags": [
                     "<c1,CAM_FRONT,757.1,462.4>",
-                    "<c2,CAM_FRONT,914.3,479.8>"
+                    "<c2,CAM_FRONT,914.3,479.8>",
+                    "<c3,CAM_FRONT,914.3,479.8>"
                 ]
             },
             {
@@ -469,7 +527,10 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,914.3,479.8>",
+                    "<c3,CAM_FRONT,914.3,479.8>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -797,7 +858,10 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c2,CAM_FRONT,914.3,479.8>",
+                    "<c3,CAM_FRONT,914.3,479.8>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
