@@ -50,8 +50,8 @@ CrossingBicycleFlow_Town12_Route1011_Weather23 过路口的时候 bicycle flow �
 DynamicObjectCrossing_Town01_Route1_Weather1 识别不到  walker.pedestrian
 EnterActorFlow_Town03_Route132_Weather2 同样也是到地方 flow 都走完了
 HardBreakRoute_Town01_Route30_Weather3 识别不到 前面车突然停了
-HazardAtSideLane_Town03_Route105_Weather22 识别不到 vehicle.bh.crossbike
-HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 识别不到 vehicle.bh.crossbike
+HazardAtSideLane_Town03_Route105_Weather22 [已解决] 识别不到 vehicle.bh.crossbike
+HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 [已解决] 识别不到 vehicle.bh.crossbike
 HighwayCutIn_Town06_Route298_Weather20 没有障碍
 HighwayExit_Town06_Route291_Weather5 没有障碍
 InterurbanActorFlow_Town06_Route294_Weather8 没有障碍
@@ -63,8 +63,8 @@ NonSignalizedJunctionLeftTurnEnterFlow_Town12_Route1022_Weather8 没有障碍
 NonSignalizedJunctionLeftTurn_Town03_Route122_Weather26 没有障碍
 OppositeVehicleRunningRedLight_Town03_Route119_Weather12 有一个警车高速闯红横穿过去，需要非常注意
 OppositeVehicleTakingPriority_Town03_Route128_Weather23 同上
-ParkedObstacle_Town03_Route103_Weather25 识别不到 停着的车
-ParkedObstacleTwoWays_Town12_Route1158_Weather14 识别不到 停着的车
+ParkedObstacle_Town03_Route103_Weather25 [已解决] 识别不到 停着的车
+ParkedObstacleTwoWays_Town12_Route1158_Weather14 [已解决] 识别不到 停着的车
 ParkingCrossingPedestrian_Town12_Route758_Weather3 识别不到 pedestrian
 ParkingCutIn_Town12_Route1300_Weather13 识别不到 车
 ParkingExit_Town12_Route1305_Weather18 [已解决] 这个比较复杂，停着的车应该不算是 obstacle,因为 ego 一开始也是 static的，需要想一想。
@@ -90,4 +90,4 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 10. 没有天气 复杂情况理解等等
 
-11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好
+11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。

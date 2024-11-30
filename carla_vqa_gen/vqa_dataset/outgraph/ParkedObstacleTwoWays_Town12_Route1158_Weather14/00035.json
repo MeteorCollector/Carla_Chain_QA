@@ -3,7 +3,7 @@
         "<c1,CAM_FRONT,242.0,481.6>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "silver car",
             "2d_bbox": [
                 [
                     172.2,
@@ -62,7 +62,7 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important object in the scene is the car to the front left of the ego vehicle.",
+                "A": "The important object in the scene is the silver car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -73,8 +73,8 @@
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front left of the ego vehicle located?",
-                "A": "The car is on the same road standing in the same direction. It is one lane to the right of the ego vehicle.",
+                "Q": "Where on the road is the silver car that is to the front left of the ego vehicle located?",
+                "A": "The silver car is on the same road standing in the same direction. It is one lane to the right of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -362,7 +362,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a parked vehicle on the current road.",
                 "C": null,
                 "con_up": [
                     [
@@ -373,7 +373,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c1,CAM_FRONT,242.0,481.6>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -398,8 +400,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front left of the ego vehicle going?",
-                "A": "The car is going straight.",
+                "Q": "Where is the silver car that is to the front left of the ego vehicle going?",
+                "A": "The silver car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -420,8 +422,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front left of the ego vehicle?",
-                "A": "The car is not moving.",
+                "Q": "What is the moving status of the silver car that is to the front left of the ego vehicle?",
+                "A": "The silver car is not moving.",
                 "C": null,
                 "con_up": [
                     [
@@ -572,8 +574,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the car is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the silver car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the silver car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -607,7 +609,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "The ego vehicle must change to the opposite lane to circumvent the parked vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -623,7 +625,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c1,CAM_FRONT,242.0,481.6>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
