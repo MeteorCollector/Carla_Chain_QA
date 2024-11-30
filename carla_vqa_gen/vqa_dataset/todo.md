@@ -91,3 +91,5 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 10. 没有天气 复杂情况理解等等
 
 11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
+
+12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。
