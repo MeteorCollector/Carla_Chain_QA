@@ -746,7 +746,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is an accident on the current road.",
                 "C": null,
                 "con_up": [
                     [
@@ -757,7 +757,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c5,CAM_FRONT,1509.4,624.8>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -827,7 +829,7 @@
             },
             {
                 "Q": "Where is the silver car that is to the front right of the ego vehicle going?",
-                "A": "The silver car is cutting into the lane of the ego vehicle.",
+                "A": "The silver car is turning slightly right.",
                 "C": null,
                 "con_up": [
                     [
@@ -959,7 +961,7 @@
             },
             {
                 "Q": "Where is the black police car that is to the front right of the ego vehicle going?",
-                "A": "The black police car is cutting into the lane of the ego vehicle.",
+                "A": "The black police car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -1167,7 +1169,7 @@
             },
             {
                 "Q": "The ego vehicle follows the road. Is the silver car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the routes will cross since the silver car is cutting into the lane of the ego vehicle.",
+                "A": "No, the silver car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -1303,7 +1305,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "The ego vehicle must change to the left lane to circumvent the accident.",
                 "C": null,
                 "con_up": [
                     [
@@ -1319,7 +1321,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c5,CAM_FRONT,1509.4,624.8>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

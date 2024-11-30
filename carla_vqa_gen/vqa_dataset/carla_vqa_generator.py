@@ -452,21 +452,28 @@ class QAsGenerator():
         False, if the vehicle is behind the ego vehicle
         False, if it's a parking vehicle, that does not cut in
         """
+        print('[debug] in should_consider vehicle, vehicle')
+        print(f"[debug] id = {vehicle['id']}, speed = {vehicle['speed']}, type_id = {vehicle['type_id']}, num_points = {vehicle['num_points']}")
         # If the vehicle is parked and not cutting in, exclude it from consideration
         if vehicle['state'] == "static":
+            print('[debug] is static, so no consider')
             return False
         # Max. distance is 25m and similar to the max. distance of junctions
         if  (
-            vehicle['bbx_loc'][0] < -1.5
+            vehicle['position'][0] < -1.5
             or (vehicle['class'] != 'bicycle' and vehicle['num_points'] < 15)
             or (vehicle['num_points'] < 10)
         ):
+            print('[debug] not satisfied')
             return False
 
         # Check if the vehicle is visible in the image
-        # But here only vehicle in front is consodered!
+        # But here only vehicle in front is considered!
         # A pity...
+        # but this is only used to identify obstacle in forward route
+        # so it's ok
         vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
+        print(f'[debug] visibility: {vehicle_is_visible}')
 
         return vehicle_is_visible
 
@@ -1422,7 +1429,7 @@ class QAsGenerator():
                 elif scenario_name not in ['VehicleOpensDoorTwoWays', 'ConstructionObstacle', 
                                            'ConstructionObstacleTwoWays', 'InvadingTurn']:
                     relevant_objects = [v for v in vehicles_by_id.values() if self.should_consider_vehicle(v) 
-                                                                        and v['speed'] == 0. 
+                                                                        and abs(v['speed']) <= 0.01
                                                                         and float(v['distance']) < 40]
                 
                 relevant_objects.sort(key = lambda x: float(x['distance']))
@@ -2435,7 +2442,6 @@ class QAsGenerator():
         for key, value in lane_info.items():
             if key not in ego:
                 ego[key] = value
-                print(f'[debug] ego[{key}] = {value}')
 
         ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False

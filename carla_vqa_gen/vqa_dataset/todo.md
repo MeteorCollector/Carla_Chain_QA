@@ -40,8 +40,8 @@
 
 这个应该 check all:
 
-Accident_Town03_Route101_Weather23 识别不到
-AccidentTwoWays_Town12_Route1102_Weather10 识别不到
+Accident_Town03_Route101_Weather23 识别不到 [已解决]
+AccidentTwoWays_Town12_Route1102_Weather10 识别不到 [已解决]
 BlockedIntersection_Town03_Route134_Weather3 没有障碍
 ConstructionObstacle_Town03_Route60_Weather8 识别不到  [已解决] static.prop.trafficwarning 
 ConstructionObstacleTwoWays_Town12_Route1080_Weather14 识别不到 [已解决] trafficwarning 其实在真正的 warning 之前还有 static.prop.warningconstruction，DriveLM 并没有处理，也要弄一下的
@@ -90,4 +90,4 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 10. 没有天气 复杂情况理解等等
 
-11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样
+11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好
