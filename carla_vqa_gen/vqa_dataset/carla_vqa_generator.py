@@ -1325,7 +1325,8 @@ class QAsGenerator():
                     relevant_objects = [x for x in vehicles_by_id.values() if x['lane_type_str']=='Parking' 
                                         and x['position'][0]>0]
 
-            elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'PedestrianCrossing' in scenario_name:
+            elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or \
+                'PedestrianCrossing' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
                 # in definition, DynamicObjectCrossing's obstacle might be a bicycle
                 # but it does not exist in b2d
                 # in PedestrianCrossing, there are 3 pedestrians
@@ -1335,6 +1336,12 @@ class QAsGenerator():
                                     and abs(x['speed']) > 1.0
                                     and -1.75 < x['position'][1] < 3.5] # carla lane width is 3.5m
                 print(f"[debug] relevant_objects = {relevant_objects}") # debug
+            
+            elif 'VehicleTurningRoute' == scenario_name:
+                # bicycle length is roughly 1.6m
+                relevant_objects = [x for x in vehicles_by_id.values() if 0.0 < x['position'][0] < 30.0
+                                    and abs(x['speed']) > 1.0
+                                    and -2.75 < x['position'][1] < 4.5] # carla lane width is 3.5m
 
             # important object descriptions
             if relevant_objects:
@@ -1385,7 +1392,7 @@ class QAsGenerator():
                         important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
                     else:
                         important_object_str = f'the {color_str}vehicle parking {rough_pos_str}'
-                elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name:
+                elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
                     category = "Pedestrian"
                     visual_description = "walking pedestrian"
                     important_object_str = f'the pedestrian crossing the road {rough_pos_str}'
@@ -1393,11 +1400,17 @@ class QAsGenerator():
                     category = "Pedestrian"
                     visual_description = "3 pedestrians"
                     important_object_str = f'3 pedestrian crossing the road {rough_pos_str}'
+                elif 'VehicleTurningRoute' == scenario_name:
+                    category = "Vehicle"
+                    visual_description = 'bicycle'
+                    important_object_str = f'the bicycle crossing the road {rough_pos_str}'
 
                 important_objects.append(important_object_str)
 
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
-                                     'ParkingExit', 'VehicleOpensDoorTwoWays', 'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing']:
+                                     'ParkingExit', 'VehicleOpensDoorTwoWays',
+                                     'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing',
+                                     'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
                     projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                     print("[debug] 1") # debug
                     # Generate a unique key and value for the vehicle object
@@ -1423,7 +1436,8 @@ class QAsGenerator():
             
             if scenario_name in ['Accident', 'AccidentTwoWays', 'ConstructionObstacle', 'ConstructionObstacleTwoWays',
                                     'InvadingTurn', 'HazardAtSideLane', 'HazardAtSideLaneTwoWays', 'ParkedObstacle',
-                                    'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays', 'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing']:
+                                    'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays', 
+                                    'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
                 
                 print(f"[debug] [3] relevant_objects = {relevant_objects}") # debug
                 obstacle = {'Accident': 'accident',
@@ -1436,7 +1450,9 @@ class QAsGenerator():
                             'ParkedObstacle': 'parked vehicle', 
                             'DynamicObjectCrossing': 'walking pedestrian',
                             'ParkingCrossingPedestrian': 'walking pedestrian',
+                            'VehicleTurningRoutePedestrian': 'walking pedestrian',
                             'PedestrianCrossing': '3 walking pedestrians',
+                            'VehicleTurningRoute': 'bicycle',
                             'ParkedObstacleTwoWays': 'parked vehicle', 
                             'VehicleOpensDoorTwoWays': 'vehicle with the opened door'}[scenario_name]
                 
@@ -1449,7 +1465,8 @@ class QAsGenerator():
                     if len(relevant_objects) == 1:
                         obstacle = 'bicycle'
                 elif scenario_name not in ['VehicleOpensDoorTwoWays', 'ConstructionObstacle', 
-                                           'ConstructionObstacleTwoWays', 'InvadingTurn', 'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing']:
+                                           'ConstructionObstacleTwoWays', 'InvadingTurn',
+                                           'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
                     relevant_objects = [v for v in vehicles_by_id.values() if self.should_consider_vehicle(v) 
                                                                         and abs(v['speed']) <= 0.01
                                                                         and float(v['distance']) < 40]
@@ -1566,12 +1583,15 @@ class QAsGenerator():
                             answer2 = f'Yes, there might be invading vehicles from the opposite lane on the current road.'
                         # 'AccidentTwoWays', 'ConstructionObstacleTwoWays', 'HazardAtSideLaneTwoWays', 
                         # 'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays'
-                        elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name:
+                        elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
                             answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a pedestrian crossing the road."
                             answer2 = f'Yes, there is a pedestrian crossing the road.'
                         elif 'PedestrianCrossing' in scenario_name:
                             answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there are 3 pedestrians crossing the road."
                             answer2 = f'Yes, there are 3 pedestrians crossing the road.'
+                        elif scenario_name == 'VehicleTurningRoute':
+                            answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a bicycle crossing the road."
+                            answer2 = f'Yes, there is a bicycle crossing the road.'
                         else: 
                             answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
                             

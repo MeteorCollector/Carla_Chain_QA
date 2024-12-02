@@ -3,7 +3,7 @@
         "<c1,CAM_FRONT,589.2,497.1>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
                     507.2,
@@ -60,7 +60,7 @@
         "<c2,CAM_FRONT,322.2,604.4>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
                     66.3,
@@ -117,7 +117,7 @@
         "<c3,CAM_FRONT,776.5,461.0>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "SUV",
+            "Visual_description": "maroon SUV",
             "2d_bbox": [
                 [
                     732.2,
@@ -174,7 +174,7 @@
         "<c4,CAM_FRONT,1021.6,618.5>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "bicycle",
+            "Visual_description": "blue bicycle",
             "2d_bbox": [
                 [
                     810.1,
@@ -227,13 +227,70 @@
                     -1.6
                 ]
             ]
+        },
+        "<c5,CAM_FRONT,1021.6,618.5>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "bicycle",
+            "2d_bbox": [
+                [
+                    810.1,
+                    411.7
+                ],
+                [
+                    1233.1,
+                    825.3
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    5.2,
+                    0.0,
+                    0.1
+                ],
+                [
+                    5.3,
+                    0.1,
+                    -1.5
+                ],
+                [
+                    4.7,
+                    0.1,
+                    0.1
+                ],
+                [
+                    4.7,
+                    0.1,
+                    -1.5
+                ],
+                [
+                    5.3,
+                    1.7,
+                    0.2
+                ],
+                [
+                    5.3,
+                    1.8,
+                    -1.5
+                ],
+                [
+                    4.7,
+                    1.7,
+                    0.2
+                ],
+                [
+                    4.7,
+                    1.8,
+                    -1.5
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the 2 cars to the front left of the ego vehicle and the SUV and the bicycle to the front of the ego vehicle.",
+                "A": "The important objects in the scene are the 2 black cars to the front left of the ego vehicle and the maroon SUV, the blue bicycle and the bicycle crossing the road to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -243,12 +300,13 @@
                     "<c1,CAM_FRONT,589.2,497.1>",
                     "<c2,CAM_FRONT,322.2,604.4>",
                     "<c3,CAM_FRONT,776.5,461.0>",
-                    "<c4,CAM_FRONT,1021.6,618.5>"
+                    "<c4,CAM_FRONT,1021.6,618.5>",
+                    "<c5,CAM_FRONT,1021.6,618.5>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front left of the ego vehicle located?",
-                "A": "The car is on the same road driving in the opposite direction. It is one lane to the left of the ego vehicle.",
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the same road driving in the opposite direction. It is one lane to the left of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -285,8 +343,8 @@
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front left of the ego vehicle located?",
-                "A": "The car is on the same road standing in the opposite direction. It is one lane to the left of the ego vehicle.",
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the same road standing in the opposite direction. It is one lane to the left of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -323,8 +381,8 @@
                 ]
             },
             {
-                "Q": "Where on the road is the SUV that is to the front of the ego vehicle located?",
-                "A": "The SUV is on the same road driving on the lane of the ego vehicle.",
+                "Q": "Where on the road is the maroon SUV that is to the front of the ego vehicle located?",
+                "A": "The maroon SUV is on the same road driving on the lane of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -361,8 +419,8 @@
                 ]
             },
             {
-                "Q": "Where on the road is the bicycle that is to the front of the ego vehicle located?",
-                "A": "The bicycle is on the same road driving in the same direction. It is one lane to the right of the ego vehicle.",
+                "Q": "Where on the road is the blue bicycle that is to the front of the ego vehicle located?",
+                "A": "The blue bicycle is on the same road driving in the same direction. It is one lane to the right of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -650,7 +708,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a bicycle crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -661,7 +719,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c5,CAM_FRONT,1021.6,618.5>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -686,8 +746,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front left of the ego vehicle going?",
-                "A": "The car is going straight.",
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -708,8 +768,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front left of the ego vehicle?",
-                "A": "The car is driving slowly.",
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is driving slowly.",
                 "C": null,
                 "con_up": [
                     [
@@ -730,8 +790,8 @@
                 ]
             },
             {
-                "Q": "Where is the car that is to the front left of the ego vehicle going?",
-                "A": "The car is going straight.",
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -752,8 +812,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front left of the ego vehicle?",
-                "A": "The car is not moving.",
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is not moving.",
                 "C": null,
                 "con_up": [
                     [
@@ -774,8 +834,8 @@
                 ]
             },
             {
-                "Q": "Where is the SUV that is to the front of the ego vehicle going?",
-                "A": "The SUV is going straight.",
+                "Q": "Where is the maroon SUV that is to the front of the ego vehicle going?",
+                "A": "The maroon SUV is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -796,8 +856,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the SUV that is to the front of the ego vehicle?",
-                "A": "The SUV is driving slowly.",
+                "Q": "What is the moving status of the maroon SUV that is to the front of the ego vehicle?",
+                "A": "The maroon SUV is driving slowly.",
                 "C": null,
                 "con_up": [
                     [
@@ -818,8 +878,8 @@
                 ]
             },
             {
-                "Q": "Where is the bicycle that is to the front of the ego vehicle going?",
-                "A": "The bicycle is going straight.",
+                "Q": "Where is the blue bicycle that is to the front of the ego vehicle going?",
+                "A": "The blue bicycle is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -840,8 +900,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the bicycle that is to the front of the ego vehicle?",
-                "A": "The bicycle is moving slowly.",
+                "Q": "What is the moving status of the blue bicycle that is to the front of the ego vehicle?",
+                "A": "The blue bicycle is moving slowly.",
                 "C": null,
                 "con_up": [
                     [
@@ -992,8 +1052,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the car is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -1026,8 +1086,8 @@
                 ]
             },
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the car is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -1060,8 +1120,8 @@
                 ]
             },
             {
-                "Q": "The ego vehicle follows the road. Is the SUV that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the SUV is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the maroon SUV that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the maroon SUV is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -1094,8 +1154,8 @@
                 ]
             },
             {
-                "Q": "The ego vehicle follows the road. Is the bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the bicycle is right to the front of the ego vehicle, so the ego vehicle should pay attention to not crash into it.",
+                "Q": "The ego vehicle follows the road. Is the blue bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the blue bicycle is right to the front of the ego vehicle, so the ego vehicle should pay attention to not crash into it.",
                 "C": null,
                 "con_up": [
                     [
@@ -1129,7 +1189,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a bicycle crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -1145,7 +1205,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c5,CAM_FRONT,1021.6,618.5>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
@@ -1189,7 +1251,8 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c4,CAM_FRONT,1021.6,618.5>"
+                    "<c4,CAM_FRONT,1021.6,618.5>",
+                    "<c5,CAM_FRONT,1021.6,618.5>"
                 ]
             },
             {
