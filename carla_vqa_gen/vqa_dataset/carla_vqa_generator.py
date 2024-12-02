@@ -1345,11 +1345,13 @@ class QAsGenerator():
 
             elif 'OppositeVehicleRunningRedLight' in scenario_name or 'OppositeVehicleTakingPriority' in scenario_name:
                 # including OppositeVehicleTakingPriority and OppositeVehicleRunningRedLight
+                # left -> right and right -> left all exists
                 relevant_objects = [x for x in vehicles_by_id.values() if 0.0 < x['position'][0] < 40.0
                                     and abs(x['speed']) > 3.0
-                                    and is_vehicle_in_camera(self.CAMERA_FRONT, x)
-                                    and x['position'][1] < 3.5]
-                # seems that all oppsite vehicle moves from left to right
+                                    and ('police' in x['type_id'] or 'ambulance' in x['type_id'] or 'firetruck' in x['type_id'])
+                                    and is_vehicle_in_junction(self.map, 
+                                    carla.Location(x=x['location'][0], y=x['location'][1], z=x['location'][2]))]
+                
 
             # important object descriptions
             if relevant_objects:
@@ -1401,9 +1403,11 @@ class QAsGenerator():
                         important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
                     elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
                         if 'police' in relevant_obj['type_id']:
-                            important_object_str = f'the police car running {rough_pos_str}'
+                            important_object_str = f'the {color_str}police car running {rough_pos_str}'
                         elif 'ambulance' in relevant_obj['type_id']:
-                            important_object_str = f'the ambulance running {rough_pos_str}'
+                            important_object_str = f'the {color_str}ambulance running {rough_pos_str}'
+                        elif 'firetruck' in relevant_obj['type_id']:
+                            important_object_str = f'the {color_str}firetruck running {rough_pos_str}'
                         else:
                             important_object_str = f'the {color_str}vehicle running {rough_pos_str}'
                     else:
@@ -1526,8 +1530,10 @@ class QAsGenerator():
                             keys = [k for k, v in key_object_infos.items() if two_d_box==v['2d_bbox']]
 
                             object_tags = keys
-                        
-                    if changed_route:
+                    
+                    if changed_route and \
+                        scenario_name not in ['DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
+                                           'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                         if 'InvadingTurn' == scenario_name:
                             answer = f"The ego vehicle has already shifted to the side to avoid {obstacle}."
                         else:
@@ -1571,7 +1577,7 @@ class QAsGenerator():
                                 obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                 answer2 = f'Yes, there {obstacle2} on the current road.'
 
-                                print(f'[debug] anSwer1 = {answer}, answer2 = {answer2}') # debug
+                                print(f'[debug] answer1 = {answer}, answer2 = {answer2}') # debug
                             elif ego_data['lane_change'] in [0]:
                                 print('[debug] lane_change in [0]') # debug
                                 if 'TwoWays' in scenario_name:
@@ -1615,15 +1621,15 @@ class QAsGenerator():
                             answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a bicycle crossing the road."
                             answer2 = f'Yes, there is a bicycle crossing the road.'
                         elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
+                            obstacle2 = 'a vehicle'
                             if 'police' in relevant_obj['type_id']:
-                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a police car taking priority."
-                                answer2 = f'Yes, there is a police car taking priority.'
+                                obstacle2 = 'a police car'
                             elif 'ambulance' in relevant_obj['type_id']:
-                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's an ambulance taking priority."
-                                answer2 = f'Yes, there is an ambulance taking priority.'
-                            else:
-                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a vehicle taking priority."
-                                answer2 = f'Yes, there is a vehicle taking priority.'
+                                obstacle2 = 'an ambulance'
+                            elif 'firetruck' in relevant_obj['type_id']:
+                                obstacle2 = 'a firetruck'
+                            answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's {obstacle2} taking priority."
+                            answer2 = f'Yes, there is {obstacle2} taking priority.'
                         else: 
                             answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
                             

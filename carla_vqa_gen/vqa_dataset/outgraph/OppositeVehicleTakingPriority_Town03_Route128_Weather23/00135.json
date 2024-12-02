@@ -56,78 +56,20 @@
                     -1.6
                 ]
             ]
-        },
-        "<c2,CAM_FRONT,211.4,574.7>": {
-            "Category": "Vehicle",
-            "Status": null,
-            "Visual_description": "black car",
-            "2d_bbox": [
-                [
-                    41.2,
-                    462.6
-                ],
-                [
-                    381.5,
-                    686.7
-                ]
-            ],
-            "3d_bbox": [
-                [
-                    7.7,
-                    -5.1,
-                    -0.1
-                ],
-                [
-                    7.7,
-                    -5.1,
-                    -1.6
-                ],
-                [
-                    8.2,
-                    -3.3,
-                    -0.1
-                ],
-                [
-                    8.2,
-                    -3.3,
-                    -1.6
-                ],
-                [
-                    12.4,
-                    -6.5,
-                    -0.1
-                ],
-                [
-                    12.4,
-                    -6.5,
-                    -1.6
-                ],
-                [
-                    12.9,
-                    -4.7,
-                    -0.2
-                ],
-                [
-                    12.9,
-                    -4.7,
-                    -1.6
-                ]
-            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the black car and the black vehicle running to the front left of the ego vehicle.",
+                "A": "The important object in the scene is the black car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,211.4,574.7>",
-                    "<c2,CAM_FRONT,211.4,574.7>"
+                    "<c1,CAM_FRONT,211.4,574.7>"
                 ]
             },
             {
@@ -420,7 +362,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "Yes, there is a vehicle taking priority.",
+                "A": "No, there is no obstacle on the current route.",
                 "C": null,
                 "con_up": [
                     [
@@ -431,9 +373,7 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": [
-                    "<c2,CAM_FRONT,211.4,574.7>"
-                ]
+                "object_tags": []
             },
             {
                 "Q": "What is the current speed limit?",
@@ -667,7 +607,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a vehicle taking priority.",
+                "A": "No, the ego vehicle can stay on its current lane.",
                 "C": null,
                 "con_up": [
                     [
@@ -683,9 +623,7 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": [
-                    "<c2,CAM_FRONT,211.4,574.7>"
-                ]
+                "object_tags": []
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
