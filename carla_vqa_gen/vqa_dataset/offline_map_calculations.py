@@ -226,6 +226,7 @@ def project_point_to_camera(intrinsic_matrix, world2cam_matrix, point, image_wid
         pos_3d, rvec, tvec, intrinsic_matrix, dist_coeffs
     )
     u, v = points_2d[0][0]
+    u, v = int(u), int(v)
 
     is_in_view = (pos_3d[2] > 0) and (0 <= u < image_width and 0 <= v < image_height)
 
