@@ -1343,6 +1343,14 @@ class QAsGenerator():
                                     and abs(x['speed']) > 1.0
                                     and -2.75 < x['position'][1] < 4.5] # carla lane width is 3.5m
 
+            elif 'OppositeVehicleRunningRedLight' in scenario_name or 'OppositeVehicleTakingPriority' in scenario_name:
+                # including OppositeVehicleTakingPriority and OppositeVehicleRunningRedLight
+                relevant_objects = [x for x in vehicles_by_id.values() if 0.0 < x['position'][0] < 40.0
+                                    and abs(x['speed']) > 3.0
+                                    and is_vehicle_in_camera(self.CAMERA_FRONT, x)
+                                    and x['position'][1] < 3.5]
+                # seems that all oppsite vehicle moves from left to right
+
             # important object descriptions
             if relevant_objects:
                 relevant_objects.sort(key=lambda x: x['distance'])
@@ -1369,7 +1377,8 @@ class QAsGenerator():
                     important_object_str = f'the construction cone{plural} {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction cone"
-                elif 'VehicleOpensDoorTwoWays' in scenario_name or 'ParkingExit' in scenario_name:
+                elif 'VehicleOpensDoorTwoWays' in scenario_name or 'ParkingExit' in scenario_name or \
+                    'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
                     # Determine the color of the vehicle
                     # color_str = relevant_obj["color_name"] + ' ' if relevant_obj.get("color_name") is not None \
                     #                                             and relevant_obj["color_name"] != 'None' else ''
@@ -1390,6 +1399,13 @@ class QAsGenerator():
                     if 'VehicleOpensDoorTwoWays' in scenario_name and relevant_obj['distance'] <= 22.0:
                         # vehicle opens door at roughly 22m away
                         important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
+                    elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
+                        if 'police' in relevant_obj['type_id']:
+                            important_object_str = f'the police car running {rough_pos_str}'
+                        elif 'ambulance' in relevant_obj['type_id']:
+                            important_object_str = f'the ambulance running {rough_pos_str}'
+                        else:
+                            important_object_str = f'the {color_str}vehicle running {rough_pos_str}'
                     else:
                         important_object_str = f'the {color_str}vehicle parking {rough_pos_str}'
                 elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
@@ -1410,7 +1426,9 @@ class QAsGenerator():
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
                                      'ParkingExit', 'VehicleOpensDoorTwoWays',
                                      'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing',
-                                     'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
+                                     'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
+                                     'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight'
+                                     ]:
                     projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                     print("[debug] 1") # debug
                     # Generate a unique key and value for the vehicle object
@@ -1437,7 +1455,8 @@ class QAsGenerator():
             if scenario_name in ['Accident', 'AccidentTwoWays', 'ConstructionObstacle', 'ConstructionObstacleTwoWays',
                                     'InvadingTurn', 'HazardAtSideLane', 'HazardAtSideLaneTwoWays', 'ParkedObstacle',
                                     'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays', 
-                                    'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
+                                    'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
+                                    'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                 
                 print(f"[debug] [3] relevant_objects = {relevant_objects}") # debug
                 obstacle = {'Accident': 'accident',
@@ -1453,6 +1472,8 @@ class QAsGenerator():
                             'VehicleTurningRoutePedestrian': 'walking pedestrian',
                             'PedestrianCrossing': '3 walking pedestrians',
                             'VehicleTurningRoute': 'bicycle',
+                            'OppositeVehicleTakingPriority': 'running vehicle',
+                            'OppositeVehicleRunningRedLight': 'running vehicle',
                             'ParkedObstacleTwoWays': 'parked vehicle', 
                             'VehicleOpensDoorTwoWays': 'vehicle with the opened door'}[scenario_name]
                 
@@ -1466,7 +1487,8 @@ class QAsGenerator():
                         obstacle = 'bicycle'
                 elif scenario_name not in ['VehicleOpensDoorTwoWays', 'ConstructionObstacle', 
                                            'ConstructionObstacleTwoWays', 'InvadingTurn',
-                                           'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute']:
+                                           'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
+                                           'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                     relevant_objects = [v for v in vehicles_by_id.values() if self.should_consider_vehicle(v) 
                                                                         and abs(v['speed']) <= 0.01
                                                                         and float(v['distance']) < 40]
@@ -1592,6 +1614,16 @@ class QAsGenerator():
                         elif scenario_name == 'VehicleTurningRoute':
                             answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a bicycle crossing the road."
                             answer2 = f'Yes, there is a bicycle crossing the road.'
+                        elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
+                            if 'police' in relevant_obj['type_id']:
+                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a police car taking priority."
+                                answer2 = f'Yes, there is a police car taking priority.'
+                            elif 'ambulance' in relevant_obj['type_id']:
+                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's an ambulance taking priority."
+                                answer2 = f'Yes, there is an ambulance taking priority.'
+                            else:
+                                answer = f"No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a vehicle taking priority."
+                                answer2 = f'Yes, there is a vehicle taking priority.'
                         else: 
                             answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
                             
@@ -1605,8 +1637,6 @@ class QAsGenerator():
                     answer = "The ego vehicle must change back to the original lane after passing the obstruction."
 
             elif 'ParkingExit' in scenario_name:
-                print("[debug] in ParkingExit branch") # debug
-                print(f"[debug] lane_type_str = {ego_data['lane_type_str']}")
                 if ego_data['lane_type_str'] == 'Parking':
                     answer = "The ego vehicle must change to the left to exit the parking lot."
 

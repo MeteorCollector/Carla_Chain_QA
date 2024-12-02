@@ -3,7 +3,7 @@
         "<c1,CAM_FRONT,41.8,635.0>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
                     -309.3,
@@ -62,13 +62,70 @@
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
+        },
+        "<c3,CAM_FRONT,41.8,635.0>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "black car",
+            "2d_bbox": [
+                [
+                    -309.3,
+                    450.0
+                ],
+                [
+                    392.8,
+                    820.1
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    4.7,
+                    -4.6,
+                    -0.0
+                ],
+                [
+                    4.7,
+                    -4.6,
+                    -1.5
+                ],
+                [
+                    5.0,
+                    -2.7,
+                    -0.0
+                ],
+                [
+                    5.0,
+                    -2.8,
+                    -1.5
+                ],
+                [
+                    9.5,
+                    -5.3,
+                    0.0
+                ],
+                [
+                    9.5,
+                    -5.3,
+                    -1.5
+                ],
+                [
+                    9.8,
+                    -3.5,
+                    -0.0
+                ],
+                [
+                    9.8,
+                    -3.5,
+                    -1.5
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are a junction and the black car and the black vehicle running to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -76,12 +133,13 @@
                 "layer": 0,
                 "object_tags": [
                     "<c1,CAM_FRONT,41.8,635.0>",
-                    "<c2,CAM_FRONT>"
+                    "<c2,CAM_FRONT>",
+                    "<c3,CAM_FRONT,41.8,635.0>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front left of the ego vehicle located?",
-                "A": "The car is after the junction on the road the ego vehicle will enter. It is pointing towards the ego vehicle.",
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is after the junction on the road the ego vehicle will enter. It is pointing towards the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -369,7 +427,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a vehicle taking priority.",
                 "C": null,
                 "con_up": [
                     [
@@ -380,7 +438,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c3,CAM_FRONT,41.8,635.0>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -405,8 +465,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front left of the ego vehicle going?",
-                "A": "The car is turning slightly right.",
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is turning slightly right.",
                 "C": null,
                 "con_up": [
                     [
@@ -427,8 +487,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front left of the ego vehicle?",
-                "A": "The car is driving.",
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is driving.",
                 "C": null,
                 "con_up": [
                     [
@@ -579,8 +639,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the black car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
                 "C": null,
                 "con_up": [
                     [
@@ -614,7 +674,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a vehicle taking priority.",
                 "C": null,
                 "con_up": [
                     [
@@ -630,7 +690,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c3,CAM_FRONT,41.8,635.0>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
