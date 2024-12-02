@@ -233,13 +233,70 @@
                     -1.4
                 ]
             ]
+        },
+        "<c6,CAM_FRONT,1265.2,532.0>": {
+            "Category": "Pedestrian",
+            "Status": null,
+            "Visual_description": "3 pedestrians",
+            "2d_bbox": [
+                [
+                    1220.1,
+                    371.1
+                ],
+                [
+                    1310.3,
+                    692.9
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    7.0,
+                    2.6,
+                    0.5
+                ],
+                [
+                    7.0,
+                    2.6,
+                    -1.4
+                ],
+                [
+                    6.6,
+                    2.6,
+                    0.5
+                ],
+                [
+                    6.6,
+                    2.6,
+                    -1.4
+                ],
+                [
+                    7.0,
+                    2.9,
+                    0.5
+                ],
+                [
+                    7.0,
+                    2.9,
+                    -1.4
+                ],
+                [
+                    6.6,
+                    3.0,
+                    0.5
+                ],
+                [
+                    6.6,
+                    2.9,
+                    -1.4
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the red traffic light, the pedestrian to the front of the ego vehicle and the 2 pedestrians to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the red traffic light, the pedestrian to the front of the ego vehicle and the 2 pedestrians and the 3 pedestrian crossing the road to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -250,7 +307,8 @@
                     "<c2,CAM_FRONT,733.4,276.4>",
                     "<c3,CAM_FRONT,1060.4,541.5>",
                     "<c4,CAM_FRONT,1558.5,524.4>",
-                    "<c5,CAM_FRONT,1265.2,532.0>"
+                    "<c5,CAM_FRONT,1265.2,532.0>",
+                    "<c6,CAM_FRONT,1265.2,532.0>"
                 ]
             },
             {
@@ -511,7 +569,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there are 3 pedestrians crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -522,7 +580,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c6,CAM_FRONT,1265.2,532.0>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -680,7 +740,7 @@
         "planning": [
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there are 3 pedestrians crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -696,7 +756,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c6,CAM_FRONT,1265.2,532.0>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

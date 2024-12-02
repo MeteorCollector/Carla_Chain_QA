@@ -3,7 +3,7 @@
         "<c1,CAM_FRONT,1431.2,484.6>": {
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
                     1267.6,
@@ -290,13 +290,70 @@
                     -1.6
                 ]
             ]
+        },
+        "<c7,CAM_FRONT,627.0,561.4>": {
+            "Category": "Pedestrian",
+            "Status": null,
+            "Visual_description": "3 pedestrians",
+            "2d_bbox": [
+                [
+                    590.3,
+                    398.7
+                ],
+                [
+                    663.6,
+                    724.0
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    6.9,
+                    -1.2,
+                    0.3
+                ],
+                [
+                    6.9,
+                    -1.2,
+                    -1.6
+                ],
+                [
+                    6.5,
+                    -1.2,
+                    0.3
+                ],
+                [
+                    6.5,
+                    -1.2,
+                    -1.6
+                ],
+                [
+                    6.9,
+                    -0.8,
+                    0.3
+                ],
+                [
+                    6.9,
+                    -0.8,
+                    -1.6
+                ],
+                [
+                    6.5,
+                    -0.8,
+                    0.3
+                ],
+                [
+                    6.5,
+                    -0.8,
+                    -1.6
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the red traffic light, the car to the front right of the ego vehicle, the pedestrian to the front left of the ego vehicle and the 2 pedestrians to the front of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the red traffic light, the black car to the front right of the ego vehicle, the pedestrian to the front left of the ego vehicle and the 2 pedestrians and the 3 pedestrian crossing the road to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
@@ -308,12 +365,13 @@
                     "<c3,CAM_FRONT,733.5,278.1>",
                     "<c4,CAM_FRONT,466.8,544.0>",
                     "<c5,CAM_FRONT,1020.4,551.2>",
-                    "<c6,CAM_FRONT,627.0,561.4>"
+                    "<c6,CAM_FRONT,627.0,561.4>",
+                    "<c7,CAM_FRONT,627.0,561.4>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front right of the ego vehicle located?",
-                "A": "The car is on the right side of the junction and is pointing in an unknown direction.",
+                "Q": "Where on the road is the black car that is to the front right of the ego vehicle located?",
+                "A": "The black car is on the right side of the junction and is pointing in an unknown direction.",
                 "C": null,
                 "con_up": [
                     [
@@ -607,7 +665,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there are 3 pedestrians crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -618,7 +676,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c7,CAM_FRONT,627.0,561.4>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -643,8 +703,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front right of the ego vehicle going?",
-                "A": "The car is turning left.",
+                "Q": "Where is the black car that is to the front right of the ego vehicle going?",
+                "A": "The black car is turning left.",
                 "C": null,
                 "con_up": [
                     [
@@ -665,8 +725,8 @@
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front right of the ego vehicle?",
-                "A": "The car is driving.",
+                "Q": "What is the moving status of the black car that is to the front right of the ego vehicle?",
+                "A": "The black car is driving.",
                 "C": null,
                 "con_up": [
                     [
@@ -819,8 +879,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the car is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -854,7 +914,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there are 3 pedestrians crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -870,7 +930,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c7,CAM_FRONT,627.0,561.4>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",

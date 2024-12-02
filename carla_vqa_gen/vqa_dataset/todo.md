@@ -47,7 +47,7 @@ ConstructionObstacle_Town03_Route60_Weather8 识别不到  [已解决] static.pr
 ConstructionObstacleTwoWays_Town12_Route1080_Weather14 识别不到 [已解决] trafficwarning 其实在真正的 warning 之前还有 static.prop.warningconstruction，DriveLM 并没有处理，也要弄一下的
 ControlLoss_Town04_Route169_Weather13 不算 obstacle, 但是有 static.prop.dirtdebris01
 CrossingBicycleFlow_Town12_Route1011_Weather23 过路口的时候 bicycle flow 已经过去了，建搞一个会挡住的情形
-DynamicObjectCrossing_Town01_Route1_Weather1 识别不到  walker.pedestrian
+DynamicObjectCrossing_Town01_Route1_Weather1 识别不到  [已解决] walker.pedestrian
 EnterActorFlow_Town03_Route132_Weather2 同样也是到地方 flow 都走完了
 HardBreakRoute_Town01_Route30_Weather3 识别不到 前面车突然停了
 HazardAtSideLane_Town03_Route105_Weather22 [已解决] 识别不到 vehicle.bh.crossbike
@@ -65,10 +65,10 @@ OppositeVehicleRunningRedLight_Town03_Route119_Weather12 有一个警车高速�
 OppositeVehicleTakingPriority_Town03_Route128_Weather23 同上
 ParkedObstacle_Town03_Route103_Weather25 [已解决] 识别不到 停着的车
 ParkedObstacleTwoWays_Town12_Route1158_Weather14 [已解决] 识别不到 停着的车
-ParkingCrossingPedestrian_Town12_Route758_Weather3 识别不到 pedestrian
+ParkingCrossingPedestrian_Town12_Route758_Weather3 [已解决] 识别不到 pedestrian
 ParkingCutIn_Town12_Route1300_Weather13 识别不到 车
 ParkingExit_Town12_Route1305_Weather18 [已解决] 这个比较复杂，停着的车应该不算是 obstacle,因为 ego 一开始也是 static的，需要想一想。
-PedestrianCrossing_Town12_Route1013_Weather25 识别不到 pedestrian
+PedestrianCrossing_Town12_Route1013_Weather25 [已解决] 识别不到 pedestrian
 SignalizedJunctionLeftTurnEnterFlow_Town12_Route1019_Weather5 没有障碍
 SignalizedJunctionLeftTurn_Town03_Route113_Weather26 没有障碍
 SignalizedJunctionRightTurn_Town03_Route118_Weather14 没有障碍
@@ -93,3 +93,7 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
 
 12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。
+
+13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了
+
+13. current speed limit 是怎么答的？
