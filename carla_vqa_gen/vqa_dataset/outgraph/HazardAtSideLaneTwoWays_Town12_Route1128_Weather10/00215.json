@@ -1,6 +1,63 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,619.7,489.4>": {
+        "<c1,CAM_FRONT,-1675.2,1046.0>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    -2325.9,
+                    599.3
+                ],
+                [
+                    -1024.4,
+                    1492.8
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    -2.7,
+                    -4.8,
+                    -0.2
+                ],
+                [
+                    -2.7,
+                    -4.7,
+                    -1.6
+                ],
+                [
+                    -2.4,
+                    -3.0,
+                    -0.1
+                ],
+                [
+                    -2.4,
+                    -2.9,
+                    -1.6
+                ],
+                [
+                    2.0,
+                    -5.4,
+                    -0.2
+                ],
+                [
+                    2.0,
+                    -5.3,
+                    -1.6
+                ],
+                [
+                    2.2,
+                    -3.6,
+                    -0.1
+                ],
+                [
+                    2.2,
+                    -3.5,
+                    -1.6
+                ]
+            ]
+        },
+        "<c2,CAM_FRONT,619.7,489.4>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -62,14 +119,53 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important object in the scene is the black car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are the silver car and the black car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,619.7,489.4>"
+                    "<c1,CAM_FRONT,-1675.2,1046.0>",
+                    "<c2,CAM_FRONT,619.7,489.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the silver car that is to the front left of the ego vehicle located?",
+                "A": "The silver car is on the same road driving in the opposite direction. It is one lane to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1675.2,1046.0>"
                 ]
             },
             {
@@ -107,7 +203,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,619.7,489.4>"
+                    "<c2,CAM_FRONT,619.7,489.4>"
                 ]
             },
             {
@@ -398,6 +494,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the silver car that is to the front left of the ego vehicle going?",
+                "A": "The silver car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1675.2,1046.0>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the silver car that is to the front left of the ego vehicle?",
+                "A": "The silver car is driving slowly.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1675.2,1046.0>"
+                ]
+            },
+            {
                 "Q": "Where is the black car that is to the front left of the ego vehicle going?",
                 "A": "The black car is going straight.",
                 "C": null,
@@ -416,7 +556,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,619.7,489.4>"
+                    "<c2,CAM_FRONT,619.7,489.4>"
                 ]
             },
             {
@@ -438,7 +578,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,619.7,489.4>"
+                    "<c2,CAM_FRONT,619.7,489.4>"
                 ]
             },
             {
@@ -572,6 +712,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the silver car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the silver car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1675.2,1046.0>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the black car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -602,12 +776,12 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,619.7,489.4>"
+                    "<c2,CAM_FRONT,619.7,489.4>"
                 ]
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "The ego vehicle must change back to the original lane after passing the obstruction.",
+                "A": "No, the ego vehicle can stay on its current lane.",
                 "C": null,
                 "con_up": [
                     [

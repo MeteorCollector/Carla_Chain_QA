@@ -101,6 +101,7 @@ class QAsGenerator():
 
         # to look into future
         self.current_measurement_path = None
+        self.current_measurement_index = 0
 
         # to memorize progress
         self.processed_paths_file = "processed_paths.txt"
@@ -196,6 +197,11 @@ class QAsGenerator():
             route_number = route_dir.split('/')[-1].split('_')[0] + '_' + route_dir.split('/')[-1].split('_')[1] + '_' + route_dir.split('/')[-1].split('_')[2]
 
             self.current_measurement_path = path
+            dir_name, file_name = os.path.split(path)
+            base_name, _ = os.path.splitext(file_name)
+            base_name, _ = os.path.splitext(base_name)
+            self.current_measurement_index = int(base_name)
+            
             # print(f"path: {path}, route_dir: {route_dir}, scenario_name: {scenario_name}, town_name: {town_name}, route_number: {route_number}")
             if self.map is None or (self.town_name is None or self.town_name is not town_name):
                 self.town_name = town_name
@@ -447,7 +453,7 @@ class QAsGenerator():
 
     def should_consider_vehicle(self, vehicle):
         """
-        True, if it's visible in the image and neither of the following applies
+        True, if it's in same lane as ego
         False, if vehicle is not bicycle and the number of points on it are below a threshold
         False, if the vehicle is behind the ego vehicle
         False, if it's a parking vehicle, that does not cut in
@@ -472,7 +478,8 @@ class QAsGenerator():
         # A pity...
         # but this is only used to identify obstacle in forward route
         # so it's ok
-        vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
+        vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle) or \
+                             is_vehicle_in_camera(self.CAMERA_FRONT_LEFT, vehicle)
         # print(f'[debug] visibility: {vehicle_is_visible}')
 
         return vehicle_is_visible
@@ -1301,12 +1308,12 @@ class QAsGenerator():
             object_tags = []
             scenario_name = scenario_name.split('_')[0]
 
-            print(f'[debug] path = {self.current_measurement_path}')
+            print(f'[debug] current_index = {self.current_measurement_index}') # debug
 
             if 'ConstructionObstacle' in scenario_name:
                 relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
                                                                 and x['distance'] < 40 
-                                                                and x['position'][0] > 0.6 and is_vehicle_in_camera(self.CAMERA_FRONT, x)]
+                                                                and x['position'][0] > 0.0 and is_vehicle_in_camera(self.CAMERA_FRONT, x)]
                 
             elif 'VehicleOpensDoorTwoWays' in scenario_name:
 
@@ -1335,7 +1342,7 @@ class QAsGenerator():
                 relevant_objects = [x for x in pedestrians if 0.0 < x['position'][0] < 30.0
                                     and abs(x['speed']) > 1.0
                                     and -1.75 < x['position'][1] < 3.5] # carla lane width is 3.5m
-                print(f"[debug] relevant_objects = {relevant_objects}") # debug
+                # print(f"[debug] relevant_objects = {relevant_objects}") # debug
             
             elif 'VehicleTurningRoute' == scenario_name:
                 # bicycle length is roughly 1.6m
@@ -1352,6 +1359,11 @@ class QAsGenerator():
                                     and is_vehicle_in_junction(self.map, 
                                     carla.Location(x=x['location'][0], y=x['location'][1], z=x['location'][2]))]
                 
+            if self.current_measurement_index <= 5:
+                # this is when background activity spawns vehicles around ego
+                # speed of those vehicles can be wrong
+                # so negelect
+                relevant_objects = []
 
             # important object descriptions
             if relevant_objects:
@@ -1434,7 +1446,6 @@ class QAsGenerator():
                                      'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight'
                                      ]:
                     projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
-                    print("[debug] 1") # debug
                     # Generate a unique key and value for the vehicle object
                     key, value = self.generate_object_key_value(
                         category = category,
@@ -1446,23 +1457,22 @@ class QAsGenerator():
                     key_object_infos[key] = value
                     object_tags = [key]
 
-            print(f"[debug] [2] relevant_objects = {relevant_objects}") # debug
+            # print(f"[debug] [2] relevant_objects = {relevant_objects}") # debug
             question = "Does the ego vehicle need to change lanes or deviate from the lane center due to an "\
                         "upcoming obstruction?"
             answer = "No, the ego vehicle can stay on its current lane."
 
             question2 = 'Is there an obstacle on the current road?'
             answer2 = 'No, there is no obstacle on the current route.'
-
-            print(f"[debug] scenario_name = {scenario_name}") # debug
             
-            if scenario_name in ['Accident', 'AccidentTwoWays', 'ConstructionObstacle', 'ConstructionObstacleTwoWays',
+            if self.current_measurement_index > 5 and \
+                scenario_name in ['Accident', 'AccidentTwoWays', 'ConstructionObstacle', 'ConstructionObstacleTwoWays',
                                     'InvadingTurn', 'HazardAtSideLane', 'HazardAtSideLaneTwoWays', 'ParkedObstacle',
                                     'ParkedObstacleTwoWays', 'VehicleOpensDoorTwoWays', 
                                     'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
                                     'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                 
-                print(f"[debug] [3] relevant_objects = {relevant_objects}") # debug
+                # print(f"[debug] [3] relevant_objects = {relevant_objects}") # debug
                 obstacle = {'Accident': 'accident',
                             'AccidentTwoWays': 'accident', 
                             'ConstructionObstacle': 'construction warning', 
@@ -1494,11 +1504,13 @@ class QAsGenerator():
                                            'DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
                                            'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                     relevant_objects = [v for v in vehicles_by_id.values() if self.should_consider_vehicle(v) 
-                                                                        and abs(v['speed']) <= 0.01
+                                                                        and abs(v['speed']) <= 0.0001
                                                                         and float(v['distance']) < 40]
+                    if 'Accident' in scenario_name:
+                        relevant_objects = [v for v in relevant_objects if 'police' in v['type_id']]
                 
                 relevant_objects.sort(key = lambda x: float(x['distance']))
-                print(f"[debug] in second branch, relevant_objects = {relevant_objects}")
+                # print(f"[debug] in second branch, relevant_objects = {relevant_objects}")
 
                 if relevant_objects:
                     if 'Accident' in scenario_name: 
@@ -1531,13 +1543,15 @@ class QAsGenerator():
 
                             object_tags = keys
                     
-                    if changed_route and \
+                    changed_route = relevant_objects[0]['lane_id'] != ego_data['lane_id']
+                    if changed_route and relevant_obj and\
                         scenario_name not in ['DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
                                            'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
                         if 'InvadingTurn' == scenario_name:
                             answer = f"The ego vehicle has already shifted to the side to avoid {obstacle}."
                         else:
-                            print("[debug] TODO: line 1463: lane_change related, has to be implemented.")
+                            print(f'[debug] path = {self.current_measurement_path}')
+                            # print("[debug] TODO: line 1463: lane_change related, has to be implemented.")
                             # route_start = np.array(measurements['route_original'][0])
                             # route_end = np.array(measurements['route_original'][1])
                             
@@ -1551,7 +1565,7 @@ class QAsGenerator():
                             # distance_to_route_start = np.linalg.norm(ego_to_route_start)
                             # lateral_distance = np.sqrt(distance_to_route_start**2 - projection_length**2)
 
-                            lateral_distance = 0
+                            lateral_distance = 3.5
 
                             # usually roads in carla are 3.5 wide
                             changing_or_has_changed = "has already changed" if lateral_distance > 3.5/2. else "is "\
@@ -1561,7 +1575,6 @@ class QAsGenerator():
                     else:
                         keywords = ['Accident', 'ConstructionObstacle', 'HazardAtSideLane', 'ParkedObstacle']
                         if any(keyword in scenario_name for keyword in keywords):
-                            print("[debug] final answer modification")
                             if ego_data['lane_change'] == 1:
                                 side = 'the right lane'
                             elif ego_data['lane_change'] == 2:
@@ -1570,20 +1583,22 @@ class QAsGenerator():
                                 side = 'either side'
                             
                             if ego_data['lane_change'] in [1, 2, 3]:
-                                print('[debug] lane_change in [1, 2, 3]') # debug
                                 answer = f"The ego vehicle must change to {side} to circumvent the {obstacle}."
 
-                                obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                if not obstacle.startswith('two'):
+                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                else:
+                                    obstacle2 = obstacle
                                 obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                 answer2 = f'Yes, there {obstacle2} on the current road.'
-
-                                print(f'[debug] answer1 = {answer}, answer2 = {answer2}') # debug
                             elif ego_data['lane_change'] in [0]:
-                                print('[debug] lane_change in [0]') # debug
                                 if 'TwoWays' in scenario_name:
                                     answer = f"The ego vehicle must change to the opposite lane to circumvent the {obstacle}."
                                 
-                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    if not obstacle.startswith('two'):
+                                        obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    else:
+                                        obstacle2 = obstacle
                                     obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                     answer2 = f'Yes, there {obstacle2} on the current road.'
                                 else:
@@ -1594,15 +1609,16 @@ class QAsGenerator():
                                     answer2 = f'Yes, there {obstacle2} on the current road.'
 
                         elif 'VehicleOpensDoor' in scenario_name:
-                                print(f"[debug] open door, distance = {relevant_obj['distance']}")
                                 if relevant_obj['distance'] > 22:
-                                    print('[debug] detected vehicle, but door not open') # debug
                                     answer = "No, the ego vehicle can stay on its current lane."
                                     answer2 = 'No, there is no obstacle on the current route.'
                                 else:
                                     answer = f"The ego vehicle must change to the left lane to circumvent the {obstacle}."
 
-                                    obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    if not obstacle.startswith('two'):
+                                        obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
+                                    else:
+                                        obstacle2 = obstacle
                                     obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                                     answer2 = f'Yes, there {obstacle2} on the current road.'
                         elif scenario_name == 'InvadingTurn':
@@ -1637,10 +1653,10 @@ class QAsGenerator():
                             obstacle2 = 'are '+obstacle2 if obstacle2.startswith('two') else 'is '+obstacle2
                             answer2 = f'Yes, there {obstacle2} on the current road.'
         
-                if changed_route \
-                        and answer == "No, the ego vehicle can stay on its current lane." \
-                        and scenario_name != 'ParkingExit':
-                    answer = "The ego vehicle must change back to the original lane after passing the obstruction."
+                # if changed_route \
+                #         and answer == "No, the ego vehicle can stay on its current lane." \
+                #         and scenario_name != 'ParkingExit':
+                #     answer = "The ego vehicle must change back to the original lane after passing the obstruction."
 
             elif 'ParkingExit' in scenario_name:
                 if ego_data['lane_type_str'] == 'Parking':
@@ -2577,14 +2593,15 @@ class QAsGenerator():
                 actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map, self.current_measurement_path)
 
         # original only raise this flag when ego vehicle overcomes an obstacle
-        measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
+        # measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)
+        _, _, measurements['changed_route'] = detect_lane_change_by_time(self.map, ego['id'], self.current_measurement_path)
         measurements['control_brake'] = measurements['should_brake']
         measurements['command'] = measurements['command_near']
         measurements['target_point'] = [measurements['x_target'], measurements['y_target']]
 
         append_dict = {
             'ego': ego,
-            'measuerments': measurements,
+            'measurements': measurements,
             'scene_data': scene_data
         }
 

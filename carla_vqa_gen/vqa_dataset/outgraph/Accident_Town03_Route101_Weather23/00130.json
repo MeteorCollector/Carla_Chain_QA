@@ -1,6 +1,63 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,679.8,499.8>": {
+        "<c1,CAM_FRONT,-626.0,577.8>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "black car",
+            "2d_bbox": [
+                [
+                    -1037.2,
+                    467.9
+                ],
+                [
+                    -214.8,
+                    687.6
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    8.4,
+                    -13.5,
+                    -0.1
+                ],
+                [
+                    8.4,
+                    -13.4,
+                    -1.6
+                ],
+                [
+                    8.5,
+                    -11.6,
+                    -0.1
+                ],
+                [
+                    8.5,
+                    -11.6,
+                    -1.6
+                ],
+                [
+                    13.3,
+                    -13.7,
+                    -0.1
+                ],
+                [
+                    13.3,
+                    -13.7,
+                    -1.6
+                ],
+                [
+                    13.4,
+                    -11.9,
+                    -0.1
+                ],
+                [
+                    13.4,
+                    -11.9,
+                    -1.6
+                ]
+            ]
+        },
+        "<c2,CAM_FRONT,679.8,499.8>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "silver car",
@@ -57,7 +114,7 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,835.9,460.8>": {
+        "<c3,CAM_FRONT,835.9,460.8>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black SUV",
@@ -114,7 +171,7 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT,185.0,561.2>": {
+        "<c4,CAM_FRONT,185.0,561.2>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -171,7 +228,7 @@
                 ]
             ]
         },
-        "<c4,CAM_FRONT,-112.8,497.1>": {
+        "<c5,CAM_FRONT,-112.8,497.1>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black SUV",
@@ -233,17 +290,56 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the silver car and the black SUV to the front of the ego vehicle and the black car and the black SUV to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are the 2 black cars and the black SUV to the front left of the ego vehicle and the silver car and the black SUV to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,679.8,499.8>",
-                    "<c2,CAM_FRONT,835.9,460.8>",
-                    "<c3,CAM_FRONT,185.0,561.2>",
-                    "<c4,CAM_FRONT,-112.8,497.1>"
+                    "<c1,CAM_FRONT,-626.0,577.8>",
+                    "<c2,CAM_FRONT,679.8,499.8>",
+                    "<c3,CAM_FRONT,835.9,460.8>",
+                    "<c4,CAM_FRONT,185.0,561.2>",
+                    "<c5,CAM_FRONT,-112.8,497.1>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the same road driving in the opposite direction. It is two lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-626.0,577.8>"
                 ]
             },
             {
@@ -281,7 +377,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,679.8,499.8>"
+                    "<c2,CAM_FRONT,679.8,499.8>"
                 ]
             },
             {
@@ -319,7 +415,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,835.9,460.8>"
+                    "<c3,CAM_FRONT,835.9,460.8>"
                 ]
             },
             {
@@ -357,7 +453,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,185.0,561.2>"
+                    "<c4,CAM_FRONT,185.0,561.2>"
                 ]
             },
             {
@@ -395,7 +491,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c4,CAM_FRONT,-112.8,497.1>"
+                    "<c5,CAM_FRONT,-112.8,497.1>"
                 ]
             },
             {
@@ -686,96 +782,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the silver car that is to the front of the ego vehicle going?",
-                "A": "The silver car is turning slightly right.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 1,
-                "object_tags": [
-                    "<c1,CAM_FRONT,679.8,499.8>"
-                ]
-            },
-            {
-                "Q": "What is the moving status of the silver car that is to the front of the ego vehicle?",
-                "A": "The silver car is driving.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 2,
-                "object_tags": [
-                    "<c1,CAM_FRONT,679.8,499.8>"
-                ]
-            },
-            {
-                "Q": "Where is the black SUV that is to the front of the ego vehicle going?",
-                "A": "The black SUV is turning slightly right.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 1,
-                "object_tags": [
-                    "<c2,CAM_FRONT,835.9,460.8>"
-                ]
-            },
-            {
-                "Q": "What is the moving status of the black SUV that is to the front of the ego vehicle?",
-                "A": "The black SUV is driving.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 2,
-                "object_tags": [
-                    "<c2,CAM_FRONT,835.9,460.8>"
-                ]
-            },
-            {
                 "Q": "Where is the black car that is to the front left of the ego vehicle going?",
-                "A": "The black car is turning slightly right.",
+                "A": "The black car is turning slightly left.",
                 "C": null,
                 "con_up": [
                     [
@@ -792,7 +800,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c3,CAM_FRONT,185.0,561.2>"
+                    "<c1,CAM_FRONT,-626.0,577.8>"
                 ]
             },
             {
@@ -814,7 +822,139 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c3,CAM_FRONT,185.0,561.2>"
+                    "<c1,CAM_FRONT,-626.0,577.8>"
+                ]
+            },
+            {
+                "Q": "Where is the silver car that is to the front of the ego vehicle going?",
+                "A": "The silver car is turning slightly right.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c2,CAM_FRONT,679.8,499.8>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the silver car that is to the front of the ego vehicle?",
+                "A": "The silver car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c2,CAM_FRONT,679.8,499.8>"
+                ]
+            },
+            {
+                "Q": "Where is the black SUV that is to the front of the ego vehicle going?",
+                "A": "The black SUV is turning slightly right.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c3,CAM_FRONT,835.9,460.8>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black SUV that is to the front of the ego vehicle?",
+                "A": "The black SUV is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c3,CAM_FRONT,835.9,460.8>"
+                ]
+            },
+            {
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is turning slightly right.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c4,CAM_FRONT,185.0,561.2>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c4,CAM_FRONT,185.0,561.2>"
                 ]
             },
             {
@@ -836,7 +976,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c4,CAM_FRONT,-112.8,497.1>"
+                    "<c5,CAM_FRONT,-112.8,497.1>"
                 ]
             },
             {
@@ -858,7 +998,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c4,CAM_FRONT,-112.8,497.1>"
+                    "<c5,CAM_FRONT,-112.8,497.1>"
                 ]
             },
             {
@@ -992,6 +1132,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-626.0,577.8>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the silver car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the silver car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -1022,7 +1196,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,679.8,499.8>"
+                    "<c2,CAM_FRONT,679.8,499.8>"
                 ]
             },
             {
@@ -1056,7 +1230,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,835.9,460.8>"
+                    "<c3,CAM_FRONT,835.9,460.8>"
                 ]
             },
             {
@@ -1090,7 +1264,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c3,CAM_FRONT,185.0,561.2>"
+                    "<c4,CAM_FRONT,185.0,561.2>"
                 ]
             },
             {
@@ -1124,7 +1298,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c4,CAM_FRONT,-112.8,497.1>"
+                    "<c5,CAM_FRONT,-112.8,497.1>"
                 ]
             },
             {

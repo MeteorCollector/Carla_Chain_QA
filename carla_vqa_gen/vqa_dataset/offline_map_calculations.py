@@ -803,7 +803,7 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map, path):
 
     return vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id
 
-def detect_lane_change_by_time(map, id, path, k=20):
+def detect_lane_change_by_time(map, id, path, k=16):
     """
     Detect lane change by comparing lane_id and road_id across k frames.
 
@@ -843,7 +843,7 @@ def detect_lane_change_by_time(map, id, path, k=20):
         return None, None, False
 
     # Get latest available (k frames after)
-    new_data = get_valid_measurement(k)
+    new_data = get_valid_measurement(k // 2)
     if new_data is None:
         return None, None, False
 

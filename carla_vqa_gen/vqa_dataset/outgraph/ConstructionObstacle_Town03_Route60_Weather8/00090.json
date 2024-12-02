@@ -1,63 +1,6 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,1405.8,544.8>": {
-            "Category": "Vehicle",
-            "Status": null,
-            "Visual_description": "black car",
-            "2d_bbox": [
-                [
-                    1238.3,
-                    458.4
-                ],
-                [
-                    1573.2,
-                    631.3
-                ]
-            ],
-            "3d_bbox": [
-                [
-                    13.4,
-                    9.1,
-                    -0.1
-                ],
-                [
-                    13.4,
-                    9.1,
-                    -1.6
-                ],
-                [
-                    14.7,
-                    7.8,
-                    -0.1
-                ],
-                [
-                    14.7,
-                    7.8,
-                    -1.6
-                ],
-                [
-                    10.0,
-                    5.6,
-                    -0.1
-                ],
-                [
-                    10.0,
-                    5.6,
-                    -1.6
-                ],
-                [
-                    11.3,
-                    4.3,
-                    -0.1
-                ],
-                [
-                    11.3,
-                    4.3,
-                    -1.6
-                ]
-            ]
-        },
-        "<c2,CAM_FRONT,1824.6,391.2>": {
+        "<c1,CAM_FRONT,1824.6,391.2>": {
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "construction warning",
@@ -119,53 +62,14 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the black car and the construction warning to the front right of the ego vehicle.",
+                "A": "The important object in the scene is the construction warning to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1405.8,544.8>",
-                    "<c2,CAM_FRONT,1824.6,391.2>"
-                ]
-            },
-            {
-                "Q": "Where on the road is the black car that is to the front right of the ego vehicle located?",
-                "A": "The black car is on the same road driving in the same direction. It is one lane to the left of the ego vehicle.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        1
-                    ],
-                    [
-                        4,
-                        2
-                    ],
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        3,
-                        0
-                    ],
-                    [
-                        3,
-                        2
-                    ],
-                    [
-                        3,
-                        3
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 0,
-                "object_tags": [
-                    "<c1,CAM_FRONT,1405.8,544.8>"
+                    "<c1,CAM_FRONT,1824.6,391.2>"
                 ]
             },
             {
@@ -432,7 +336,7 @@
                 "cluster": 3,
                 "layer": 9,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1824.6,391.2>"
+                    "<c1,CAM_FRONT,1824.6,391.2>"
                 ]
             },
             {
@@ -457,50 +361,6 @@
             }
         ],
         "prediction": [
-            {
-                "Q": "Where is the black car that is to the front right of the ego vehicle going?",
-                "A": "The black car is turning slightly right.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 1,
-                "object_tags": [
-                    "<c1,CAM_FRONT,1405.8,544.8>"
-                ]
-            },
-            {
-                "Q": "What is the moving status of the black car that is to the front right of the ego vehicle?",
-                "A": "The black car is driving.",
-                "C": null,
-                "con_up": [
-                    [
-                        4,
-                        3
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 2,
-                "object_tags": [
-                    "<c1,CAM_FRONT,1405.8,544.8>"
-                ]
-            },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should pay particular attention to traffic changing lanes from neighboring lanes.",
@@ -632,40 +492,6 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the black car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the black car is not crossing paths with the ego vehicle.",
-                "C": null,
-                "con_up": [
-                    [
-                        6,
-                        0
-                    ]
-                ],
-                "con_down": [
-                    [
-                        4,
-                        0
-                    ],
-                    [
-                        4,
-                        1
-                    ],
-                    [
-                        4,
-                        2
-                    ],
-                    [
-                        3,
-                        1
-                    ]
-                ],
-                "cluster": 4,
-                "layer": 3,
-                "object_tags": [
-                    "<c1,CAM_FRONT,1405.8,544.8>"
-                ]
-            },
-            {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "The ego vehicle must change to the left lane to circumvent the construction warning.",
                 "C": null,
@@ -684,7 +510,7 @@
                 "cluster": 3,
                 "layer": 8,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1824.6,391.2>"
+                    "<c1,CAM_FRONT,1824.6,391.2>"
                 ]
             },
             {

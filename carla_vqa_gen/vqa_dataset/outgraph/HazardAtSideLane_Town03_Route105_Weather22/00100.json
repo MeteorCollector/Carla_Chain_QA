@@ -1,6 +1,63 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,-7743.4,3336.4>": {
+        "<c1,CAM_FRONT,-1077.7,581.8>": {
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "maroon car",
+            "2d_bbox": [
+                [
+                    -1712.1,
+                    460.3
+                ],
+                [
+                    -443.3,
+                    703.4
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    7.0,
+                    -15.4,
+                    -0.2
+                ],
+                [
+                    7.0,
+                    -15.4,
+                    -1.6
+                ],
+                [
+                    7.1,
+                    -13.4,
+                    -0.2
+                ],
+                [
+                    7.1,
+                    -13.4,
+                    -1.6
+                ],
+                [
+                    12.4,
+                    -15.6,
+                    -0.2
+                ],
+                [
+                    12.4,
+                    -15.6,
+                    -1.6
+                ],
+                [
+                    12.4,
+                    -13.5,
+                    -0.2
+                ],
+                [
+                    12.4,
+                    -13.5,
+                    -1.6
+                ]
+            ]
+        },
+        "<c2,CAM_FRONT,-7743.4,3336.4>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -57,7 +114,7 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,576.6,496.8>": {
+        "<c3,CAM_FRONT,576.6,496.8>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "gray car",
@@ -114,7 +171,7 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT,856.8,524.6>": {
+        "<c4,CAM_FRONT,856.8,524.6>": {
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "maroon bicycle",
@@ -176,16 +233,55 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the black car and the gray car to the front left of the ego vehicle and the maroon bicycle to the front of the ego vehicle.",
+                "A": "The important objects in the scene are the maroon car, the black car and the gray car to the front left of the ego vehicle and the maroon bicycle to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,-7743.4,3336.4>",
-                    "<c2,CAM_FRONT,576.6,496.8>",
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c1,CAM_FRONT,-1077.7,581.8>",
+                    "<c2,CAM_FRONT,-7743.4,3336.4>",
+                    "<c3,CAM_FRONT,576.6,496.8>",
+                    "<c4,CAM_FRONT,856.8,524.6>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the maroon car that is to the front left of the ego vehicle located?",
+                "A": "The maroon car is on the same road driving in the opposite direction. It is three lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1077.7,581.8>"
                 ]
             },
             {
@@ -223,7 +319,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,-7743.4,3336.4>"
+                    "<c2,CAM_FRONT,-7743.4,3336.4>"
                 ]
             },
             {
@@ -261,7 +357,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,576.6,496.8>"
+                    "<c3,CAM_FRONT,576.6,496.8>"
                 ]
             },
             {
@@ -299,7 +395,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -566,7 +662,7 @@
                 "cluster": 3,
                 "layer": 9,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -592,6 +688,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the maroon car that is to the front left of the ego vehicle going?",
+                "A": "The maroon car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1077.7,581.8>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the maroon car that is to the front left of the ego vehicle?",
+                "A": "The maroon car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1077.7,581.8>"
+                ]
+            },
+            {
                 "Q": "Where is the black car that is to the front left of the ego vehicle going?",
                 "A": "The black car is going straight.",
                 "C": null,
@@ -610,7 +750,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,-7743.4,3336.4>"
+                    "<c2,CAM_FRONT,-7743.4,3336.4>"
                 ]
             },
             {
@@ -632,7 +772,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,-7743.4,3336.4>"
+                    "<c2,CAM_FRONT,-7743.4,3336.4>"
                 ]
             },
             {
@@ -654,7 +794,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,576.6,496.8>"
+                    "<c3,CAM_FRONT,576.6,496.8>"
                 ]
             },
             {
@@ -676,7 +816,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,576.6,496.8>"
+                    "<c3,CAM_FRONT,576.6,496.8>"
                 ]
             },
             {
@@ -698,7 +838,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -720,7 +860,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -854,6 +994,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the maroon car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the maroon car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c1,CAM_FRONT,-1077.7,581.8>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the black car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -884,7 +1058,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,-7743.4,3336.4>"
+                    "<c2,CAM_FRONT,-7743.4,3336.4>"
                 ]
             },
             {
@@ -918,7 +1092,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,576.6,496.8>"
+                    "<c3,CAM_FRONT,576.6,496.8>"
                 ]
             },
             {
@@ -952,7 +1126,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -974,7 +1148,7 @@
                 "cluster": 3,
                 "layer": 8,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
@@ -1019,7 +1193,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,856.8,524.6>"
+                    "<c4,CAM_FRONT,856.8,524.6>"
                 ]
             },
             {
