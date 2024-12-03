@@ -82,7 +82,7 @@ VehicleTurningRoutePedestrian_Town12_Route1027_Weather13 没懂这个行人在�
 VehicleTurningRoute_Town12_Route1026_Weather12 识别不到 冲出来的自行车
 YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
-7. QA 里面，为什么没有提到颜色？ 已经修复
+7. QA 里面，为什么没有提到颜色？ 已经修复 [已解决]
 
 8. cutting into the lane of the ego vehicle 判定有点宽
 
@@ -92,8 +92,8 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
 
-12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。
+12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。 [已解决]
 
-13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了
+13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了 [已解决]
 
 13. current speed limit 是怎么答的？
