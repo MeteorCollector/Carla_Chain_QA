@@ -1374,3 +1374,20 @@ def get_pedestrian_str(pedestrian):
         rough_pos_str = 'to the front left of the ego vehicle'
 
     return f'the pedestrian {rough_pos_str}'
+
+def get_bicycle_str(vehicle):
+    color_str = vehicle.get('color_name') + ' ' if vehicle.get('color_name') is not None \
+                                                and vehicle.get('color_name') != 'None' else ''
+    if vehicle.get('color') is not None and vehicle.get('color') != 'None':
+        color_str = rgb_to_color_name(vehicle['color']) + ' '
+        if vehicle['color'] == [0, 28, 0] or vehicle['color'] == [12, 42, 12]:
+            color_str = 'dark green '
+        elif vehicle['color'] == [211, 142, 0]:
+            color_str = 'yellow '
+        elif vehicle['color'] == [145, 255, 181]:
+            color_str = 'blue '
+        elif vehicle['color'] == [215, 88, 0]:
+            color_str = 'orange '
+
+    important_object_str = f'{color_str}bicycle'
+    return important_object_str

@@ -1314,6 +1314,7 @@ class QAsGenerator():
             scenario_name = scenario_name.split('_')[0]
 
             print(f'[debug] current_index = {self.current_measurement_index}') # debug
+            print(f'[debug] before obstacles, important_objects = {important_objects}') # debug
 
             if 'ConstructionObstacle' in scenario_name:
                 relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
@@ -1353,7 +1354,8 @@ class QAsGenerator():
                 # bicycle length is roughly 1.6m
                 relevant_objects = [x for x in vehicles_by_id.values() if 0.0 < x['position'][0] < 30.0
                                     and abs(x['speed']) > 1.0
-                                    and -2.75 < x['position'][1] < 4.5] # carla lane width is 3.5m
+                                    and -2.75 < x['position'][1] < 4.5
+                                    and 'bicycle' == x['base_type']] # carla lane width is 3.5m
 
             elif 'OppositeVehicleRunningRedLight' in scenario_name or 'OppositeVehicleTakingPriority' in scenario_name:
                 # including OppositeVehicleTakingPriority and OppositeVehicleRunningRedLight
@@ -1430,45 +1432,65 @@ class QAsGenerator():
                         important_object_str = f"the {color_str}{relevant_obj['base_type']} with the open doors {rough_pos_str}"
                     elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
                         if 'police' in relevant_obj['type_id']:
-                            important_object_str = f'the {color_str}police car running {rough_pos_str}'
+                            important_object_str = f'the {color_str}police car taking priority {rough_pos_str}'
                         elif 'ambulance' in relevant_obj['type_id']:
-                            important_object_str = f'the {color_str}ambulance running {rough_pos_str}'
+                            important_object_str = f'the {color_str}ambulance taking priority {rough_pos_str}'
                         elif 'firetruck' in relevant_obj['type_id']:
-                            important_object_str = f'the {color_str}firetruck running {rough_pos_str}'
+                            important_object_str = f'the {color_str}firetruck taking priority {rough_pos_str}'
                         else:
-                            important_object_str = f'the {color_str}vehicle running {rough_pos_str}'
+                            important_object_str = f'the {color_str}vehicle taking priority {rough_pos_str}'
                     else:
                         important_object_str = f"the {color_str}{relevant_obj['base_type']} parking {rough_pos_str}"
                     del_object_in_key_info(key_object_infos, [relevant_obj])
-                    old_str = get_vehicle_str(relevant_obj)
-                    important_objects = [item for item in important_objects if item != old_str]
+                    old_str, _, _ = get_vehicle_str(relevant_obj)
+                    print(f"[debug] old str = {old_str}") # debug
+                    while old_str in important_objects:
+                        important_objects.remove(old_str)
                 elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
                     category = "Pedestrian"
                     visual_description = "walking pedestrian"
                     important_object_str = f'the pedestrian crossing the road {rough_pos_str}'
                     del_object_in_key_info(key_object_infos, [relevant_obj])
                     old_str = get_pedestrian_str(relevant_obj)
-                    important_objects = [item for item in important_objects if item != old_str]
+                    while old_str in important_objects:
+                        important_objects.remove(old_str)
                 elif 'PedestrianCrossing' in scenario_name:
                     category = "Pedestrian"
                     visual_description = "3 pedestrians"
-                    important_object_str = f'3 pedestrian crossing the road {rough_pos_str}'
+                    important_object_str = f'3 pedestrians crossing the road {rough_pos_str}'
                     # avoid repeat
                     keys_to_remove = [k for k, v in key_object_infos.items() if v.get('category') == 'Pedestrian']
                     for p in pedestrians:
                         old_str = get_pedestrian_str(p)
-                        important_objects = [item for item in important_objects if item != old_str]
+                        while old_str in important_objects:
+                            important_objects.remove(old_str)
                     for key in keys_to_remove:
                         del key_object_infos[key]
                 elif 'VehicleTurningRoute' == scenario_name:
                     category = "Vehicle"
                     visual_description = 'bicycle'
-                    important_object_str = f'the bicycle crossing the road {rough_pos_str}'
+
+                    if relevant_obj.get('color') is not None:
+                        color_str = rgb_to_color_name(relevant_obj['color']) + ' '
+                        if relevant_obj['color'] == [0, 28, 0] or relevant_obj['color'] == [12, 42, 12]:
+                            color_str = 'dark green '
+                        elif relevant_obj['color'] == [211, 142, 0]:
+                            color_str = 'yellow '
+                        elif relevant_obj['color'] == [145, 255, 181]:
+                            color_str = 'blue '
+                        elif relevant_obj['color'] == [215, 88, 0]:
+                            color_str = 'orange '
+
+                    important_object_str = f'the {color_str}bicycle crossing the road {rough_pos_str}'
                     del_object_in_key_info(key_object_infos, [relevant_obj])
-                    old_str = get_vehicle_str(relevant_obj)
-                    important_objects = [item for item in important_objects if item != old_str]
+                    old_str = get_bicycle_str(relevant_obj)
+                    print(f'[debug] old_str = {old_str}')
+                    for i in range(len(important_objects) - 1, -1, -1):
+                        if old_str in important_objects[i]:
+                            del important_objects[i]
 
                 important_objects.append(important_object_str)
+                print(f"[debug] obstacle object!")
 
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
                                      'ParkingExit', 'VehicleOpensDoorTwoWays',
@@ -1694,6 +1716,7 @@ class QAsGenerator():
                 if ego_data['lane_type_str'] == 'Parking':
                     answer = "The ego vehicle must change to the left to exit the parking lot."
 
+            print(f"[debug] important_objects = {important_objects}") # debug
             self.add_qas_questions(qa_list=qas_conversation_ego,
                                    chain=3,
                                    layer=8,
@@ -1723,6 +1746,7 @@ class QAsGenerator():
                                                                        measurements,
                                                                        ego_data, important_objects, key_object_infos)
 
+        print(f"[debug] after determine_whether_ego_needs_to_change_lanes_due_to_obstruction, important_objects = {important_objects}")
         determine_braking_requirement(qas_conversation_ego,
                                       pedestrians,
                                       measurements,
@@ -2644,7 +2668,8 @@ class QAsGenerator():
         # Merge same objects and count identical objects in the same direction
         grouped_items = {}
         keep_items = []
-        print(important_objects) # [debug]
+        print(f'[debug] finally, current_index = {self.current_measurement_index}') # debug
+        print(f"[debug] finally, important_objects = {important_objects}") # [debug]
         for obj_idx, obj in enumerate(important_objects):
             item_parts = obj.split(" to the ")
             if item_parts[0].startswith('the '):

@@ -1,63 +1,65 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,800.7,614.2>": {
+        "<c8106,CAM_FRONT,-1063.8,911.1>": {
+            "id": "8106",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "silver car",
+            "Visual_description": "black police car",
             "2d_bbox": [
                 [
-                    624.1,
-                    466.9
+                    -1635.7,
+                    425.5
                 ],
                 [
-                    977.3,
-                    761.5
+                    -491.9,
+                    1396.7
                 ]
             ],
             "3d_bbox": [
                 [
-                    10.5,
-                    0.9,
-                    -0.2
+                    1.9,
+                    -2.2,
+                    0.0
                 ],
                 [
-                    10.5,
-                    0.9,
+                    1.9,
+                    -2.2,
                     -1.6
                 ],
                 [
-                    10.5,
-                    -0.9,
-                    -0.2
+                    1.9,
+                    -4.1,
+                    0.0
                 ],
                 [
-                    10.5,
-                    -0.9,
+                    1.9,
+                    -4.1,
                     -1.6
                 ],
                 [
-                    5.9,
-                    0.9,
-                    -0.2
+                    -3.3,
+                    -2.2,
+                    0.0
                 ],
                 [
-                    5.9,
-                    0.9,
+                    -3.3,
+                    -2.2,
                     -1.6
                 ],
                 [
-                    5.9,
-                    -0.9,
-                    -0.2
+                    -3.3,
+                    -4.1,
+                    0.0
                 ],
                 [
-                    5.9,
-                    -0.9,
+                    -3.3,
+                    -4.1,
                     -1.6
                 ]
             ]
         },
-        "<c2,CAM_FRONT,800.7,614.2>": {
+        "<c8104,CAM_FRONT,800.7,614.2>": {
+            "id": "8104",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "silver car",
@@ -119,15 +121,53 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the silver car and the silver vehicle parking to the front of the ego vehicle.",
+                "A": "The important objects in the scene are the black police car to the front left of the ego vehicle and the silver car to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,800.7,614.2>",
-                    "<c2,CAM_FRONT,800.7,614.2>"
+                    "<c8106,CAM_FRONT,-1063.8,911.1>",
+                    "<c8104,CAM_FRONT,800.7,614.2>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black police car that is to the front left of the ego vehicle located?",
+                "A": "The black police car is on the same road standing in the same direction. It is one lane to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c8106,CAM_FRONT,-1063.8,911.1>"
                 ]
             },
             {
@@ -165,7 +205,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,800.7,614.2>"
+                    "<c8104,CAM_FRONT,800.7,614.2>"
                 ]
             },
             {
@@ -431,9 +471,7 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": [
-                    "<c2,CAM_FRONT,800.7,614.2>"
-                ]
+                "object_tags": []
             },
             {
                 "Q": "What is the current speed limit?",
@@ -458,6 +496,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the black police car that is to the front left of the ego vehicle going?",
+                "A": "The black police car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c8106,CAM_FRONT,-1063.8,911.1>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black police car that is to the front left of the ego vehicle?",
+                "A": "The black police car is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c8106,CAM_FRONT,-1063.8,911.1>"
+                ]
+            },
+            {
                 "Q": "Where is the silver car that is to the front of the ego vehicle going?",
                 "A": "The silver car is going straight.",
                 "C": null,
@@ -476,7 +558,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,800.7,614.2>"
+                    "<c8104,CAM_FRONT,800.7,614.2>"
                 ]
             },
             {
@@ -498,7 +580,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,800.7,614.2>"
+                    "<c8104,CAM_FRONT,800.7,614.2>"
                 ]
             },
             {
@@ -632,6 +714,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the black police car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, because the ego vehicle wants to exit the parking spot and the black police car is on the lane the ego vehicle wants to enter.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c8106,CAM_FRONT,-1063.8,911.1>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the silver car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the silver car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -662,7 +778,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,800.7,614.2>"
+                    "<c8104,CAM_FRONT,800.7,614.2>"
                 ]
             },
             {
@@ -683,9 +799,7 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": [
-                    "<c2,CAM_FRONT,800.7,614.2>"
-                ]
+                "object_tags": []
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
