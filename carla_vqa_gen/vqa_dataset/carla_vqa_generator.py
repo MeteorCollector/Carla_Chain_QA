@@ -1395,7 +1395,6 @@ class QAsGenerator():
 
                 # Determine the type of vehicle based on its type_id
                 if 'ConstructionObstacle' in scenario_name:
-                    # print("[debug] construction_obstacle") # debug
                     important_object_str = f'the construction warning {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction warning"
@@ -1443,7 +1442,6 @@ class QAsGenerator():
                         important_object_str = f"the {color_str}{relevant_obj['base_type']} parking {rough_pos_str}"
                     del_object_in_key_info(key_object_infos, [relevant_obj])
                     old_str, _, _ = get_vehicle_str(relevant_obj)
-                    print(f"[debug] old str = {old_str}") # debug
                     while old_str in important_objects:
                         important_objects.remove(old_str)
                 elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
@@ -1484,13 +1482,11 @@ class QAsGenerator():
                     important_object_str = f'the {color_str}bicycle crossing the road {rough_pos_str}'
                     del_object_in_key_info(key_object_infos, [relevant_obj])
                     old_str = get_bicycle_str(relevant_obj)
-                    print(f'[debug] old_str = {old_str}')
                     for i in range(len(important_objects) - 1, -1, -1):
                         if old_str in important_objects[i]:
                             del important_objects[i]
 
                 important_objects.append(important_object_str)
-                print(f"[debug] obstacle object!")
 
                 if scenario_name in ['ConstructionObstacle', 'ConstructionObstacleTwoWays', 'InvadingTurn', 
                                      'ParkingExit', 'VehicleOpensDoorTwoWays',
@@ -1564,7 +1560,6 @@ class QAsGenerator():
                         relevant_objects = [v for v in relevant_objects if 'police' in v['type_id']]
                 
                 relevant_objects.sort(key = lambda x: float(x['distance']))
-                # print(f"[debug] in second branch, relevant_objects = {relevant_objects}")
 
                 if relevant_objects:
                     if 'Accident' in scenario_name: 
@@ -1604,7 +1599,7 @@ class QAsGenerator():
                         if 'InvadingTurn' == scenario_name:
                             answer = f"The ego vehicle has already shifted to the side to avoid {obstacle}."
                         else:
-                            print(f'[debug] path = {self.current_measurement_path}')
+                            # print(f'[debug] path = {self.current_measurement_path}')
                             # print("[debug] TODO: line 1463: lane_change related, has to be implemented.")
                             # route_start = np.array(measurements['route_original'][0])
                             # route_end = np.array(measurements['route_original'][1])
@@ -1716,7 +1711,7 @@ class QAsGenerator():
                 if ego_data['lane_type_str'] == 'Parking':
                     answer = "The ego vehicle must change to the left to exit the parking lot."
 
-            print(f"[debug] important_objects = {important_objects}") # debug
+            # print(f"[debug] important_objects = {important_objects}") # debug
             self.add_qas_questions(qa_list=qas_conversation_ego,
                                    chain=3,
                                    layer=8,
@@ -1746,7 +1741,6 @@ class QAsGenerator():
                                                                        measurements,
                                                                        ego_data, important_objects, key_object_infos)
 
-        print(f"[debug] after determine_whether_ego_needs_to_change_lanes_due_to_obstruction, important_objects = {important_objects}")
         determine_braking_requirement(qas_conversation_ego,
                                       pedestrians,
                                       measurements,
@@ -2668,8 +2662,8 @@ class QAsGenerator():
         # Merge same objects and count identical objects in the same direction
         grouped_items = {}
         keep_items = []
-        print(f'[debug] finally, current_index = {self.current_measurement_index}') # debug
-        print(f"[debug] finally, important_objects = {important_objects}") # [debug]
+        # print(f'[debug] finally, current_index = {self.current_measurement_index}') # debug
+        # print(f"[debug] finally, important_objects = {important_objects}") # [debug]
         for obj_idx, obj in enumerate(important_objects):
             item_parts = obj.split(" to the ")
             if item_parts[0].startswith('the '):
