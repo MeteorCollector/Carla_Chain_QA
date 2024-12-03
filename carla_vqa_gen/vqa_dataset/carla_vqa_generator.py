@@ -490,7 +490,7 @@ class QAsGenerator():
                 [round(projected_points[:, 0].max(), 1), round(projected_points[:, 1].max(), 1)],
             ]
 
-    def generate_object_key_value(self, category, visual_description, object_count, 
+    def generate_object_key_value(self, id, category, visual_description, object_count, 
                                   projected_points=None, projected_points_meters=None):
         """
         Generate a key-value pair representing an object detected in an image, including its category,
@@ -498,6 +498,7 @@ class QAsGenerator():
         """
         # Create a dictionary to store the object's information
         object_info = {
+            'id': id,
             'Category': category,
             'Status': None,
             'Visual_description': visual_description,
@@ -514,10 +515,16 @@ class QAsGenerator():
             center_y = float(mean[1])
 
         # Generate a unique key for the object
-        if projected_points is not None and len(projected_points) > 0:
-            object_key = f"<c{object_count + 1},CAM_FRONT,{center_x},{center_y}>"
+        if id is None:
+            if projected_points is not None and len(projected_points) > 0:
+                object_key = f"<e{object_count + 1},CAM_FRONT,{center_x},{center_y}>"
+            else:
+                object_key = f"<e{object_count + 1},CAM_FRONT>"
         else:
-            object_key = f"<c{object_count + 1},CAM_FRONT>"
+            if projected_points is not None and len(projected_points) > 0:
+                object_key = f"<c{id},CAM_FRONT,{center_x},{center_y}>"
+            else:
+                object_key = f"<c{id},CAM_FRONT>"
 
         return object_key, object_info
 
@@ -563,20 +570,16 @@ class QAsGenerator():
             close_pedestrians.append(pedestrian)
 
             # Determine rough position of pedestrian relative to ego vehicle
-            if -2 < pedestrian['position'][1] < 2:
-                rough_pos_str = 'to the front of the ego vehicle'
-            elif pedestrian['position'][1] > 2:
-                rough_pos_str = 'to the front right of the ego vehicle'
-            else:
-                rough_pos_str = 'to the front left of the ego vehicle'
+            important_object_str = get_pedestrian_str(pedestrian)
 
-            important_objects.append(f'the pedestrian {rough_pos_str}')
+            important_objects.append(important_object_str)
 
             # Project pedestrian points and center onto the image plane
             projected_points, projected_points_meters = project_all_corners(pedestrian, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
 
             # Generate key-value pair for the pedestrian object
             key, value = self.generate_object_key_value(
+                id=pedestrian['id'],
                 category='Pedestrian',
                 visual_description=f'Pedestrian',
                 object_count=len(object_infos),
@@ -624,6 +627,7 @@ class QAsGenerator():
                 important_objects.append('the stop sign')
                 projected_points, projected_points_meters = project_all_corners(stop_sign, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                 key, value = self.generate_object_key_value(
+                    id=stop_sign['id'],
                     category='Traffic element',
                     visual_description='Stop sign',
                     object_count=len(object_infos),
@@ -707,7 +711,8 @@ class QAsGenerator():
             important_objects.append(f'the {state} traffic light')
             projected_points, projected_points_meters = project_all_corners(traffic_light, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
             visual_description = f'{ego_vehicle["traffic_light_state"]} traffic light'
-            key, value = self.generate_object_key_value(category='Traffic element',
+            key, value = self.generate_object_key_value(id=traffic_light['id'],
+                                                        category='Traffic element',
                                                         visual_description=visual_description,
                                                         object_count=len(object_infos),
                                                         projected_points=projected_points,
@@ -1378,12 +1383,21 @@ class QAsGenerator():
                 else: #vehicle['position'][1] < -2
                     rough_pos_str = 'to the front left of the ego vehicle'
 
+                def del_object_in_key_info(key_dict, obj_list):
+                    # avoid repeat
+                    for obj in obj_list:
+                        obj_id = obj['id']
+                        keys_to_remove = [k for k, v in key_dict.items() if v.get('id') == obj_id]
+                        for key in keys_to_remove:
+                            del key_dict[key]
+
                 # Determine the type of vehicle based on its type_id
                 if 'ConstructionObstacle' in scenario_name:
                     # print("[debug] construction_obstacle") # debug
                     important_object_str = f'the construction warning {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction warning"
+                    del_object_in_key_info(key_object_infos, [relevant_obj])
                 elif 'InvadingTurn' in scenario_name:
                     multiple_cones = len(relevant_objects) > 1
                         
@@ -1391,6 +1405,7 @@ class QAsGenerator():
                     important_object_str = f'the construction cone{plural} {rough_pos_str}'
                     category = "Traffic element"
                     visual_description = "construction cone"
+                    del_object_in_key_info(key_object_infos, relevant_objects)
                 elif 'VehicleOpensDoorTwoWays' in scenario_name or 'ParkingExit' in scenario_name or \
                     'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
                     # Determine the color of the vehicle
@@ -1412,7 +1427,7 @@ class QAsGenerator():
 
                     if 'VehicleOpensDoorTwoWays' in scenario_name and relevant_obj['distance'] <= 22.0:
                         # vehicle opens door at roughly 22m away
-                        important_object_str = f'the {color_str}vehicle with the open doors {rough_pos_str}'
+                        important_object_str = f"the {color_str}{relevant_obj['base_type']} with the open doors {rough_pos_str}"
                     elif 'OppositeVehicleTakingPriority' in scenario_name or 'OppositeVehicleRunningRedLight' in scenario_name:
                         if 'police' in relevant_obj['type_id']:
                             important_object_str = f'the {color_str}police car running {rough_pos_str}'
@@ -1423,19 +1438,35 @@ class QAsGenerator():
                         else:
                             important_object_str = f'the {color_str}vehicle running {rough_pos_str}'
                     else:
-                        important_object_str = f'the {color_str}vehicle parking {rough_pos_str}'
+                        important_object_str = f"the {color_str}{relevant_obj['base_type']} parking {rough_pos_str}"
+                    del_object_in_key_info(key_object_infos, [relevant_obj])
+                    old_str = get_vehicle_str(relevant_obj)
+                    important_objects = [item for item in important_objects if item != old_str]
                 elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
                     category = "Pedestrian"
                     visual_description = "walking pedestrian"
                     important_object_str = f'the pedestrian crossing the road {rough_pos_str}'
+                    del_object_in_key_info(key_object_infos, [relevant_obj])
+                    old_str = get_pedestrian_str(relevant_obj)
+                    important_objects = [item for item in important_objects if item != old_str]
                 elif 'PedestrianCrossing' in scenario_name:
                     category = "Pedestrian"
                     visual_description = "3 pedestrians"
                     important_object_str = f'3 pedestrian crossing the road {rough_pos_str}'
+                    # avoid repeat
+                    keys_to_remove = [k for k, v in key_object_infos.items() if v.get('category') == 'Pedestrian']
+                    for p in pedestrians:
+                        old_str = get_pedestrian_str(p)
+                        important_objects = [item for item in important_objects if item != old_str]
+                    for key in keys_to_remove:
+                        del key_object_infos[key]
                 elif 'VehicleTurningRoute' == scenario_name:
                     category = "Vehicle"
                     visual_description = 'bicycle'
                     important_object_str = f'the bicycle crossing the road {rough_pos_str}'
+                    del_object_in_key_info(key_object_infos, [relevant_obj])
+                    old_str = get_vehicle_str(relevant_obj)
+                    important_objects = [item for item in important_objects if item != old_str]
 
                 important_objects.append(important_object_str)
 
@@ -1448,6 +1479,7 @@ class QAsGenerator():
                     projected_points, projected_points_meters = project_all_corners(relevant_obj, self.CAMERA_MATRIX, self.WORLD2CAM_FRONT)
                     # Generate a unique key and value for the vehicle object
                     key, value = self.generate_object_key_value(
+                        id=relevant_obj['id'],
                         category = category,
                         visual_description = visual_description,
                         object_count = len(key_object_infos),
@@ -2337,54 +2369,7 @@ class QAsGenerator():
 
             other_vehicle_points_towards_ego = abs(vehicle_heading_angle_deg - angle_deg + 180) % 360 < 90
 
-            # Determine the rough position of the vehicle relative to the ego (front, front-left, front-right)
-            if -2 <= vehicle['position'][1] <= 2:
-                rough_pos_str = 'to the front of the ego vehicle'
-            elif vehicle['position'][1] > 2:
-                rough_pos_str = 'to the front right of the ego vehicle'
-            else: #vehicle['position'][1] < -2
-                rough_pos_str = 'to the front left of the ego vehicle'
-
-            # Determine the type of vehicle based on its type_id
-            if 'firetruck' in vehicle['type_id']:
-                vehicle_type = 'firetruck'
-            elif 'police' in vehicle['type_id']:
-                vehicle_type = 'police car'
-            elif 'ambulance' in vehicle['type_id']:
-                vehicle_type = 'ambulance'
-            elif 'jeep' in vehicle['type_id']:
-                vehicle_type = 'jeep'
-            elif 'micro' in vehicle['type_id']:
-                vehicle_type = 'small car'
-            elif 'nissan.patrol' in vehicle['type_id']:
-                vehicle_type = 'SUV'
-            elif 'european_hgv' in vehicle['type_id']:
-                vehicle_type = 'HGV'
-            elif 'sprinter' in vehicle['type_id']:
-                vehicle_type = 'sprinter'
-            else:
-                vehicle_type = vehicle['base_type']
-
-            # Determine the color of the vehicle
-            color_str = vehicle.get('color_name') + ' ' if vehicle.get('color_name') is not None \
-                                                        and vehicle.get('color_name') != 'None' else ''
-            if vehicle.get('color') is not None and vehicle.get('color') != 'None':
-                color_str = rgb_to_color_name(vehicle['color']) + ' '
-                if vehicle['color'] == [0, 28, 0] or vehicle['color'] == [12, 42, 12]:
-                    color_str = 'dark green '
-                elif vehicle['color'] == [211, 142, 0]:
-                    color_str = 'yellow '
-                elif vehicle['color'] == [145, 255, 181]:
-                    color_str = 'blue '
-                elif vehicle['color'] == [215, 88, 0]:
-                    color_str = 'orange '
-
-            # Construct a string description of the vehicle
-            description = vehicle_type
-            important_object_str = f'the {color_str}{description} {rough_pos_str}'
-
-            vehicle_description = f'{color_str}{description}'
-            vehicle_location_description = f'the {color_str}{description} that is {rough_pos_str}'
+            important_object_str, vehicle_description, vehicle_location_description = get_vehicle_str(vehicle)
 
             important_objects.append(important_object_str)
 
@@ -2394,8 +2379,9 @@ class QAsGenerator():
 
             # Generate a unique key and value for the vehicle object
             key, value = self.generate_object_key_value(
+                id=vehicle['id'],
                 category='Vehicle',
-                visual_description = f'{color_str}{description}',
+                visual_description = vehicle_description,
                 object_count = len(key_object_infos),
                 projected_points = projected_points,
                 projected_points_meters=projected_points_meters
@@ -2658,6 +2644,7 @@ class QAsGenerator():
         # Merge same objects and count identical objects in the same direction
         grouped_items = {}
         keep_items = []
+        print(important_objects) # [debug]
         for obj_idx, obj in enumerate(important_objects):
             item_parts = obj.split(" to the ")
             if item_parts[0].startswith('the '):
@@ -3116,6 +3103,7 @@ class QAsGenerator():
                 important_objects.append('a highway entry')
 
                 key, value = self.generate_object_key_value(
+                    id=None,
                     category='Traffic element', 
                     visual_description='Junction',
                     object_count=len(key_object_infos)
@@ -3130,6 +3118,7 @@ class QAsGenerator():
                 important_objects.append('a highway exit')
 
                 key, value = self.generate_object_key_value(
+                    id=None,
                     category='Traffic element', 
                     visual_description='Junction',
                     object_count=len(key_object_infos)
@@ -3144,6 +3133,7 @@ class QAsGenerator():
                 important_objects.append('a junction')
 
                 key, value = self.generate_object_key_value(
+                    id=None,
                     category='Traffic element', 
                     visual_description='Junction',
                     object_count=len(key_object_infos)
@@ -3155,6 +3145,7 @@ class QAsGenerator():
                 important_objects.append('a junction')
 
                 key, value = self.generate_object_key_value(
+                    id=None,
                     category='Traffic element', 
                     visual_description='Junction',
                     object_count=len(key_object_infos)
@@ -3166,6 +3157,7 @@ class QAsGenerator():
                 important_objects.append('a junction')
 
                 key, value = self.generate_object_key_value(
+                    id=None,
                     category='Traffic element', 
                     visual_description='Junction',
                     object_count=len(key_object_infos)

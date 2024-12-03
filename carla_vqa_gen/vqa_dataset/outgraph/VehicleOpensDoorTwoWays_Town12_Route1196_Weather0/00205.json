@@ -1,63 +1,65 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,1603.8,482.2>": {
+        "<c56807,CAM_FRONT,-5252.5,2636.6>": {
+            "id": "56807",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "maroon car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
-                    1552.6,
-                    449.9
+                    -5268.2,
+                    729.4
                 ],
                 [
-                    1654.9,
-                    514.4
+                    -5236.8,
+                    4543.9
                 ]
             ],
             "3d_bbox": [
                 [
-                    30.1,
-                    22.0,
-                    -0.2
-                ],
-                [
-                    30.1,
-                    22.0,
-                    -1.6
-                ],
-                [
-                    31.0,
-                    20.5,
+                    -0.5,
+                    -0.8,
                     -0.1
                 ],
                 [
-                    31.0,
-                    20.5,
+                    -0.5,
+                    -0.8,
                     -1.6
                 ],
                 [
-                    26.1,
-                    19.5,
-                    -0.2
+                    0.4,
+                    -2.4,
+                    -0.1
                 ],
                 [
-                    26.1,
-                    19.5,
+                    0.4,
+                    -2.4,
                     -1.6
                 ],
                 [
-                    27.1,
-                    18.0,
-                    -0.2
+                    -4.7,
+                    -3.3,
+                    -0.1
                 ],
                 [
-                    27.1,
-                    18.0,
+                    -4.7,
+                    -3.4,
+                    -1.6
+                ],
+                [
+                    -3.7,
+                    -4.9,
+                    -0.1
+                ],
+                [
+                    -3.7,
+                    -4.9,
                     -1.6
                 ]
             ]
         },
-        "<c2,CAM_FRONT,1408.3,500.3>": {
+        "<c56805,CAM_FRONT,1408.3,500.3>": {
+            "id": "56805",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -114,7 +116,8 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT,1603.8,482.2>": {
+        "<c56800,CAM_FRONT,1603.8,482.2>": {
+            "id": "56800",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "maroon car",
@@ -176,16 +179,16 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the maroon car, the black car and the maroon vehicle parking to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are the maroon car and the black car to the front right of the ego vehicle and the black car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>",
-                    "<c2,CAM_FRONT,1408.3,500.3>",
-                    "<c3,CAM_FRONT,1603.8,482.2>"
+                    "<c56807,CAM_FRONT,-5252.5,2636.6>",
+                    "<c56805,CAM_FRONT,1408.3,500.3>",
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
                 ]
             },
             {
@@ -223,7 +226,45 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the same road standing in the same direction. It is one lane to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c56807,CAM_FRONT,-5252.5,2636.6>"
                 ]
             },
             {
@@ -261,7 +302,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1408.3,500.3>"
+                    "<c56805,CAM_FRONT,1408.3,500.3>"
                 ]
             },
             {
@@ -389,7 +430,7 @@
             },
             {
                 "Q": "On which lane is the ego vehicle (left most lane of the lanes going in the same direction is indicated with 0)?",
-                "A": "The ego vehicle is on lane 1.",
+                "A": "The ego vehicle is on lane 2 since it overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -425,7 +466,7 @@
             },
             {
                 "Q": "What lane marking is on the left side of the ego car?",
-                "A": "The lane marking on the left side of the ego car is a white broken lane.",
+                "A": "It is not possible to tell since the ego vehicle overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -528,8 +569,7 @@
                 "cluster": 3,
                 "layer": 9,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>",
-                    "<c3,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
                 ]
             },
             {
@@ -573,7 +613,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
                 ]
             },
             {
@@ -595,7 +635,51 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
+                ]
+            },
+            {
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c56807,CAM_FRONT,-5252.5,2636.6>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c56807,CAM_FRONT,-5252.5,2636.6>"
                 ]
             },
             {
@@ -617,7 +701,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1408.3,500.3>"
+                    "<c56805,CAM_FRONT,1408.3,500.3>"
                 ]
             },
             {
@@ -639,12 +723,12 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1408.3,500.3>"
+                    "<c56805,CAM_FRONT,1408.3,500.3>"
                 ]
             },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
-                "A": "The ego vehicle should pay particular attention to traffic changing lanes from neighboring lanes.",
+                "A": "The ego vehicle should keep driving regardless of other vehicles since it overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -672,7 +756,7 @@
             },
             {
                 "Q": "In which direction is the ego car allowed to change lanes?",
-                "A": "The ego vehicle is allowed to change lanes to the left.",
+                "A": "The ego vehicle overtakes an obstruction. It is not expected to change lanes.",
                 "C": null,
                 "con_up": [
                     [
@@ -700,7 +784,7 @@
             },
             {
                 "Q": "From which side are other vehicles allowed to change lanes into the ego lane?",
-                "A": "Vehicles are allowed to change lanes from the left side.",
+                "A": "The ego vehicle overtakes an obstruction. We do not expect vehicles to change into the ego lane.",
                 "C": null,
                 "con_up": [
                     [
@@ -803,7 +887,41 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c56807,CAM_FRONT,-5252.5,2636.6>"
                 ]
             },
             {
@@ -837,7 +955,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1408.3,500.3>"
+                    "<c56805,CAM_FRONT,1408.3,500.3>"
                 ]
             },
             {
@@ -859,8 +977,7 @@
                 "cluster": 3,
                 "layer": 8,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1603.8,482.2>",
-                    "<c3,CAM_FRONT,1603.8,482.2>"
+                    "<c56800,CAM_FRONT,1603.8,482.2>"
                 ]
             },
             {

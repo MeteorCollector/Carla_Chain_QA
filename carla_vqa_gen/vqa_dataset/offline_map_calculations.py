@@ -1305,3 +1305,72 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
                 return True, target_vehicle
 
     return False, None
+
+def get_vehicle_str(vehicle):
+    """
+    :param vehicle (dict)
+    :return important_object_str, vehicle_description, vehicle_location_description
+    """
+    # Determine the rough position of the vehicle relative to the ego (front, front-left, front-right)
+    if -2 <= vehicle['position'][1] <= 2:
+        rough_pos_str = 'to the front of the ego vehicle'
+    elif vehicle['position'][1] > 2:
+        rough_pos_str = 'to the front right of the ego vehicle'
+    else: #vehicle['position'][1] < -2
+        rough_pos_str = 'to the front left of the ego vehicle'
+
+    # Determine the type of vehicle based on its type_id
+    if 'firetruck' in vehicle['type_id']:
+        vehicle_type = 'firetruck'
+    elif 'police' in vehicle['type_id']:
+        vehicle_type = 'police car'
+    elif 'ambulance' in vehicle['type_id']:
+        vehicle_type = 'ambulance'
+    elif 'jeep' in vehicle['type_id']:
+        vehicle_type = 'jeep'
+    elif 'micro' in vehicle['type_id']:
+        vehicle_type = 'small car'
+    elif 'nissan.patrol' in vehicle['type_id']:
+        vehicle_type = 'SUV'
+    elif 'european_hgv' in vehicle['type_id']:
+        vehicle_type = 'HGV'
+    elif 'sprinter' in vehicle['type_id']:
+        vehicle_type = 'sprinter'
+    else:
+        vehicle_type = vehicle['base_type']
+
+    # Determine the color of the vehicle
+    color_str = vehicle.get('color_name') + ' ' if vehicle.get('color_name') is not None \
+                                                and vehicle.get('color_name') != 'None' else ''
+    if vehicle.get('color') is not None and vehicle.get('color') != 'None':
+        color_str = rgb_to_color_name(vehicle['color']) + ' '
+        if vehicle['color'] == [0, 28, 0] or vehicle['color'] == [12, 42, 12]:
+            color_str = 'dark green '
+        elif vehicle['color'] == [211, 142, 0]:
+            color_str = 'yellow '
+        elif vehicle['color'] == [145, 255, 181]:
+            color_str = 'blue '
+        elif vehicle['color'] == [215, 88, 0]:
+            color_str = 'orange '
+
+    # Construct a string description of the vehicle
+    description = vehicle_type
+    important_object_str = f'the {color_str}{description} {rough_pos_str}'
+    vehicle_description = f'{color_str}{description}'
+    vehicle_location_description = f'the {color_str}{description} that is {rough_pos_str}'
+
+    return important_object_str, vehicle_description, vehicle_location_description
+
+def get_pedestrian_str(pedestrian):
+    """
+    :param pedestrian (dict)
+    :return important_object_str
+    """
+    if -2 < pedestrian['position'][1] < 2:
+        rough_pos_str = 'to the front of the ego vehicle'
+    elif pedestrian['position'][1] > 2:
+        rough_pos_str = 'to the front right of the ego vehicle'
+    else:
+        rough_pos_str = 'to the front left of the ego vehicle'
+
+    return f'the pedestrian {rough_pos_str}'

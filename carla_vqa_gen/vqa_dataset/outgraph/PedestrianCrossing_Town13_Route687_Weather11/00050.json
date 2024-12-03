@@ -1,12 +1,72 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
+        "<c36799,CAM_FRONT,-2536.4,445.1>": {
+            "id": "36799",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    -3007.8,
+                    363.7
+                ],
+                [
+                    -2065.0,
+                    526.5
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    11.1,
+                    -32.5,
+                    -0.2
+                ],
+                [
+                    11.1,
+                    -32.5,
+                    -1.7
+                ],
+                [
+                    12.9,
+                    -32.4,
+                    -0.2
+                ],
+                [
+                    12.9,
+                    -32.5,
+                    -1.7
+                ],
+                [
+                    11.2,
+                    -37.1,
+                    -0.1
+                ],
+                [
+                    11.2,
+                    -37.2,
+                    -1.5
+                ],
+                [
+                    13.0,
+                    -37.1,
+                    -0.1
+                ],
+                [
+                    13.0,
+                    -37.2,
+                    -1.5
+                ]
+            ]
+        },
+        "<e2,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c2,CAM_FRONT,823.4,235.4>": {
+        "<c33467,CAM_FRONT,823.4,235.4>": {
+            "id": "33467",
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "green traffic light",
@@ -63,7 +123,8 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT,2037.4,687.5>": {
+        "<c36754,CAM_FRONT,2037.4,687.5>": {
+            "id": "36754",
             "Category": "Pedestrian",
             "Status": null,
             "Visual_description": "Pedestrian",
@@ -120,7 +181,8 @@
                 ]
             ]
         },
-        "<c4,CAM_FRONT,2524.2,677.4>": {
+        "<c36752,CAM_FRONT,2524.2,677.4>": {
+            "id": "36752",
             "Category": "Pedestrian",
             "Status": null,
             "Visual_description": "Pedestrian",
@@ -177,7 +239,8 @@
                 ]
             ]
         },
-        "<c5,CAM_FRONT,2881.4,823.4>": {
+        "<c36750,CAM_FRONT,2881.4,823.4>": {
+            "id": "36750",
             "Category": "Pedestrian",
             "Status": null,
             "Visual_description": "Pedestrian",
@@ -239,18 +302,57 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the green traffic light and the 3 pedestrians to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the green traffic light, the silver car to the front left of the ego vehicle and the 3 pedestrians to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>",
-                    "<c2,CAM_FRONT,823.4,235.4>",
-                    "<c3,CAM_FRONT,2037.4,687.5>",
-                    "<c4,CAM_FRONT,2524.2,677.4>",
-                    "<c5,CAM_FRONT,2881.4,823.4>"
+                    "<c36799,CAM_FRONT,-2536.4,445.1>",
+                    "<e2,CAM_FRONT>",
+                    "<c33467,CAM_FRONT,823.4,235.4>",
+                    "<c36754,CAM_FRONT,2037.4,687.5>",
+                    "<c36752,CAM_FRONT,2524.2,677.4>",
+                    "<c36750,CAM_FRONT,2881.4,823.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the silver car that is to the front left of the ego vehicle located?",
+                "A": "The silver car is on the left side of the junction and is pointing away from the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-2536.4,445.1>"
                 ]
             },
             {
@@ -487,7 +589,7 @@
                 "cluster": 2,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,823.4,235.4>"
+                    "<c33467,CAM_FRONT,823.4,235.4>"
                 ]
             },
             {
@@ -504,9 +606,9 @@
                 "cluster": 5,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,2037.4,687.5>",
-                    "<c4,CAM_FRONT,2524.2,677.4>",
-                    "<c5,CAM_FRONT,2881.4,823.4>"
+                    "<c36754,CAM_FRONT,2037.4,687.5>",
+                    "<c36752,CAM_FRONT,2524.2,677.4>",
+                    "<c36750,CAM_FRONT,2881.4,823.4>"
                 ]
             },
             {
@@ -546,6 +648,50 @@
             }
         ],
         "prediction": [
+            {
+                "Q": "Where is the silver car that is to the front left of the ego vehicle going?",
+                "A": "The silver car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-2536.4,445.1>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the silver car that is to the front left of the ego vehicle?",
+                "A": "The silver car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-2536.4,445.1>"
+                ]
+            },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should watch out for traffic coming from the oncoming lane and for the parking lane.",
@@ -673,11 +819,45 @@
                 "cluster": 2,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,823.4,235.4>"
+                    "<c33467,CAM_FRONT,823.4,235.4>"
                 ]
             }
         ],
         "planning": [
+            {
+                "Q": "The ego vehicle follows the road. Is the silver car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the silver car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-2536.4,445.1>"
+                ]
+            },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "No, the ego vehicle can stay on its current lane.",
@@ -760,7 +940,7 @@
                 "cluster": 2,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,823.4,235.4>"
+                    "<c33467,CAM_FRONT,823.4,235.4>"
                 ]
             },
             {

@@ -1,6 +1,65 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,792.4,498.2>": {
+        "<c27095,CAM_FRONT,-1713.8,755.2>": {
+            "id": "27095",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "gray car",
+            "2d_bbox": [
+                [
+                    -2953.3,
+                    498.5
+                ],
+                [
+                    -474.4,
+                    1011.9
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    3.3,
+                    -10.9,
+                    -0.3
+                ],
+                [
+                    3.3,
+                    -10.9,
+                    -1.6
+                ],
+                [
+                    3.3,
+                    -9.0,
+                    -0.3
+                ],
+                [
+                    3.3,
+                    -9.0,
+                    -1.6
+                ],
+                [
+                    8.0,
+                    -10.8,
+                    -0.3
+                ],
+                [
+                    8.0,
+                    -10.8,
+                    -1.6
+                ],
+                [
+                    8.0,
+                    -8.9,
+                    -0.3
+                ],
+                [
+                    8.0,
+                    -8.9,
+                    -1.6
+                ]
+            ]
+        },
+        "<c27076,CAM_FRONT,792.4,498.2>": {
+            "id": "27076",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "maroon car",
@@ -57,7 +116,8 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,617.6,505.4>": {
+        "<c27074,CAM_FRONT,617.6,505.4>": {
+            "id": "27074",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "maroon car",
@@ -113,21 +173,119 @@
                     -1.6
                 ]
             ]
+        },
+        "<c27094,CAM_FRONT,-1218.8,746.2>": {
+            "id": "27094",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "olive car",
+            "2d_bbox": [
+                [
+                    -2364.8,
+                    382.7
+                ],
+                [
+                    -72.8,
+                    1109.7
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    2.8,
+                    -7.7,
+                    0.2
+                ],
+                [
+                    2.8,
+                    -7.7,
+                    -1.6
+                ],
+                [
+                    2.8,
+                    -5.6,
+                    0.2
+                ],
+                [
+                    2.8,
+                    -5.6,
+                    -1.6
+                ],
+                [
+                    7.3,
+                    -7.7,
+                    0.2
+                ],
+                [
+                    7.3,
+                    -7.7,
+                    -1.6
+                ],
+                [
+                    7.3,
+                    -5.6,
+                    0.2
+                ],
+                [
+                    7.3,
+                    -5.6,
+                    -1.6
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the maroon car to the front of the ego vehicle and the maroon car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are the gray car, the maroon car and the olive car to the front left of the ego vehicle and the maroon car to the front of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>",
-                    "<c2,CAM_FRONT,617.6,505.4>"
+                    "<c27095,CAM_FRONT,-1713.8,755.2>",
+                    "<c27076,CAM_FRONT,792.4,498.2>",
+                    "<c27074,CAM_FRONT,617.6,505.4>",
+                    "<c27094,CAM_FRONT,-1218.8,746.2>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the gray car that is to the front left of the ego vehicle located?",
+                "A": "The gray car is on the same road driving in the opposite direction. It is three lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c27095,CAM_FRONT,-1713.8,755.2>"
                 ]
             },
             {
@@ -165,7 +323,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>"
+                    "<c27076,CAM_FRONT,792.4,498.2>"
                 ]
             },
             {
@@ -203,7 +361,45 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,617.6,505.4>"
+                    "<c27074,CAM_FRONT,617.6,505.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the olive car that is to the front left of the ego vehicle located?",
+                "A": "The olive car is on the same road driving in the opposite direction. It is two lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c27094,CAM_FRONT,-1218.8,746.2>"
                 ]
             },
             {
@@ -494,6 +690,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the gray car that is to the front left of the ego vehicle going?",
+                "A": "The gray car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c27095,CAM_FRONT,-1713.8,755.2>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the gray car that is to the front left of the ego vehicle?",
+                "A": "The gray car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c27095,CAM_FRONT,-1713.8,755.2>"
+                ]
+            },
+            {
                 "Q": "Where is the maroon car that is to the front of the ego vehicle going?",
                 "A": "The maroon car is going straight.",
                 "C": null,
@@ -512,7 +752,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>"
+                    "<c27076,CAM_FRONT,792.4,498.2>"
                 ]
             },
             {
@@ -534,7 +774,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>"
+                    "<c27076,CAM_FRONT,792.4,498.2>"
                 ]
             },
             {
@@ -556,7 +796,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,617.6,505.4>"
+                    "<c27074,CAM_FRONT,617.6,505.4>"
                 ]
             },
             {
@@ -578,7 +818,51 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,617.6,505.4>"
+                    "<c27074,CAM_FRONT,617.6,505.4>"
+                ]
+            },
+            {
+                "Q": "Where is the olive car that is to the front left of the ego vehicle going?",
+                "A": "The olive car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c27094,CAM_FRONT,-1218.8,746.2>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the olive car that is to the front left of the ego vehicle?",
+                "A": "The olive car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c27094,CAM_FRONT,-1218.8,746.2>"
                 ]
             },
             {
@@ -712,6 +996,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the gray car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the gray car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c27095,CAM_FRONT,-1713.8,755.2>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the maroon car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the maroon car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -742,7 +1060,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>"
+                    "<c27076,CAM_FRONT,792.4,498.2>"
                 ]
             },
             {
@@ -776,7 +1094,41 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,617.6,505.4>"
+                    "<c27074,CAM_FRONT,617.6,505.4>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the olive car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the olive car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c27094,CAM_FRONT,-1218.8,746.2>"
                 ]
             },
             {
@@ -841,7 +1193,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,792.4,498.2>"
+                    "<c27076,CAM_FRONT,792.4,498.2>"
                 ]
             },
             {

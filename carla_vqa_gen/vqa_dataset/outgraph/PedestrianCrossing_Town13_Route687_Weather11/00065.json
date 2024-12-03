@@ -1,6 +1,65 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,668.6,496.2>": {
+        "<c36799,CAM_FRONT,-29962.3,1510.8>": {
+            "id": "36799",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "silver car",
+            "2d_bbox": [
+                [
+                    -32120.9,
+                    576.8
+                ],
+                [
+                    -27803.7,
+                    2444.7
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    -0.9,
+                    -22.6,
+                    -0.2
+                ],
+                [
+                    -0.9,
+                    -22.6,
+                    -1.6
+                ],
+                [
+                    0.9,
+                    -22.6,
+                    -0.2
+                ],
+                [
+                    0.9,
+                    -22.6,
+                    -1.6
+                ],
+                [
+                    -0.9,
+                    -27.3,
+                    -0.1
+                ],
+                [
+                    -0.9,
+                    -27.3,
+                    -1.6
+                ],
+                [
+                    1.0,
+                    -27.3,
+                    -0.2
+                ],
+                [
+                    0.9,
+                    -27.3,
+                    -1.6
+                ]
+            ]
+        },
+        "<c36800,CAM_FRONT,668.6,496.2>": {
+            "id": "36800",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "teal car",
@@ -57,7 +116,8 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT>": {
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
@@ -68,15 +128,54 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the teal car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are a junction and the silver car and the teal car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,668.6,496.2>",
-                    "<c2,CAM_FRONT>"
+                    "<c36799,CAM_FRONT,-29962.3,1510.8>",
+                    "<c36800,CAM_FRONT,668.6,496.2>",
+                    "<e3,CAM_FRONT>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the silver car that is to the front left of the ego vehicle located?",
+                "A": "The silver car is on the left side of the junction and is pointing away from the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-29962.3,1510.8>"
                 ]
             },
             {
@@ -114,7 +213,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,668.6,496.2>"
+                    "<c36800,CAM_FRONT,668.6,496.2>"
                 ]
             },
             {
@@ -405,6 +504,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the silver car that is to the front left of the ego vehicle going?",
+                "A": "The silver car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-29962.3,1510.8>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the silver car that is to the front left of the ego vehicle?",
+                "A": "The silver car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-29962.3,1510.8>"
+                ]
+            },
+            {
                 "Q": "Where is the teal car that is to the front left of the ego vehicle going?",
                 "A": "The teal car is going straight.",
                 "C": null,
@@ -423,7 +566,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,668.6,496.2>"
+                    "<c36800,CAM_FRONT,668.6,496.2>"
                 ]
             },
             {
@@ -445,7 +588,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,668.6,496.2>"
+                    "<c36800,CAM_FRONT,668.6,496.2>"
                 ]
             },
             {
@@ -579,6 +722,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the silver car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the silver car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c36799,CAM_FRONT,-29962.3,1510.8>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the teal car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the teal car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -609,7 +786,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,668.6,496.2>"
+                    "<c36800,CAM_FRONT,668.6,496.2>"
                 ]
             },
             {
