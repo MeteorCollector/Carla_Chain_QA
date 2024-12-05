@@ -109,6 +109,9 @@ class QAsGenerator():
 
         # for [debug]
         self.appended_measurements = {}
+
+        # config
+        self.frame_rate = 10 # collect 10 data every 1s
     
     def load_processed_paths(self):
         """从文件加载已处理的路径"""
@@ -877,8 +880,18 @@ class QAsGenerator():
 
             acc = get_acceleration_by_future(self.current_measurement_path, 4)
             flags = get_affect_flags(scene_data)
-            hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
-            hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
+
+            predict_second = 5
+            predict_frame = 10 * self.frame_rate
+            predict_distance = max(ego_vehicle['speed'] * predict_second, 20.0)
+
+            # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
+            # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
+            hazardous_walkers = get_hazard_by_future(self.current_measurement_path, self.map, 
+                                                     k=predict_frame, filter='pedestrian', max_distance=predict_distance)
+            hazardous_actors = get_hazard_by_future(self.current_measurement_path, self.map, 
+                                                     k=predict_frame, filter=None, max_distance=predict_distance)
+            
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
             measurements['vehicle_hazard'] = hazardous and 'vehicle' in hazardous_actors[0]['class']
@@ -2560,8 +2573,9 @@ class QAsGenerator():
 
         ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False
-        affected_by_vehicle_10, hazard_actor_10 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
-        
+        res = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
+        print(f'[debug] res = {res}')
+        affected_by_vehicle_10, hazard_actor_10 = res
         if affected_by_vehicle_10:
                 ego['hazard_detected_10'] = True
                 ego['affects_ego_10'] = hazard_actor_10['id']

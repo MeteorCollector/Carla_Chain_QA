@@ -965,10 +965,6 @@ def get_steer_by_future(path, id, k=5):
 
     return steer
 
-
-
-
-
 def get_affect_flags(bbox_data):
     """
     Analyze traffic and get affect flags
@@ -1138,18 +1134,19 @@ def get_all_hazard_with_prediction_sorted(bbox_data, expansion=1.2, prediction_t
 
     return hazardous_actors
 
-def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30.0, junction_threshold=3.0):
+def vehicle_obstacle_list(ego_data, vehicle_list, carla_map, max_distance, junction_threshold):
     """
-    Method to check if there is a vehicle in front of the agent blocking its path.
-    Migrated from pdm_lite, but massive modification
-        :param ego_vehicle (actor dict): ego vehicle object information.
-        :param vehicle_list (list of actor dict): list contatining vehicle object information.
-        :param carla_map (carla.map): current map.
-        :param max_distance: max freespace to check for obstacles.
-                If None, the base threshold value is used
-        :param junction_threshold: when vehicle waypoint goes into junction, how much further is detected.
-                If None, the base threshold value is used
-        :return Tuple (bool: detected or not, dict(actor): nearest obstacle vehicle at front, if exist)
+    Helper function to detect all vehicles in front of the agent blocking its path, sorted by distance.
+
+    Args:
+        ego_data (dict): Ego vehicle object information.
+        vehicle_list (list): List containing vehicle object information.
+        carla_map (carla.map): Current map.
+        max_distance (float): Max freespace to check for obstacles.
+        junction_threshold (float): When vehicle waypoint goes into junction, how much further is detected.
+
+    Returns:
+        Tuple (bool, list): A bool indicating if any vehicle is detected and a list of all blocking vehicles sorted by distance.
     """
 
     def compute_distance(loc1, loc2):
@@ -1178,7 +1175,6 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
 
         right_vector = [-ego_forward_vector[1], ego_forward_vector[0]]
 
-        # two vertices start from vehicle's current location
         p1 = (ego_location[0] + r_ext * right_vector[0], ego_location[1] + r_ext * right_vector[1])
         p2 = (ego_location[0] + l_ext * right_vector[0], ego_location[1] + l_ext * right_vector[1])
 
@@ -1222,6 +1218,8 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
 
     route_polygon, last_wpt = get_route_polygon()
 
+    detected_vehicles = []
+
     for target_vehicle in vehicle_list:
         if target_vehicle['id'] == ego_data['id']:
             continue
@@ -1235,10 +1233,10 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
         target_polygon = Polygon([(v[0], v[1]) for v in target_bounding_box])
 
         if route_polygon and route_polygon.intersects(target_polygon):
-            return True, target_vehicle
+            detected_vehicles.append(target_vehicle)
+            continue
 
         if last_wpt:
-            # print("[debug] detect stopped before junction") # debug
             target_forward_vector = get_forward_vector(target_vehicle['rotation'])
             last_forward_vector = last_wpt.transform.get_forward_vector()
             dot_product = last_forward_vector.x * target_forward_vector[0] + last_forward_vector.y * target_forward_vector[1]
@@ -1246,9 +1244,96 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
             distance = compute_distance([last_wpt.transform.location.x, last_wpt.transform.location.y], target_location)
 
             if distance < junction_threshold and abs(angle) <= 20:
-                return True, target_vehicle
+                detected_vehicles.append(target_vehicle)
 
-    return False, None
+    detected_vehicles.sort(key=lambda v: v['distance'])
+
+    return bool(detected_vehicles) and len(detected_vehicles) > 0, detected_vehicles
+
+def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30.0, junction_threshold=3.0):
+    """
+    Method to check if there is a vehicle in front of the agent blocking its path.
+    Migrated from pdm_lite, but massive modification
+        :param ego_vehicle (actor dict): ego vehicle object information.
+        :param vehicle_list (list of actor dict): list contatining vehicle object information.
+        :param carla_map (carla.map): current map.
+        :param max_distance: max freespace to check for obstacles.
+                If None, the base threshold value is used
+        :param junction_threshold: when vehicle waypoint goes into junction, how much further is detected.
+                If None, the base threshold value is used
+        :return Tuple (bool: detected or not, dict(actor): nearest obstacle vehicle at front, if exist)
+    """
+
+    detected, vehicle_list = vehicle_obstacle_list(ego_data, vehicle_list, carla_map, max_distance, junction_threshold)
+    return (detected, vehicle_list[0]) if detected else (False, [])
+
+def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_threshold=3.0):
+    """
+    Identify hazards within the next k measurements based on the specified filter.
+
+    Args:
+        path (str): Path to the current measurement file.
+        k (int): Number of future measurements to consider.
+        filter (str or None): Substring to filter vehicle class. If None, consider all vehicles.
+        max_distance (float): Maximum detection distance for obstacles.
+        junction_threshold (float): Threshold for detecting vehicles at junctions.
+
+    Returns:
+        list: Sorted list of actor dicts representing hazards, ordered by distance.
+    """
+    dir_name, file_name = os.path.split(path)
+    base_name, _ = os.path.splitext(file_name)
+    base_name, _ = os.path.splitext(base_name)
+    ext = ".json.gz"
+    initial_index = int(base_name)
+
+    hazards = []
+
+    current_file = os.path.join(dir_name, f"{initial_index:05d}{ext}")
+    if not os.path.exists(current_file):
+        return hazards
+
+    print(F'[debug] current_file = {current_file}')
+    current_data = load_measurement(current_file)
+    ego_data = next((item for item in current_data["bounding_boxes"] if item["class"] == "ego_vehicle"), None)
+    if ego_data is None:
+        return hazards
+
+    carla_map = map
+
+    # Iterate over future frames
+    for i in range(k + 1):
+        future_file = os.path.join(dir_name, f"{initial_index + i:05d}{ext}")
+        if not os.path.exists(future_file):
+            break
+
+        future_data = load_measurement(future_file)
+        vehicle_list = [
+            item for item in future_data["bounding_boxes"]
+            if filter is None or filter in item["class"]
+        ]
+
+        # Call vehicle_obstacle_list to get hazards
+        _, hazard_list = vehicle_obstacle_list(
+            ego_data=ego_data,
+            vehicle_list=vehicle_list,
+            carla_map=carla_map,
+            max_distance=max_distance,
+            junction_threshold=junction_threshold
+        )
+
+        hazards.extend(hazard_list)
+
+    unique_ids = {hazard["id"] for hazard in hazards}
+    
+    matched_hazards = []
+    for bbox in current_data["bounding_boxes"]:
+        if bbox["id"] in unique_ids:
+            matched_hazards.append(bbox)
+
+    matched_hazards.sort(key=lambda x: x["distance"])
+
+    return matched_hazards
 
 def get_vehicle_str(vehicle):
     """
