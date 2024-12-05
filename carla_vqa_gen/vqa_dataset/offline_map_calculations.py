@@ -735,72 +735,16 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map, path):
 
     vehicle_id = vehicle_data['id']
 
-    new_lane_id, old_lane_id, vehicle_is_changing_lane = detect_lane_change_by_time(map, vehicle_id, path)
+    old_lane_id, new_lane_id, vehicle_is_changing_lane = detect_lane_change_by_time(map, vehicle_id, path)
     
     if vehicle_is_changing_lane is False:
         return False
-    # if is_vehicle_changing_lane(vehicle_data, map) is False:
-    #     return False
-
-    # vehicle_location = carla.Location(x=vehicle_data['location'][0], y=vehicle_data['location'][1])
-    # vehicle_theta = vehicle_data['rotation'][1]
-    # waypoint = map.get_waypoint(vehicle_location, project_to_road=True, lane_type=carla.LaneType.Driving)
-    # lane_direction = waypoint.transform.rotation.yaw
-    
-    # angle_diff = (vehicle_theta - lane_direction) % 360
-    # if angle_diff > 180:
-    #     angle_diff -= 360
-    
-    # lane_change_direction = None
-    # angle_threshold = 10.0
-    # if angle_diff > angle_threshold:
-    #     lane_change_direction = 'right'
-    # elif angle_diff < -angle_threshold:
-    #     lane_change_direction = 'left'
-    # else:
-    #     return False
-
-    # left_waypoint = waypoint.get_left_lane()
-    # right_waypoint = waypoint.get_right_lane()
-    
-    # def calculate_distance_to_waypoint(wp):
-    #     return math.sqrt((vehicle_location.x - wp.transform.location.x) ** 2 +
-    #                      (vehicle_location.y - wp.transform.location.y) ** 2)
-    
-    # nearest_lane = None
-    # nearest_lane_distance = 1000 # max value
-    
-    # if left_waypoint:
-    #     left_distance = calculate_distance_to_waypoint(left_waypoint)
-    #     if left_distance < nearest_lane_distance:
-    #         nearest_lane = left_waypoint
-    #         nearest_lane_distance = left_distance
-
-    # if right_waypoint:
-    #     right_distance = calculate_distance_to_waypoint(right_waypoint)
-    #     if right_distance < nearest_lane_distance:
-    #         nearest_lane = right_waypoint
-    #         nearest_lane_distance = right_distance
-    
-    # if nearest_lane is None:
-    #     return False # there is no other lane!
-    
-    # if lane_change_direction is 'left':
-    #     if nearest_lane == left_waypoint:
-    #         target_lane = left_waypoint
-    #         original_lane = waypoint
-    #     else:
-    #         target_lane = waypoint
-    #         original_lane = right_waypoint
-    # elif lane_change_direction is 'right':
-    #     if nearest_lane == right_waypoint:
-    #         target_lane = right_waypoint
-    #         original_lane = waypoint
-    #     else:
-    #         target_lane = waypoint
     
     ego_location = carla.Location(x=ego_data['location'][0], y=ego_data['location'][1])
     ego_waypoint = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
+
+    print(f"[debug] path = {path}")
+    print(f"[debug] vehicle_id = {vehicle_id}, {vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id}, old_lane_id = {old_lane_id}, new_lane_id = {new_lane_id}, ego_lane_id = {ego_waypoint.lane_id}")
 
     return vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id
 

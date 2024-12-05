@@ -2515,6 +2515,7 @@ class QAsGenerator():
                     if key not in actor:
                         actor[key] = value
                 actor['steer'] = get_steer_by_future(self.current_measurement_path, actor['id'])
+                actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map, self.current_measurement_path)
 
         # Categorize objects from the scene data
         # print(scene_data) # debug
@@ -2589,10 +2590,6 @@ class QAsGenerator():
                 ego['affects_ego_40'] = hazard_actor_40['id']
                 ego['affects_ego_40_id'] = hazard_actor_40['id']
                 ego['affects_ego_40_dis'] = hazard_actor_40['distance']
-    
-        for actor in scene_data:
-            if actor['class'] == 'vehicle':
-                actor['vehicle_cuts_in'] = is_vehicle_cutting_in(ego, actor, self.map, self.current_measurement_path)
 
         # original only raise this flag when ego vehicle overcomes an obstacle
         # measurements['changed_route'] = is_ego_changing_lane_due_to_obstacle(ego_measurements, self.map, scene_data)

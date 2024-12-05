@@ -129,3 +129,5 @@ ParkedObstacle
 14. current speed limit 是怎么答的？
 
 15. 看看 vehicle hazard 和 crash into 之类的
+
+16. StaticCutIn_Town03_Route109_Weather1 这种中间的虚线加实线为什么可以变道
