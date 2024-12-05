@@ -1,12 +1,72 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
+        "<c23290,CAM_FRONT,-34069.6,2998.0>": {
+            "id": "23290",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "gray bicycle",
+            "2d_bbox": [
+                [
+                    -36993.5,
+                    -449.3
+                ],
+                [
+                    -31145.8,
+                    6445.2
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    -1.6,
+                    -9.0,
+                    0.2
+                ],
+                [
+                    -1.5,
+                    -9.0,
+                    -1.6
+                ],
+                [
+                    -1.6,
+                    -8.4,
+                    0.2
+                ],
+                [
+                    -1.5,
+                    -8.4,
+                    -1.6
+                ],
+                [
+                    0.3,
+                    -9.0,
+                    0.2
+                ],
+                [
+                    0.3,
+                    -9.0,
+                    -1.6
+                ],
+                [
+                    0.3,
+                    -8.3,
+                    0.2
+                ],
+                [
+                    0.3,
+                    -8.3,
+                    -1.6
+                ]
+            ]
+        },
+        "<e2,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c2,CAM_FRONT,1438.7,110.8>": {
+        "<c20924,CAM_FRONT,1438.7,110.8>": {
+            "id": "20924",
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "red traffic light",
@@ -68,15 +128,54 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the red traffic light.",
+                "A": "The important objects in the scene are a junction, the red traffic light and the gray bicycle to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>",
-                    "<c2,CAM_FRONT,1438.7,110.8>"
+                    "<c23290,CAM_FRONT,-34069.6,2998.0>",
+                    "<e2,CAM_FRONT>",
+                    "<c20924,CAM_FRONT,1438.7,110.8>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the gray bicycle that is to the front left of the ego vehicle located?",
+                "A": "The gray bicycle is on the same road driving in the opposite direction. It is on the bike lane three lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c23290,CAM_FRONT,-34069.6,2998.0>"
                 ]
             },
             {
@@ -313,7 +412,7 @@
                 "cluster": 2,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1438.7,110.8>"
+                    "<c20924,CAM_FRONT,1438.7,110.8>"
                 ]
             },
             {
@@ -368,6 +467,50 @@
             }
         ],
         "prediction": [
+            {
+                "Q": "Where is the gray bicycle that is to the front left of the ego vehicle going?",
+                "A": "The gray bicycle is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c23290,CAM_FRONT,-34069.6,2998.0>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the gray bicycle that is to the front left of the ego vehicle?",
+                "A": "The gray bicycle is moving slowly.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c23290,CAM_FRONT,-34069.6,2998.0>"
+                ]
+            },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should pay particular attention to traffic changing lanes from neighboring lanes and for traffic coming from the oncoming lane. Additionally, the ego vehicle should have an eye on the bike lane on the right side.",
@@ -495,11 +638,45 @@
                 "cluster": 2,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1438.7,110.8>"
+                    "<c20924,CAM_FRONT,1438.7,110.8>"
                 ]
             }
         ],
         "planning": [
+            {
+                "Q": "The ego vehicle follows the road. Is the gray bicycle that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the gray bicycle is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c23290,CAM_FRONT,-34069.6,2998.0>"
+                ]
+            },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "No, the ego vehicle can stay on its current lane.",
@@ -562,7 +739,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1438.7,110.8>"
+                    "<c20924,CAM_FRONT,1438.7,110.8>"
                 ]
             },
             {
@@ -584,7 +761,7 @@
                 "cluster": 2,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1438.7,110.8>"
+                    "<c20924,CAM_FRONT,1438.7,110.8>"
                 ]
             },
             {

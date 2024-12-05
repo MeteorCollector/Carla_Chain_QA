@@ -1,6 +1,7 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,524.2,505.2>": {
+        "<c45893,CAM_FRONT,524.2,505.2>": {
+            "id": "45893",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "olive car",
@@ -57,7 +58,8 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,12.8,529.2>": {
+        "<c45909,CAM_FRONT,12.8,529.2>": {
+            "id": "45909",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "navy car",
@@ -114,7 +116,8 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT,281.8,526.2>": {
+        "<c45908,CAM_FRONT,281.8,526.2>": {
+            "id": "45908",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -183,9 +186,9 @@
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,524.2,505.2>",
-                    "<c2,CAM_FRONT,12.8,529.2>",
-                    "<c3,CAM_FRONT,281.8,526.2>"
+                    "<c45893,CAM_FRONT,524.2,505.2>",
+                    "<c45909,CAM_FRONT,12.8,529.2>",
+                    "<c45908,CAM_FRONT,281.8,526.2>"
                 ]
             },
             {
@@ -223,7 +226,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,524.2,505.2>"
+                    "<c45893,CAM_FRONT,524.2,505.2>"
                 ]
             },
             {
@@ -261,7 +264,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,12.8,529.2>"
+                    "<c45909,CAM_FRONT,12.8,529.2>"
                 ]
             },
             {
@@ -299,7 +302,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,281.8,526.2>"
+                    "<c45908,CAM_FRONT,281.8,526.2>"
                 ]
             },
             {
@@ -427,7 +430,7 @@
             },
             {
                 "Q": "On which lane is the ego vehicle (left most lane of the lanes going in the same direction is indicated with 0)?",
-                "A": "The ego vehicle is on lane 2.",
+                "A": "The ego vehicle is on lane 3 since it overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -463,7 +466,7 @@
             },
             {
                 "Q": "What lane marking is on the left side of the ego car?",
-                "A": "The lane marking on the left side of the ego car is a white broken lane.",
+                "A": "It is not possible to tell since the ego vehicle overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -608,7 +611,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,524.2,505.2>"
+                    "<c45893,CAM_FRONT,524.2,505.2>"
                 ]
             },
             {
@@ -630,7 +633,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,524.2,505.2>"
+                    "<c45893,CAM_FRONT,524.2,505.2>"
                 ]
             },
             {
@@ -652,7 +655,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,12.8,529.2>"
+                    "<c45909,CAM_FRONT,12.8,529.2>"
                 ]
             },
             {
@@ -674,7 +677,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,12.8,529.2>"
+                    "<c45909,CAM_FRONT,12.8,529.2>"
                 ]
             },
             {
@@ -696,7 +699,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c3,CAM_FRONT,281.8,526.2>"
+                    "<c45908,CAM_FRONT,281.8,526.2>"
                 ]
             },
             {
@@ -718,12 +721,12 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c3,CAM_FRONT,281.8,526.2>"
+                    "<c45908,CAM_FRONT,281.8,526.2>"
                 ]
             },
             {
                 "Q": "The ego vehicle wants to follow the road. Which lanes are important to watch out for?",
-                "A": "The ego vehicle should pay particular attention to traffic changing lanes from neighboring lanes.",
+                "A": "The ego vehicle should keep driving regardless of other vehicles since it overtakes an obstruction.",
                 "C": null,
                 "con_up": [
                     [
@@ -751,7 +754,7 @@
             },
             {
                 "Q": "In which direction is the ego car allowed to change lanes?",
-                "A": "The ego vehicle is allowed to change lanes to the left and right.",
+                "A": "The ego vehicle overtakes an obstruction. It is not expected to change lanes.",
                 "C": null,
                 "con_up": [
                     [
@@ -779,7 +782,7 @@
             },
             {
                 "Q": "From which side are other vehicles allowed to change lanes into the ego lane?",
-                "A": "Vehicles are allowed to change lanes from both sides.",
+                "A": "The ego vehicle overtakes an obstruction. We do not expect vehicles to change into the ego lane.",
                 "C": null,
                 "con_up": [
                     [
@@ -882,7 +885,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,524.2,505.2>"
+                    "<c45893,CAM_FRONT,524.2,505.2>"
                 ]
             },
             {
@@ -916,7 +919,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,12.8,529.2>"
+                    "<c45909,CAM_FRONT,12.8,529.2>"
                 ]
             },
             {
@@ -950,7 +953,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c3,CAM_FRONT,281.8,526.2>"
+                    "<c45908,CAM_FRONT,281.8,526.2>"
                 ]
             },
             {

@@ -170,12 +170,18 @@
         ],
         "yaw": -0.0015275888111579631
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             2.815636396408081,
             -0.046972859650850296,
             10.111197471618652
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.0007438332540914416,
             -0.004085945896804333,
@@ -1241,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": 0.26174105114087054,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.9215385317802429,
@@ -1378,7 +1384,7 @@
                 "state": "dynamic",
                 "steer": 0.21888741778852636,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.6693204641342163,
@@ -2695,6 +2701,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.0003710937453433871,
+                    0.0,
+                    0.6926480531692505
+                ],
+                "brake": 1.0,
+                "center": [
+                    185.49249267578125,
+                    -197.35899353027344,
+                    0.6805770397186279
+                ],
+                "class": "vehicle",
+                "color": "0,39,105",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 13.004382774495385,
+                "distance_to_junction": 188.74411010742188,
+                "extent": [
+                    2.0906050205230713,
+                    0.9970585703849792,
+                    0.6926480531692505
+                ],
+                "id": "427",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "9",
+                "location": [
+                    185.49436950683594,
+                    -197.3589630126953,
+                    -0.012068481184542179
+                ],
+                "next_junction_id": 1135,
+                "next_next_road_ids": [
+                    66
+                ],
+                "next_road_ids": [
+                    1165
+                ],
+                "num_points": 158,
+                "position": [
+                    -13.004318081701655,
+                    0.021103202745308636,
+                    0.03342414514285663
+                ],
+                "road_id": 65,
+                "rotation": [
+                    0.12447336316108704,
+                    -0.000946044921875,
+                    0.5117241144180298
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 6.640356166177852,
+                "state": "dynamic",
+                "steer": 0.004669911412730105,
+                "type_id": "vehicle.audi.tt",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.9999577403068542,
+                        0.008931131102144718,
+                        0.002172468462958932,
+                        -183.72386169433594
+                    ],
+                    [
+                        -0.008931188844144344,
+                        0.9999601244926453,
+                        1.651155798754189e-05,
+                        199.00778198242188
+                    ],
+                    [
+                        -0.00217223446816206,
+                        -3.591358836274594e-05,
+                        0.999997615814209,
+                        0.407917857170105
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        187.57260131835938,
+                        -196.34332275390625,
+                        1.377781629562378
+                    ],
+                    [
+                        187.5756072998047,
+                        -196.34327697753906,
+                        -0.0075110504403710365
+                    ],
+                    [
+                        187.5904083251953,
+                        -198.3373565673828,
+                        1.377748727798462
+                    ],
+                    [
+                        187.59341430664062,
+                        -198.33731079101562,
+                        -0.007543976418673992
+                    ],
+                    [
+                        183.39157104492188,
+                        -196.38067626953125,
+                        1.3686981201171875
+                    ],
+                    [
+                        183.3945770263672,
+                        -196.380615234375,
+                        -0.016594598069787025
+                    ],
+                    [
+                        183.4093780517578,
+                        -198.3747100830078,
+                        1.3686652183532715
+                    ],
+                    [
+                        183.41238403320312,
+                        -198.37464904785156,
+                        -0.01662752404808998
+                    ]
+                ],
+                "yaw": -0.0015275888111579631
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -3674,6 +3822,7 @@
         },
         "should_brake": false,
         "speed": 1.7393176422838104,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             234.23590087890625,
@@ -3681,6 +3830,7 @@
         ],
         "theta": 1.5692687034606934,
         "throttle": 0.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4762,7 +4912,7 @@
             "state": "dynamic",
             "steer": 0.26174105114087054,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.9215385317802429,
@@ -4899,7 +5049,7 @@
             "state": "dynamic",
             "steer": 0.21888741778852636,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.6693204641342163,

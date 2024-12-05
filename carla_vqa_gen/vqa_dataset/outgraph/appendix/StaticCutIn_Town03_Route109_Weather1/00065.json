@@ -164,12 +164,18 @@
         ],
         "yaw": 0.9368391516799405
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             0.3045904040336609,
             4.09141731262207,
             9.59057331085205
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.009011714719235897,
             -0.0039778887294232845,
@@ -1640,7 +1646,7 @@
                 "state": "dynamic",
                 "steer": 0.32583164260683745,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.9516239762306213,
@@ -3175,6 +3181,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    0.0321384035050869,
+                    -1.4781952017983713e-07,
+                    0.650469958782196
+                ],
+                "brake": 0.0,
+                "center": [
+                    245.42677307128906,
+                    -133.7511749267578,
+                    0.6448632478713989
+                ],
+                "class": "vehicle",
+                "color": "160,160,160",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 54.043038624800865,
+                "distance_to_junction": 107.05451202392578,
+                "extent": [
+                    2.358762502670288,
+                    0.947413444519043,
+                    0.650469958782196
+                ],
+                "id": "435",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": 2,
+                "lane_relative_to_ego": -1,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "Position",
+                "location": [
+                    245.4257049560547,
+                    -133.71937561035156,
+                    -0.005622243974357843
+                ],
+                "next_junction_id": 498,
+                "next_next_road_ids": [
+                    0
+                ],
+                "next_road_ids": [
+                    519
+                ],
+                "num_points": 0,
+                "position": [
+                    52.2162783711937,
+                    13.931173199207137,
+                    -0.18353149623420162
+                ],
+                "road_id": 65,
+                "rotation": [
+                    0.027812529355287552,
+                    -0.00015258786152116954,
+                    -88.07105255126953
+                ],
+                "same_direction_as_ego": false,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 6.790769333388765,
+                "state": "dynamic",
+                "steer": -0.06240885104401926,
+                "type_id": "vehicle.ford.mustang",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.03366008400917053,
+                        -0.9994332194328308,
+                        0.00048542016884312034,
+                        -141.90463256835938
+                    ],
+                    [
+                        0.9994333386421204,
+                        0.03366008773446083,
+                        2.6631603304849705e-06,
+                        -240.78562927246094
+                    ],
+                    [
+                        -1.9000935935764574e-05,
+                        0.000485055468743667,
+                        0.9999998807907104,
+                        0.0751468762755394
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        246.45303344726562,
+                        -136.07640075683594,
+                        1.296480655670166
+                    ],
+                    [
+                        246.45306396484375,
+                        -136.0770263671875,
+                        -0.004459129646420479
+                    ],
+                    [
+                        244.5592803955078,
+                        -136.1401824951172,
+                        1.2964756488800049
+                    ],
+                    [
+                        244.55931091308594,
+                        -136.14080810546875,
+                        -0.0044641755521297455
+                    ],
+                    [
+                        246.2942352294922,
+                        -131.36154174804688,
+                        1.2941906452178955
+                    ],
+                    [
+                        246.2942657470703,
+                        -131.3621826171875,
+                        -0.0067491112276911736
+                    ],
+                    [
+                        244.40048217773438,
+                        -131.42532348632812,
+                        1.2941856384277344
+                    ],
+                    [
+                        244.4005126953125,
+                        -131.42596435546875,
+                        -0.00675415713340044
+                    ]
+                ],
+                "yaw": 0.9368391516799405
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": false,
@@ -4154,6 +4302,7 @@
         },
         "should_brake": true,
         "speed": 8.404437917803508,
+        "speed_limit": 10000,
         "steer": 0.10000000149011612,
         "target_point": [
             234.23590087890625,
@@ -4161,6 +4310,7 @@
         ],
         "theta": 2.5076353549957275,
         "throttle": 0.699999988079071,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -5647,7 +5797,7 @@
             "state": "dynamic",
             "steer": 0.32583164260683745,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.9516239762306213,

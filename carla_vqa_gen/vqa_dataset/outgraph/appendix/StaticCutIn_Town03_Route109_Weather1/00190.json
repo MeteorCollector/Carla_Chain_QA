@@ -167,12 +167,18 @@
         ],
         "yaw": 1.596286240536372
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             0.3572608232498169,
             7.84359872341156e-05,
             9.726366996765137
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             4.890808850177564e-05,
             0.00888383574783802,
@@ -413,7 +419,7 @@
                 "state": "dynamic",
                 "steer": 0.0020401743062875574,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.022777533158659935,
@@ -550,7 +556,7 @@
                 "state": "dynamic",
                 "steer": -0.00021837210791746616,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.02419394999742508,
@@ -687,7 +693,7 @@
                 "state": "dynamic",
                 "steer": -8.455230856713719e-05,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.024243246763944626,
@@ -2194,7 +2200,7 @@
                 "state": "dynamic",
                 "steer": 0.1353216575724338,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.05867728218436241,
@@ -2521,6 +2527,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -3500,6 +3510,7 @@
         },
         "should_brake": true,
         "speed": 8.47675309617899,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             237.46974182128903,
@@ -3507,6 +3518,7 @@
         ],
         "theta": 3.1670825481414795,
         "throttle": 0.0,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -3763,7 +3775,7 @@
             "state": "dynamic",
             "steer": 0.0020401743062875574,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.022777533158659935,
@@ -3900,7 +3912,7 @@
             "state": "dynamic",
             "steer": -0.00021837210791746616,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.02419394999742508,
@@ -4037,7 +4049,7 @@
             "state": "dynamic",
             "steer": -8.455230856713719e-05,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.024243246763944626,
@@ -5544,7 +5556,7 @@
             "state": "dynamic",
             "steer": 0.1353216575724338,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.05867728218436241,

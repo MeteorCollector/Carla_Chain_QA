@@ -1,9 +1,10 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,834.4,469.0>": {
+        "<c290,CAM_FRONT,834.4,469.0>": {
+            "id": "290",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "maroon car",
             "2d_bbox": [
                 [
                     778.5,
@@ -57,10 +58,11 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,1013.7,464.4>": {
+        "<c289,CAM_FRONT,1013.7,464.4>": {
+            "id": "289",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "SUV",
+            "Visual_description": "maroon SUV",
             "2d_bbox": [
                 [
                     939.1,
@@ -113,26 +115,85 @@
                     -1.7
                 ]
             ]
+        },
+        "<c312,CAM_FRONT,-2828.3,762.0>": {
+            "id": "312",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "navy SUV",
+            "2d_bbox": [
+                [
+                    -5082.4,
+                    230.3
+                ],
+                [
+                    -574.2,
+                    1293.8
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    2.3,
+                    -11.7,
+                    0.4
+                ],
+                [
+                    2.3,
+                    -11.7,
+                    -1.6
+                ],
+                [
+                    2.2,
+                    -9.6,
+                    0.4
+                ],
+                [
+                    2.2,
+                    -9.6,
+                    -1.6
+                ],
+                [
+                    7.8,
+                    -11.5,
+                    0.5
+                ],
+                [
+                    7.9,
+                    -11.5,
+                    -1.6
+                ],
+                [
+                    7.7,
+                    -9.3,
+                    0.5
+                ],
+                [
+                    7.8,
+                    -9.3,
+                    -1.6
+                ]
+            ]
         }
     },
     "QA": {
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are the car to the front of the ego vehicle and the SUV to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are the maroon car to the front of the ego vehicle, the maroon SUV to the front right of the ego vehicle and the navy SUV to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>",
-                    "<c2,CAM_FRONT,1013.7,464.4>"
+                    "<c290,CAM_FRONT,834.4,469.0>",
+                    "<c289,CAM_FRONT,1013.7,464.4>",
+                    "<c312,CAM_FRONT,-2828.3,762.0>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front of the ego vehicle located?",
-                "A": "The car is on the same road driving on the lane of the ego vehicle.",
+                "Q": "Where on the road is the maroon car that is to the front of the ego vehicle located?",
+                "A": "The maroon car is on the same road driving on the lane of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -165,12 +226,12 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>"
+                    "<c290,CAM_FRONT,834.4,469.0>"
                 ]
             },
             {
-                "Q": "Where on the road is the SUV that is to the front right of the ego vehicle located?",
-                "A": "The SUV is on the same road driving in the same direction. It is one lane to the right of the ego vehicle.",
+                "Q": "Where on the road is the maroon SUV that is to the front right of the ego vehicle located?",
+                "A": "The maroon SUV is on the same road driving in the same direction. It is one lane to the right of the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -203,7 +264,45 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1013.7,464.4>"
+                    "<c289,CAM_FRONT,1013.7,464.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the navy SUV that is to the front left of the ego vehicle located?",
+                "A": "The navy SUV is on the same road standing in the opposite direction. It is two lanes to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c312,CAM_FRONT,-2828.3,762.0>"
                 ]
             },
             {
@@ -494,8 +593,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front of the ego vehicle going?",
-                "A": "The car is cutting into the lane of the ego vehicle.",
+                "Q": "Where is the maroon car that is to the front of the ego vehicle going?",
+                "A": "The maroon car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -512,12 +611,12 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>"
+                    "<c290,CAM_FRONT,834.4,469.0>"
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front of the ego vehicle?",
-                "A": "The car is driving.",
+                "Q": "What is the moving status of the maroon car that is to the front of the ego vehicle?",
+                "A": "The maroon car is driving.",
                 "C": null,
                 "con_up": [
                     [
@@ -534,12 +633,12 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>"
+                    "<c290,CAM_FRONT,834.4,469.0>"
                 ]
             },
             {
-                "Q": "Where is the SUV that is to the front right of the ego vehicle going?",
-                "A": "The SUV is going straight.",
+                "Q": "Where is the maroon SUV that is to the front right of the ego vehicle going?",
+                "A": "The maroon SUV is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -556,12 +655,12 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1013.7,464.4>"
+                    "<c289,CAM_FRONT,1013.7,464.4>"
                 ]
             },
             {
-                "Q": "What is the moving status of the SUV that is to the front right of the ego vehicle?",
-                "A": "The SUV is driving.",
+                "Q": "What is the moving status of the maroon SUV that is to the front right of the ego vehicle?",
+                "A": "The maroon SUV is driving.",
                 "C": null,
                 "con_up": [
                     [
@@ -578,7 +677,51 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1013.7,464.4>"
+                    "<c289,CAM_FRONT,1013.7,464.4>"
+                ]
+            },
+            {
+                "Q": "Where is the navy SUV that is to the front left of the ego vehicle going?",
+                "A": "The navy SUV is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c312,CAM_FRONT,-2828.3,762.0>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the navy SUV that is to the front left of the ego vehicle?",
+                "A": "The navy SUV is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c312,CAM_FRONT,-2828.3,762.0>"
                 ]
             },
             {
@@ -712,8 +855,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the routes will cross since the car is cutting into the lane of the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the maroon car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the maroon car is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -742,12 +885,12 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>"
+                    "<c290,CAM_FRONT,834.4,469.0>"
                 ]
             },
             {
-                "Q": "The ego vehicle follows the road. Is the SUV that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "No, the SUV is not crossing paths with the ego vehicle.",
+                "Q": "The ego vehicle follows the road. Is the maroon SUV that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the maroon SUV is not crossing paths with the ego vehicle.",
                 "C": null,
                 "con_up": [
                     [
@@ -776,7 +919,41 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1013.7,464.4>"
+                    "<c289,CAM_FRONT,1013.7,464.4>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the navy SUV that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the navy SUV is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c312,CAM_FRONT,-2828.3,762.0>"
                 ]
             },
             {
@@ -841,7 +1018,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,834.4,469.0>"
+                    "<c290,CAM_FRONT,834.4,469.0>"
                 ]
             },
             {

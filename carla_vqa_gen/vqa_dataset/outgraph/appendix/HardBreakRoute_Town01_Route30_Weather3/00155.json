@@ -170,12 +170,18 @@
         ],
         "yaw": 1.5534009580286625
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             1.7078115940093994,
             -0.12949001789093018,
             10.037169456481934
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.1245078518986702,
             0.02567262016236782,
@@ -830,7 +836,7 @@
                 "state": "dynamic",
                 "steer": 0.02133538750817827,
                 "type_id": "vehicle.ford.mustang",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.006215130910277367,
@@ -967,7 +973,7 @@
                 "state": "dynamic",
                 "steer": 0.028949827045855313,
                 "type_id": "vehicle.nissan.patrol_2021",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.009452841244637966,
@@ -1104,7 +1110,7 @@
                 "state": "dynamic",
                 "steer": -0.003557498395103175,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.0016237720847129822,
@@ -1241,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": -0.0010785055216261947,
                 "type_id": "vehicle.lincoln.mkz_2017",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.0002516944659873843,
@@ -1649,6 +1655,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": false,
@@ -2628,6 +2638,7 @@
         },
         "should_brake": true,
         "speed": 7.819889376424784,
+        "speed_limit": 10000,
         "steer": -0.30000001192092896,
         "target_point": [
             -2.058120012283325,
@@ -2635,6 +2646,7 @@
         ],
         "theta": 3.124194860458374,
         "throttle": 0.30000001192092896,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 60.0,
             "fog_density": 3.0,
@@ -3305,7 +3317,7 @@
             "state": "dynamic",
             "steer": 0.02133538750817827,
             "type_id": "vehicle.ford.mustang",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.006215130910277367,
@@ -3442,7 +3454,7 @@
             "state": "dynamic",
             "steer": 0.028949827045855313,
             "type_id": "vehicle.nissan.patrol_2021",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.009452841244637966,
@@ -3579,7 +3591,7 @@
             "state": "dynamic",
             "steer": -0.003557498395103175,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.0016237720847129822,
@@ -3716,7 +3728,7 @@
             "state": "dynamic",
             "steer": -0.0010785055216261947,
             "type_id": "vehicle.lincoln.mkz_2017",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.0002516944659873843,

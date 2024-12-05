@@ -1,12 +1,72 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
+        "<c885,CAM_FRONT,-2486.2,510.9>": {
+            "id": "885",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "black car",
+            "2d_bbox": [
+                [
+                    -3048.5,
+                    423.1
+                ],
+                [
+                    -1923.9,
+                    598.7
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    10.0,
+                    -28.4,
+                    -0.1
+                ],
+                [
+                    10.1,
+                    -28.4,
+                    -1.6
+                ],
+                [
+                    11.9,
+                    -28.5,
+                    -0.1
+                ],
+                [
+                    11.9,
+                    -28.5,
+                    -1.6
+                ],
+                [
+                    9.9,
+                    -33.3,
+                    -0.1
+                ],
+                [
+                    9.9,
+                    -33.3,
+                    -1.6
+                ],
+                [
+                    11.7,
+                    -33.4,
+                    -0.1
+                ],
+                [
+                    11.8,
+                    -33.4,
+                    -1.6
+                ]
+            ]
+        },
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c2,CAM_FRONT,1539.5,529.2>": {
+        "<c839,CAM_FRONT,1539.5,529.2>": {
+            "id": "839",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -68,15 +128,92 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the black police car running to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the black car to the front left of the ego vehicle and the black police car taking priority to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>",
-                    "<c2,CAM_FRONT,1539.5,529.2>"
+                    "<c885,CAM_FRONT,-2486.2,510.9>",
+                    "<e3,CAM_FRONT>",
+                    "<c839,CAM_FRONT,1539.5,529.2>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the left side of the junction and is pointing towards the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-2486.2,510.9>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black police car that is to the front right of the ego vehicle located?",
+                "A": "The black police car is inside the upcoming junction and is pointing towards the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c839,CAM_FRONT,1539.5,529.2>"
                 ]
             },
             {
@@ -343,7 +480,7 @@
                 "cluster": 3,
                 "layer": 9,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1539.5,529.2>"
+                    "<c839,CAM_FRONT,1539.5,529.2>"
                 ]
             },
             {
@@ -368,6 +505,94 @@
             }
         ],
         "prediction": [
+            {
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-2486.2,510.9>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-2486.2,510.9>"
+                ]
+            },
+            {
+                "Q": "Where is the black police car that is to the front right of the ego vehicle going?",
+                "A": "The black police car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c839,CAM_FRONT,1539.5,529.2>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black police car that is to the front right of the ego vehicle?",
+                "A": "The black police car is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c839,CAM_FRONT,1539.5,529.2>"
+                ]
+            },
             {
                 "Q": "The ego vehicle wants to go straight at the next intersection. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should pay particular attention to traffic coming from the left side of the intersection and is going straight or turning left, traffic coming from the right and going straight or turning right and to oncoming traffic turning left.",
@@ -499,6 +724,74 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the black car might cross the path of the ego vehicle, depending on which way the vehicle is going to turn.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-2486.2,510.9>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the black police car that is to the front right of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black police car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c839,CAM_FRONT,1539.5,529.2>"
+                ]
+            },
+            {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a police car taking priority.",
                 "C": null,
@@ -517,7 +810,7 @@
                 "cluster": 3,
                 "layer": 8,
                 "object_tags": [
-                    "<c2,CAM_FRONT,1539.5,529.2>"
+                    "<c839,CAM_FRONT,1539.5,529.2>"
                 ]
             },
             {

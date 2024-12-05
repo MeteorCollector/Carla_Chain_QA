@@ -170,12 +170,18 @@
         ],
         "yaw": 0.0255313987172372
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             2.7361695766448975,
             0.19698461890220642,
             9.916443824768066
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.06592029333114624,
             0.005988652817904949,
@@ -1241,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": 0.25127712390705403,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.899237871170044,
@@ -1378,7 +1384,7 @@
                 "state": "dynamic",
                 "steer": 0.30834094134785545,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.6076464653015137,
@@ -2695,6 +2701,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -3674,6 +3684,7 @@
         },
         "should_brake": false,
         "speed": 2.7456191170649706,
+        "speed_limit": 10000,
         "steer": 0.699999988079071,
         "target_point": [
             234.23590087890625,
@@ -3681,6 +3692,7 @@
         ],
         "theta": 1.596327781677246,
         "throttle": 0.30000001192092896,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4762,7 +4774,7 @@
             "state": "dynamic",
             "steer": 0.25127712390705403,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.899237871170044,
@@ -4899,7 +4911,7 @@
             "state": "dynamic",
             "steer": 0.30834094134785545,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.6076464653015137,

@@ -170,12 +170,18 @@
         ],
         "yaw": 5.029817131120342e-05
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             5.060188293457031,
             -0.010418524034321308,
             9.275174140930176
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.002164319157600403,
             -0.04556158930063248,
@@ -1241,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": 0.4535673605336871,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.9502823352813721,
@@ -1378,7 +1384,7 @@
                 "state": "dynamic",
                 "steer": 0.5244672390186842,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.7638163566589355,
@@ -2695,6 +2701,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    5.263549610390328e-05,
+                    0.0017914252821356058,
+                    0.7014925479888916
+                ],
+                "brake": 0.0,
+                "center": [
+                    209.3695068359375,
+                    -195.721923828125,
+                    0.6773012280464172
+                ],
+                "class": "vehicle",
+                "color": "61,86,143",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 13.216421893953637,
+                "distance_to_junction": 181.84567260742188,
+                "extent": [
+                    2.6787397861480713,
+                    1.0166014432907104,
+                    0.7053293585777283
+                ],
+                "id": "426",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "Position",
+                "location": [
+                    209.37001037597656,
+                    -195.72364807128906,
+                    -0.024191321805119514
+                ],
+                "next_junction_id": 1135,
+                "next_next_road_ids": [
+                    66
+                ],
+                "next_road_ids": [
+                    1165
+                ],
+                "num_points": 159,
+                "position": [
+                    13.10963378579649,
+                    1.675793053331489,
+                    -0.0599367857067441
+                ],
+                "road_id": 65,
+                "rotation": [
+                    0.0,
+                    0.0,
+                    18.14299774169922
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 4.12945869701887e-09,
+                "state": "dynamic",
+                "steer": 0.4535673605336871,
+                "type_id": "vehicle.chevrolet.impala",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.9502823352813721,
+                        0.31138965487480164,
+                        0.0,
+                        -138.01429748535156
+                    ],
+                    [
+                        -0.31138965487480164,
+                        0.9502823352813721,
+                        -0.0,
+                        251.18838500976562
+                    ],
+                    [
+                        -0.0,
+                        0.0,
+                        1.0,
+                        0.024191321805119514
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        211.59849548339844,
+                        -193.92173767089844,
+                        1.3826305866241455
+                    ],
+                    [
+                        211.59849548339844,
+                        -193.92173767089844,
+                        -0.028028132393956184
+                    ],
+                    [
+                        212.23162841796875,
+                        -195.85385131835938,
+                        1.3826305866241455
+                    ],
+                    [
+                        212.23162841796875,
+                        -195.85385131835938,
+                        -0.028028132393956184
+                    ],
+                    [
+                        206.50738525390625,
+                        -195.58999633789062,
+                        1.3826305866241455
+                    ],
+                    [
+                        206.50738525390625,
+                        -195.58999633789062,
+                        -0.028028132393956184
+                    ],
+                    [
+                        207.1405029296875,
+                        -197.52212524414062,
+                        1.3826305866241455
+                    ],
+                    [
+                        207.1405029296875,
+                        -197.52212524414062,
+                        -0.028028132393956184
+                    ]
+                ],
+                "yaw": 5.029817131120342e-05
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -3674,6 +3822,7 @@
         },
         "should_brake": false,
         "speed": 0.8901293740801269,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             234.23590087890625,
@@ -3681,6 +3830,7 @@
         ],
         "theta": 1.570846676826477,
         "throttle": 1.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4762,7 +4912,7 @@
             "state": "dynamic",
             "steer": 0.4535673605336871,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.9502823352813721,
@@ -4899,7 +5049,7 @@
             "state": "dynamic",
             "steer": 0.5244672390186842,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.7638163566589355,

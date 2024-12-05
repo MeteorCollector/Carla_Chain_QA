@@ -1,6 +1,7 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,1467.2,383.4>": {
+        "<c601,CAM_FRONT,1467.2,383.4>": {
+            "id": "601",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -57,13 +58,73 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT>": {
+        "<c615,CAM_FRONT,-315.4,396.5>": {
+            "id": "615",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "navy SUV",
+            "2d_bbox": [
+                [
+                    -530.5,
+                    331.1
+                ],
+                [
+                    -100.3,
+                    461.8
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    19.6,
+                    -17.2,
+                    0.2
+                ],
+                [
+                    19.8,
+                    -17.3,
+                    -1.8
+                ],
+                [
+                    21.7,
+                    -17.2,
+                    0.5
+                ],
+                [
+                    21.9,
+                    -17.3,
+                    -1.6
+                ],
+                [
+                    19.6,
+                    -22.8,
+                    0.4
+                ],
+                [
+                    19.8,
+                    -22.9,
+                    -1.6
+                ],
+                [
+                    21.7,
+                    -22.8,
+                    0.6
+                ],
+                [
+                    21.9,
+                    -22.9,
+                    -1.4
+                ]
+            ]
+        },
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c3,CAM_FRONT,929.9,203.0>": {
+        "<c541,CAM_FRONT,929.9,203.0>": {
+            "id": "541",
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "red traffic light",
@@ -125,16 +186,17 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the red traffic light and the black car to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the red traffic light, the black car to the front right of the ego vehicle and the navy SUV to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1467.2,383.4>",
-                    "<c2,CAM_FRONT>",
-                    "<c3,CAM_FRONT,929.9,203.0>"
+                    "<c601,CAM_FRONT,1467.2,383.4>",
+                    "<c615,CAM_FRONT,-315.4,396.5>",
+                    "<e3,CAM_FRONT>",
+                    "<c541,CAM_FRONT,929.9,203.0>"
                 ]
             },
             {
@@ -172,7 +234,45 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1467.2,383.4>"
+                    "<c601,CAM_FRONT,1467.2,383.4>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the navy SUV that is to the front left of the ego vehicle located?",
+                "A": "The navy SUV is on the left side of the junction and is pointing towards the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c615,CAM_FRONT,-315.4,396.5>"
                 ]
             },
             {
@@ -409,7 +509,7 @@
                 "cluster": 2,
                 "layer": 0,
                 "object_tags": [
-                    "<c3,CAM_FRONT,929.9,203.0>"
+                    "<c541,CAM_FRONT,929.9,203.0>"
                 ]
             },
             {
@@ -483,7 +583,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1467.2,383.4>"
+                    "<c601,CAM_FRONT,1467.2,383.4>"
                 ]
             },
             {
@@ -505,7 +605,51 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1467.2,383.4>"
+                    "<c601,CAM_FRONT,1467.2,383.4>"
+                ]
+            },
+            {
+                "Q": "Where is the navy SUV that is to the front left of the ego vehicle going?",
+                "A": "The navy SUV is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c615,CAM_FRONT,-315.4,396.5>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the navy SUV that is to the front left of the ego vehicle?",
+                "A": "The navy SUV is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c615,CAM_FRONT,-315.4,396.5>"
                 ]
             },
             {
@@ -635,7 +779,7 @@
                 "cluster": 2,
                 "layer": 1,
                 "object_tags": [
-                    "<c3,CAM_FRONT,929.9,203.0>"
+                    "<c541,CAM_FRONT,929.9,203.0>"
                 ]
             }
         ],
@@ -671,7 +815,41 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,1467.2,383.4>"
+                    "<c601,CAM_FRONT,1467.2,383.4>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the navy SUV that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the navy SUV might cross the path of the ego vehicle, depending on which way the vehicle is going to turn.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c615,CAM_FRONT,-315.4,396.5>"
                 ]
             },
             {
@@ -756,7 +934,7 @@
                 "cluster": 2,
                 "layer": 2,
                 "object_tags": [
-                    "<c3,CAM_FRONT,929.9,203.0>"
+                    "<c541,CAM_FRONT,929.9,203.0>"
                 ]
             },
             {

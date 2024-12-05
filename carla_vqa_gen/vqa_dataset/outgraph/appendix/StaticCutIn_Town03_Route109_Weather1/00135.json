@@ -164,12 +164,18 @@
         ],
         "yaw": 1.6090710116654063
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             3.0788493156433105,
             0.05742781609296799,
             9.529943466186523
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.003203616477549076,
             -0.07653048634529114,
@@ -544,7 +550,7 @@
                 "state": "dynamic",
                 "steer": 0.13224762327944822,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.0944681316614151,
@@ -681,7 +687,7 @@
                 "state": "dynamic",
                 "steer": 0.038220322788577975,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.034560270607471466,
@@ -955,7 +961,7 @@
                 "state": "dynamic",
                 "steer": -1.6587873052581124,
                 "type_id": "vehicle.mercedes.coupe_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.33007392287254333,
@@ -2325,7 +2331,7 @@
                 "state": "dynamic",
                 "steer": 0.11762897572811928,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.3545459508895874,
@@ -2845,6 +2851,285 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.0025885500945150852,
+                    4.344582521298435e-06,
+                    0.7203620076179504
+                ],
+                "brake": 0.0,
+                "center": [
+                    235.15684509277344,
+                    -119.71717834472656,
+                    0.719102680683136
+                ],
+                "class": "vehicle",
+                "color": "73,0,0",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 10.775021128737226,
+                "distance_to_junction": 103.99999237060547,
+                "extent": [
+                    2.3368194103240967,
+                    0.9059062600135803,
+                    0.7209736704826355
+                ],
+                "id": "390",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -2,
+                "lane_relative_to_ego": 1,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "NONE",
+                "location": [
+                    235.1616668701172,
+                    -119.714599609375,
+                    -0.0012432098155841231
+                ],
+                "next_junction_id": 1135,
+                "next_next_road_ids": [
+                    66
+                ],
+                "next_road_ids": [
+                    1165
+                ],
+                "num_points": 316,
+                "position": [
+                    10.427744361795902,
+                    2.713446581048771,
+                    0.020881243681684883
+                ],
+                "road_id": 65,
+                "rotation": [
+                    0.11434418708086014,
+                    0.29421114921569824,
+                    70.72669982910156
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 2.742537059378267,
+                "state": "dynamic",
+                "steer": -1.6587873052581124,
+                "type_id": "vehicle.mercedes.coupe_2020",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.33007392287254333,
+                        0.9439530372619629,
+                        0.0019956810865551233,
+                        35.38422775268555
+                    ],
+                    [
+                        -0.9439390301704407,
+                        0.33007991313934326,
+                        -0.005134920589625835,
+                        261.49365234375
+                    ],
+                    [
+                        -0.005505857989192009,
+                        -0.0001888979459181428,
+                        0.999984860420227,
+                        1.2733961343765259
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        235.06907653808594,
+                        -117.21244812011719,
+                        1.4400771856307983
+                    ],
+                    [
+                        235.07701110839844,
+                        -117.21217346191406,
+                        -0.0018482618033885956
+                    ],
+                    [
+                        236.77931213378906,
+                        -117.81048583984375,
+                        1.4493807554244995
+                    ],
+                    [
+                        236.78726196289062,
+                        -117.81021881103516,
+                        0.007455251645296812
+                    ],
+                    [
+                        233.52642822265625,
+                        -121.62413787841797,
+                        1.4307501316070557
+                    ],
+                    [
+                        233.53436279296875,
+                        -121.62387084960938,
+                        -0.01117535401135683
+                    ],
+                    [
+                        235.23666381835938,
+                        -122.22218322753906,
+                        1.4400537014007568
+                    ],
+                    [
+                        235.24461364746094,
+                        -122.22190856933594,
+                        -0.0018718414939939976
+                    ]
+                ],
+                "yaw": 1.6090710116654063
+            },
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    5.263549610390328e-05,
+                    0.0017914252821356058,
+                    0.7014925479888916
+                ],
+                "brake": 0.0,
+                "center": [
+                    237.51995849609375,
+                    -98.95468139648438,
+                    0.6943637728691101
+                ],
+                "class": "vehicle",
+                "color": "61,86,143",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 31.08482549776873,
+                "distance_to_junction": 83.99999237060547,
+                "extent": [
+                    2.6787397861480713,
+                    1.0166014432907104,
+                    0.7053293585777283
+                ],
+                "id": "426",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "Position",
+                "location": [
+                    237.5217742919922,
+                    -98.95513153076172,
+                    -0.007128515280783176
+                ],
+                "next_junction_id": 1135,
+                "next_next_road_ids": [
+                    66
+                ],
+                "next_road_ids": [
+                    1165
+                ],
+                "num_points": 19,
+                "position": [
+                    31.081670708087955,
+                    -0.43927016125343243,
+                    0.05790350417890211
+                ],
+                "road_id": 65,
+                "rotation": [
+                    -0.037477247416973114,
+                    0.0005423130933195353,
+                    91.98055267333984
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 0.31691291083127404,
+                "state": "dynamic",
+                "steer": 0.038220322788577975,
+                "type_id": "vehicle.chevrolet.impala",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        -0.034560270607471466,
+                        0.9994024038314819,
+                        -0.0006541013135574758,
+                        107.10480499267578
+                    ],
+                    [
+                        -0.999402642250061,
+                        -0.03456028550863266,
+                        -9.465146831644233e-06,
+                        233.9599609375
+                    ],
+                    [
+                        -3.206541805411689e-05,
+                        0.00065338343847543,
+                        0.9999997615814209,
+                        0.07940039783716202
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        236.41136169433594,
+                        -96.31221771240234,
+                        1.3979313373565674
+                    ],
+                    [
+                        236.41140747070312,
+                        -96.31314086914062,
+                        -0.012727165594696999
+                    ],
+                    [
+                        238.443359375,
+                        -96.24195098876953,
+                        1.397950530052185
+                    ],
+                    [
+                        238.4434051513672,
+                        -96.24287414550781,
+                        -0.012707920745015144
+                    ],
+                    [
+                        236.59652709960938,
+                        -101.66649627685547,
+                        1.4014356136322021
+                    ],
+                    [
+                        236.59657287597656,
+                        -101.66741943359375,
+                        -0.009222831577062607
+                    ],
+                    [
+                        238.62850952148438,
+                        -101.59622955322266,
+                        1.4014549255371094
+                    ],
+                    [
+                        238.62855529785156,
+                        -101.5971450805664,
+                        -0.009203586727380753
+                    ]
+                ],
+                "yaw": 1.6090710116654063
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": false,
@@ -3824,6 +4109,7 @@
         },
         "should_brake": true,
         "speed": 6.016352107038029,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             237.90737915039062,
@@ -3831,6 +4117,7 @@
         ],
         "theta": 3.179868459701538,
         "throttle": 1.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4221,7 +4508,7 @@
             "state": "dynamic",
             "steer": 0.13224762327944822,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.0944681316614151,
@@ -4358,7 +4645,7 @@
             "state": "dynamic",
             "steer": 0.038220322788577975,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.034560270607471466,
@@ -4632,7 +4919,7 @@
             "state": "dynamic",
             "steer": -1.6587873052581124,
             "type_id": "vehicle.mercedes.coupe_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.33007392287254333,
@@ -6002,7 +6289,7 @@
             "state": "dynamic",
             "steer": 0.11762897572811928,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.3545459508895874,

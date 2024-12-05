@@ -1,8 +1,8 @@
 1. 除了 stop sign 其他的 sign 没有考虑
 
-2. 其他 vehicle 的 steer 在 pdm 里是有的，这个要从未来 gt 获得了（已完成）
+2. 其他 vehicle 的 steer 在 pdm 里是有的，这个要从未来 gt 获得了 [已解决]
 
-3. 注意 object key 会根据 bbox2d 来获取，现在 bbox2d 用的是浮点值，可能获取不到，应该改成整型。
+3. 注意 object key 会根据 bbox2d 来获取，现在 bbox2d 用的是浮点值，可能获取不到，应该改成整型。 [其实不用]
 
 4. 这些 relevent_object 的计算：
 
@@ -32,9 +32,9 @@
 		return []
 	```
 	
-5. lane_change 值的计算，好像是允许变的道？ 对 这个没错
+5. lane_change 值的计算，好像是允许变的道？ 对 这个没错 [已解决]
 
-6. Is there an obstacle on the current road? Accident_Town03_Route101_Weather23 就识别不到
+6. Is there an obstacle on the current road? Accident_Town03_Route101_Weather23 就识别不到 [已解决]
 
 首先要做一个 general的：保持自己目前轨迹，会与未来k帧的该物体相撞。但是这样一来前面慢速行驶的车辆算不算？这些只需要减速...？注意如果 lane_change 为 0，就需要占对向车道超车了。TwoWays关键词就是这样。如果只有一条车道，那就只能停车了。
 
@@ -92,8 +92,40 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
 
+AccidentTwoWays
+ConstructionObstacleTwoWays
+ParkedObstacleTwoWays
+VehicleOpensDoorTwoWays
+HazardAtSideLaneTwoWays
+
+"EnterActorFlow", 
+"EnterActorFlowV2", 
+"HighwayCutIn", 
+"HighwayExit", 
+"MergerIntoSlowTraffic",
+"MergerIntoSlowTrafficV2",
+"YieldToEmergencyVehicle",
+
+BlockedIntersection
+CrossingBicycleFlow
+InterurbanActorFlow
+
+Accident
+ConstructionObstacle
+HazardAtSideLane
+ParkedObstacle
+
+'DynamicObjectCrossing'
+'ParkingCrossingPedestrian'
+'PedestrianCrossing'
+'VehicleTurningRoutePedestrian'
+
+'VehicleTurningRoute' 
+
 12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。 [已解决]
 
 13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了 [已解决]
 
-13. current speed limit 是怎么答的？
+14. current speed limit 是怎么答的？
+
+15. 看看 vehicle hazard 和 crash into 之类的

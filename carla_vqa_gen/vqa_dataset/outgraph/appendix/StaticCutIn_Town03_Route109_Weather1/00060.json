@@ -161,12 +161,18 @@
         ],
         "yaw": 0.7714230258401757
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             1.3743622303009033,
             2.718438148498535,
             9.69034194946289
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.0009327606530860066,
             -0.012364896014332771,
@@ -1634,7 +1640,7 @@
                 "state": "dynamic",
                 "steer": 0.3319738101820425,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.9839327335357666,
@@ -3169,6 +3175,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    6.321370165096596e-05,
+                    0.0017958689713850617,
+                    0.7014925479888916
+                ],
+                "brake": 0.0,
+                "center": [
+                    248.7947540283203,
+                    -129.48350524902344,
+                    0.6944529414176941
+                ],
+                "class": "vehicle",
+                "color": "61,86,143",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 63.32739483749875,
+                "distance_to_junction": 114.65850067138672,
+                "extent": [
+                    2.6787397861480713,
+                    1.0166014432907104,
+                    0.7053293585777283
+                ],
+                "id": "436",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": 3,
+                "lane_relative_to_ego": -2,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "Position",
+                "location": [
+                    248.79298400878906,
+                    -129.48348999023438,
+                    -0.007039644755423069
+                ],
+                "next_junction_id": 498,
+                "next_next_road_ids": [
+                    0
+                ],
+                "next_road_ids": [
+                    526
+                ],
+                "num_points": 0,
+                "position": [
+                    58.82828156803268,
+                    23.441340998860426,
+                    -0.3065701964431593
+                ],
+                "road_id": 65,
+                "rotation": [
+                    -0.001495811389759183,
+                    -0.0017700194148346782,
+                    -87.9564208984375
+                ],
+                "same_direction_as_ego": false,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 8.098885800331368,
+                "state": "dynamic",
+                "steer": -0.005126864222964316,
+                "type_id": "vehicle.chevrolet.impala",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.03565957397222519,
+                        -0.9993640184402466,
+                        -2.6106834411621094e-05,
+                        -138.2729949951172
+                    ],
+                    [
+                        0.9993640184402466,
+                        0.03565957397222519,
+                        3.089266465394758e-05,
+                        -244.01742553710938
+                    ],
+                    [
+                        -2.9942057153675705e-05,
+                        -2.7191850676899776e-05,
+                        1.0,
+                        0.010968122631311417
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        249.90621948242188,
+                        -132.1243133544922,
+                        1.3997437953948975
+                    ],
+                    [
+                        249.90626525878906,
+                        -132.124267578125,
+                        -0.010914929211139679
+                    ],
+                    [
+                        247.8743133544922,
+                        -132.19680786132812,
+                        1.3996809720993042
+                    ],
+                    [
+                        247.8743438720703,
+                        -132.19677734375,
+                        -0.01097774039953947
+                    ],
+                    [
+                        249.7151641845703,
+                        -126.7702407836914,
+                        1.39988374710083
+                    ],
+                    [
+                        249.7152099609375,
+                        -126.77020263671875,
+                        -0.010775062255561352
+                    ],
+                    [
+                        247.68325805664062,
+                        -126.84274291992188,
+                        1.3998209238052368
+                    ],
+                    [
+                        247.6833038330078,
+                        -126.84270477294922,
+                        -0.010837873443961143
+                    ]
+                ],
+                "yaw": 0.7714230258401757
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": false,
@@ -4148,6 +4296,7 @@
         },
         "should_brake": true,
         "speed": 8.770220826346959,
+        "speed_limit": 10000,
         "steer": 0.10000000149011612,
         "target_point": [
             234.23590087890625,
@@ -4155,6 +4304,7 @@
         ],
         "theta": 2.342219829559326,
         "throttle": 0.699999988079071,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -5638,7 +5788,7 @@
             "state": "dynamic",
             "steer": 0.3319738101820425,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.9839327335357666,

@@ -1,9 +1,10 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,844.8,509.4>": {
+        "<c41938,CAM_FRONT,844.8,509.4>": {
+            "id": "41938",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "black car",
             "2d_bbox": [
                 [
                     751.7,
@@ -57,10 +58,11 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,484.1,644.5>": {
+        "<c41935,CAM_FRONT,484.1,644.5>": {
+            "id": "41935",
             "Category": "Vehicle",
             "Status": null,
-            "Visual_description": "car",
+            "Visual_description": "maroon car",
             "2d_bbox": [
                 [
                     130.4,
@@ -114,16 +116,18 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT>": {
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
             "2d_bbox": null
         },
-        "<c4,CAM_FRONT,7456.6,2617.9>": {
+        "<c41895,CAM_FRONT,7456.6,2617.9>": {
+            "id": "41895",
             "Category": "Pedestrian",
             "Status": null,
-            "Visual_description": "Pedestrian",
+            "Visual_description": "walking pedestrian",
             "2d_bbox": [
                 [
                     4811.4,
@@ -182,22 +186,22 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction, the 2 cars to the front of the ego vehicle and the pedestrian to the front right of the ego vehicle.",
+                "A": "The important objects in the scene are a junction, the black car and the maroon car to the front of the ego vehicle and the pedestrian crossing the road to the front right of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,844.8,509.4>",
-                    "<c2,CAM_FRONT,484.1,644.5>",
-                    "<c3,CAM_FRONT>",
-                    "<c4,CAM_FRONT,7456.6,2617.9>"
+                    "<c41938,CAM_FRONT,844.8,509.4>",
+                    "<c41935,CAM_FRONT,484.1,644.5>",
+                    "<e3,CAM_FRONT>",
+                    "<c41895,CAM_FRONT,7456.6,2617.9>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front of the ego vehicle located?",
-                "A": "The car is after the junction on the road the ego vehicle will enter. It is pointing rightwards.",
+                "Q": "Where on the road is the black car that is to the front of the ego vehicle located?",
+                "A": "The black car is after the junction on the road the ego vehicle will enter. It is pointing rightwards.",
                 "C": null,
                 "con_up": [
                     [
@@ -230,12 +234,12 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,844.8,509.4>"
+                    "<c41938,CAM_FRONT,844.8,509.4>"
                 ]
             },
             {
-                "Q": "Where on the road is the car that is to the front of the ego vehicle located?",
-                "A": "The car is after the junction on the road the ego vehicle will enter. It is pointing rightwards.",
+                "Q": "Where on the road is the maroon car that is to the front of the ego vehicle located?",
+                "A": "The maroon car is after the junction on the road the ego vehicle will enter. It is pointing rightwards.",
                 "C": null,
                 "con_up": [
                     [
@@ -268,7 +272,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,484.1,644.5>"
+                    "<c41935,CAM_FRONT,484.1,644.5>"
                 ]
             },
             {
@@ -520,12 +524,12 @@
                 "cluster": 5,
                 "layer": 0,
                 "object_tags": [
-                    "<c4,CAM_FRONT,7456.6,2617.9>"
+                    "<c41895,CAM_FRONT,7456.6,2617.9>"
                 ]
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a pedestrian crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -536,7 +540,9 @@
                 "con_down": -1,
                 "cluster": 3,
                 "layer": 9,
-                "object_tags": []
+                "object_tags": [
+                    "<c41895,CAM_FRONT,7456.6,2617.9>"
+                ]
             },
             {
                 "Q": "What is the current speed limit?",
@@ -561,8 +567,8 @@
         ],
         "prediction": [
             {
-                "Q": "Where is the car that is to the front of the ego vehicle going?",
-                "A": "The car is going straight.",
+                "Q": "Where is the black car that is to the front of the ego vehicle going?",
+                "A": "The black car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -579,12 +585,12 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,844.8,509.4>"
+                    "<c41938,CAM_FRONT,844.8,509.4>"
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front of the ego vehicle?",
-                "A": "The car is not moving.",
+                "Q": "What is the moving status of the black car that is to the front of the ego vehicle?",
+                "A": "The black car is not moving.",
                 "C": null,
                 "con_up": [
                     [
@@ -601,12 +607,12 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,844.8,509.4>"
+                    "<c41938,CAM_FRONT,844.8,509.4>"
                 ]
             },
             {
-                "Q": "Where is the car that is to the front of the ego vehicle going?",
-                "A": "The car is going straight.",
+                "Q": "Where is the maroon car that is to the front of the ego vehicle going?",
+                "A": "The maroon car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -623,12 +629,12 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,484.1,644.5>"
+                    "<c41935,CAM_FRONT,484.1,644.5>"
                 ]
             },
             {
-                "Q": "What is the moving status of the car that is to the front of the ego vehicle?",
-                "A": "The car is not moving.",
+                "Q": "What is the moving status of the maroon car that is to the front of the ego vehicle?",
+                "A": "The maroon car is not moving.",
                 "C": null,
                 "con_up": [
                     [
@@ -645,7 +651,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,484.1,644.5>"
+                    "<c41935,CAM_FRONT,484.1,644.5>"
                 ]
             },
             {
@@ -779,8 +785,8 @@
         ],
         "planning": [
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the black car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
                 "C": null,
                 "con_up": [
                     [
@@ -809,12 +815,12 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,844.8,509.4>"
+                    "<c41938,CAM_FRONT,844.8,509.4>"
                 ]
             },
             {
-                "Q": "The ego vehicle follows the road. Is the car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
-                "A": "Yes, the car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
+                "Q": "The ego vehicle follows the road. Is the maroon car that is to the front of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the maroon car is behind the intersection on the road the ego vehicle will enter, so the ego vehicle should pay attention to not crash into it.",
                 "C": null,
                 "con_up": [
                     [
@@ -843,12 +849,12 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,484.1,644.5>"
+                    "<c41935,CAM_FRONT,484.1,644.5>"
                 ]
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "No, the ego vehicle can stay on its current lane.",
+                "A": "No, the ego vehicle can stay on its current lane. But the ego vehicle must stop because there's a pedestrian crossing the road.",
                 "C": null,
                 "con_up": [
                     [
@@ -864,7 +870,9 @@
                 ],
                 "cluster": 3,
                 "layer": 8,
-                "object_tags": []
+                "object_tags": [
+                    "<c41895,CAM_FRONT,7456.6,2617.9>"
+                ]
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
@@ -908,7 +916,7 @@
                 "cluster": 6,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,484.1,644.5>"
+                    "<c41935,CAM_FRONT,484.1,644.5>"
                 ]
             },
             {

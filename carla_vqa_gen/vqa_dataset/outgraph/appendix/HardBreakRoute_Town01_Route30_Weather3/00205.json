@@ -170,12 +170,18 @@
         ],
         "yaw": 1.571966652935932
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             4.916001796722412,
             0.00047749801888130605,
             9.768537521362305
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.0011431121965870261,
             0.0011776341125369072,
@@ -830,7 +836,7 @@
                 "state": "dynamic",
                 "steer": 0.0,
                 "type_id": "vehicle.ford.mustang",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         -0.00043325021397322416,
@@ -967,7 +973,7 @@
                 "state": "dynamic",
                 "steer": 0.0004573458826368734,
                 "type_id": "vehicle.nissan.patrol_2021",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         2.9400966013781726e-05,
@@ -1104,7 +1110,7 @@
                 "state": "dynamic",
                 "steer": 6.161726371692962e-05,
                 "type_id": "vehicle.lincoln.mkz_2020",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.0009067807695828378,
@@ -1241,7 +1247,7 @@
                 "state": "dynamic",
                 "steer": 0.00034719030140656007,
                 "type_id": "vehicle.lincoln.mkz_2017",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.0007026949315331876,
@@ -1618,6 +1624,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.006293945945799351,
+                    2.872943696274888e-07,
+                    0.7488452196121216
+                ],
+                "brake": 0.0,
+                "center": [
+                    -2.150239944458008,
+                    108.97242736816406,
+                    0.744074285030365
+                ],
+                "class": "vehicle",
+                "color": "0,0,0",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 12.38138894044834,
+                "distance_to_junction": null,
+                "extent": [
+                    2.44619083404541,
+                    0.9183566570281982,
+                    0.7451388239860535
+                ],
+                "id": "18706",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "NONE",
+                "location": [
+                    -2.150226593017578,
+                    108.97950744628906,
+                    -0.004763908218592405
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [
+                    5
+                ],
+                "next_road_ids": [
+                    20
+                ],
+                "num_points": 144,
+                "position": [
+                    12.379684443941116,
+                    0.19906563350999296,
+                    -0.050305202413669814
+                ],
+                "road_id": 15,
+                "rotation": [
+                    0.06027641519904137,
+                    0.0005160897271707654,
+                    89.94804382324219
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 7.9244952060287766,
+                "state": "dynamic",
+                "steer": 6.161726371692962e-05,
+                "type_id": "vehicle.lincoln.mkz_2020",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.0009067807695828378,
+                        0.9999990463256836,
+                        0.001052021631039679,
+                        -108.9774398803711
+                    ],
+                    [
+                        -0.9999995827674866,
+                        0.000906790723092854,
+                        -9.007459993881639e-06,
+                        -2.24904727935791
+                    ],
+                    [
+                        -9.961414434656035e-06,
+                        -0.0010520130163058639,
+                        0.999999463558197,
+                        0.1193903461098671
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        -3.0663857460021973,
+                        111.41866302490234,
+                        1.491777777671814
+                    ],
+                    [
+                        -3.066370725631714,
+                        111.42022705078125,
+                        0.001501037273555994
+                    ],
+                    [
+                        -1.2296730279922485,
+                        111.41699981689453,
+                        1.491794228553772
+                    ],
+                    [
+                        -1.2296581268310547,
+                        111.41856384277344,
+                        0.0015175812877714634
+                    ],
+                    [
+                        -3.07082200050354,
+                        106.52628326416016,
+                        1.4866307973861694
+                    ],
+                    [
+                        -3.0708069801330566,
+                        106.5278549194336,
+                        -0.003645853837952018
+                    ],
+                    [
+                        -1.2341094017028809,
+                        106.52462005615234,
+                        1.486647367477417
+                    ],
+                    [
+                        -1.234094500541687,
+                        106.52619171142578,
+                        -0.0036293098237365484
+                    ]
+                ],
+                "yaw": 1.571966652935932
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -2597,6 +2745,7 @@
         },
         "should_brake": true,
         "speed": 8.92647641469452,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             -2.0359115600585938,
@@ -2604,6 +2753,7 @@
         ],
         "theta": 3.142737865447998,
         "throttle": 0.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 60.0,
             "fog_density": 3.0,
@@ -3274,7 +3424,7 @@
             "state": "dynamic",
             "steer": 0.0,
             "type_id": "vehicle.ford.mustang",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     -0.00043325021397322416,
@@ -3411,7 +3561,7 @@
             "state": "dynamic",
             "steer": 0.0004573458826368734,
             "type_id": "vehicle.nissan.patrol_2021",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     2.9400966013781726e-05,
@@ -3548,7 +3698,7 @@
             "state": "dynamic",
             "steer": 6.161726371692962e-05,
             "type_id": "vehicle.lincoln.mkz_2020",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.0009067807695828378,
@@ -3685,7 +3835,7 @@
             "state": "dynamic",
             "steer": 0.00034719030140656007,
             "type_id": "vehicle.lincoln.mkz_2017",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.0007026949315331876,

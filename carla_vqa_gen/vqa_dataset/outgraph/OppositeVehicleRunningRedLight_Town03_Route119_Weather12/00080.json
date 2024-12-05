@@ -1,6 +1,123 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT>": {
+        "<c885,CAM_FRONT,-70943.0,4245.2>": {
+            "id": "885",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "black car",
+            "2d_bbox": [
+                [
+                    -94979.7,
+                    839.5
+                ],
+                [
+                    -46906.4,
+                    7650.9
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    -1.4,
+                    -16.6,
+                    -0.1
+                ],
+                [
+                    -1.4,
+                    -16.6,
+                    -1.6
+                ],
+                [
+                    0.4,
+                    -16.7,
+                    -0.1
+                ],
+                [
+                    0.4,
+                    -16.7,
+                    -1.6
+                ],
+                [
+                    -1.6,
+                    -21.5,
+                    -0.1
+                ],
+                [
+                    -1.6,
+                    -21.5,
+                    -1.6
+                ],
+                [
+                    0.3,
+                    -21.6,
+                    -0.1
+                ],
+                [
+                    0.3,
+                    -21.6,
+                    -1.6
+                ]
+            ]
+        },
+        "<c886,CAM_FRONT,589.5,502.4>": {
+            "id": "886",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "navy car",
+            "2d_bbox": [
+                [
+                    530.8,
+                    464.9
+                ],
+                [
+                    648.2,
+                    540.0
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    22.4,
+                    -5.3,
+                    -0.1
+                ],
+                [
+                    22.4,
+                    -5.3,
+                    -1.6
+                ],
+                [
+                    22.4,
+                    -3.5,
+                    -0.1
+                ],
+                [
+                    22.4,
+                    -3.5,
+                    -1.6
+                ],
+                [
+                    27.1,
+                    -5.4,
+                    -0.2
+                ],
+                [
+                    27.1,
+                    -5.4,
+                    -1.6
+                ],
+                [
+                    27.1,
+                    -3.6,
+                    -0.2
+                ],
+                [
+                    27.1,
+                    -3.6,
+                    -1.6
+                ]
+            ]
+        },
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
@@ -11,14 +128,92 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important object in the scene is a junction.",
+                "A": "The important objects in the scene are a junction and the black car and the navy car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT>"
+                    "<c885,CAM_FRONT,-70943.0,4245.2>",
+                    "<c886,CAM_FRONT,589.5,502.4>",
+                    "<e3,CAM_FRONT>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black car that is to the front left of the ego vehicle located?",
+                "A": "The black car is on the left side of the junction and is pointing towards the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-70943.0,4245.2>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the navy car that is to the front left of the ego vehicle located?",
+                "A": "The navy car is after the junction on the road the ego vehicle will enter. It is pointing towards the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c886,CAM_FRONT,589.5,502.4>"
                 ]
             },
             {
@@ -309,6 +504,94 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the black car that is to the front left of the ego vehicle going?",
+                "A": "The black car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-70943.0,4245.2>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black car that is to the front left of the ego vehicle?",
+                "A": "The black car is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-70943.0,4245.2>"
+                ]
+            },
+            {
+                "Q": "Where is the navy car that is to the front left of the ego vehicle going?",
+                "A": "The navy car is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c886,CAM_FRONT,589.5,502.4>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the navy car that is to the front left of the ego vehicle?",
+                "A": "The navy car is not moving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c886,CAM_FRONT,589.5,502.4>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle wants to go straight at the next intersection. Which lanes are important to watch out for?",
                 "A": "The ego vehicle should pay particular attention to traffic coming from the left side of the intersection and is going straight or turning left, traffic coming from the right and going straight or turning right and to oncoming traffic turning left.",
                 "C": null,
@@ -438,6 +721,74 @@
             }
         ],
         "planning": [
+            {
+                "Q": "The ego vehicle follows the road. Is the black car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "Yes, the black car might cross the path of the ego vehicle, depending on which way the vehicle is going to turn.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c885,CAM_FRONT,-70943.0,4245.2>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the navy car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the navy car is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c886,CAM_FRONT,589.5,502.4>"
+                ]
+            },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
                 "A": "No, the ego vehicle can stay on its current lane.",

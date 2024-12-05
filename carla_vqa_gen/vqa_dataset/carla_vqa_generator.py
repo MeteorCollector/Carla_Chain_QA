@@ -106,6 +106,9 @@ class QAsGenerator():
         # to memorize progress
         self.processed_paths_file = "processed_paths.txt"
         self.processed_paths = self.load_processed_paths()
+
+        # for [debug]
+        self.appended_measurements = {}
     
     def load_processed_paths(self):
         """从文件加载已处理的路径"""
@@ -880,6 +883,16 @@ class QAsGenerator():
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
             measurements['vehicle_hazard'] = hazardous and 'vehicle' in hazardous_actors[0]['class']
 
+            ######## for [debug] ########
+            self.appended_measurements['future_acceleration'] = acc
+            self.appended_measurements['affect_flags'] = flags
+            self.appended_measurements['hazardous_walkers'] = hazardous_walkers
+            self.appended_measurements['hazardous_actors'] = hazardous_actors
+            self.appended_measurements['hazardous_flag'] = hazardous
+            self.appended_measurements['speed_limit'] = measurements['speed_limit']
+            self.appended_measurements['vehicle_hazard_flag'] = measurements['vehicle_hazard']
+            ######## for [debug] ########
+
             if measurements['control_brake'] or acc is "Decelerate" or hazardous:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 limit_speed = float(measurements['speed_limit']) / 3.6
@@ -1312,9 +1325,6 @@ class QAsGenerator():
             relevant_obj = None
             object_tags = []
             scenario_name = scenario_name.split('_')[0]
-
-            print(f'[debug] current_index = {self.current_measurement_index}') # debug
-            print(f'[debug] before obstacles, important_objects = {important_objects}') # debug
 
             if 'ConstructionObstacle' in scenario_name:
                 relevant_objects = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning' 
@@ -2039,13 +2049,13 @@ class QAsGenerator():
             steer = other_vehicle['steer']
 
             # Determine trajectory based on steer angle
-            if steer < -0.2:
+            if steer < -0.9:
                 answer = f"The {other_vehicle_description} is turning left."
-            elif steer < -0.05:
+            elif steer < -0.2:
                 answer = f"The {other_vehicle_description} is turning slightly left."
-            elif steer > 0.2:
+            elif steer > 0.9:
                 answer = f"The {other_vehicle_description} is turning right."
-            elif steer > 0.05:
+            elif steer > 0.2:
                 answer = f"The {other_vehicle_description} is turning slightly right."
             else:
                 answer = f"The {other_vehicle_description} is going straight."
@@ -2550,47 +2560,35 @@ class QAsGenerator():
         ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False
         affected_by_vehicle_10, hazard_actor_10 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
-        # print(f"[debug] affected_by_vehicle_10 = {affected_by_vehicle_10}") # debug
+        
         if affected_by_vehicle_10:
                 ego['hazard_detected_10'] = True
                 ego['affects_ego_10'] = hazard_actor_10['id']
                 ego['affects_ego_10_id'] = hazard_actor_10['id']
                 ego['affects_ego_10_dis'] = hazard_actor_10['distance']
-                # print(f"[debug] affects_ego_10_id = {ego['affects_ego_10_id']}") # debug
-                # print(f"[debug] affects_ego_10_dis = {ego['affects_ego_10_dis']}") # debug
 
         ego['hazard_detected_15'] = False
         affected_by_vehicle_15, hazard_actor_15 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 15)
-        # print(f"[debug] affected_by_vehicle_15 = {affected_by_vehicle_15}") # debug
         if affected_by_vehicle_15:
                 ego['hazard_detected_15'] = True
                 ego['affects_ego_15'] = hazard_actor_15['id']
                 ego['affects_ego_15_id'] = hazard_actor_15['id']
                 ego['affects_ego_15_dis'] = hazard_actor_15['distance']
-                # print(f"[debug] affects_ego_15_id = {ego['affects_ego_15_id']}") # debug
-                # print(f"[debug] affects_ego_15_dis = {ego['affects_ego_15_dis']}") # debug
 
         ego['hazard_detected_20'] = False
         affected_by_vehicle_20, hazard_actor_20 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 20)
-        # print(f"[debug] affected_by_vehicle_20 = {affected_by_vehicle_20}") # debug
         if affected_by_vehicle_20:
                 ego['hazard_detected_20'] = True
                 ego['affects_ego_20'] = hazard_actor_20['id']
                 ego['affects_ego_20_id'] = hazard_actor_20['id']
-                ego['affects_ego_20_dis'] = hazard_actor_20['distance']
-                # print(f"[debug] affects_ego_20_id = {ego['affects_ego_20_id']}") # debug
-                # print(f"[debug] affects_ego_20_dis = {ego['affects_ego_20_dis']}") # debug
-        
+                ego['affects_ego_20_dis'] = hazard_actor_20['distance']        
         ego['hazard_detected_40'] = False
         affected_by_vehicle_40, hazard_actor_40 = vehicle_obstacle_detected(ego, other_vehicles, self.map, 40)
-        # print(f"[debug] affected_by_vehicle_40 = {affected_by_vehicle_40}") # debug
         if affected_by_vehicle_40:
                 ego['hazard_detected_40'] = True
                 ego['affects_ego_40'] = hazard_actor_40['id']
                 ego['affects_ego_40_id'] = hazard_actor_40['id']
                 ego['affects_ego_40_dis'] = hazard_actor_40['distance']
-                # print(f"[debug] affects_ego_40_id = {ego['affects_ego_40_id']}") # debug
-                # print(f"[debug] affects_ego_40_dis = {ego['affects_ego_40_dis']}") # debug
     
         for actor in scene_data:
             if actor['class'] == 'vehicle':
@@ -2603,18 +2601,9 @@ class QAsGenerator():
         measurements['command'] = measurements['command_near']
         measurements['target_point'] = [measurements['x_target'], measurements['y_target']]
 
-        append_dict = {
-            'ego': ego,
-            'measurements': measurements,
-            'scene_data': scene_data
-        }
-
         # for [debug]
-        file_name = f'{self.output_graph_directory}/appendix/' \
-                            f'{scenario_name}/{int(frame_number):05d}.json'
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
-        with open(file_name, 'w', encoding='utf-8') as f:
-            json.dump(append_dict, f, sort_keys=True, indent=4)
+        for key, value in measurements.items():
+            self.appended_measurements[key] = value
 
         # Generate questions and answers for different categories
         res = self.generate_vehicle_information(other_vehicles, ego, important_objects, key_object_infos,
@@ -2639,6 +2628,20 @@ class QAsGenerator():
                                                 scenario, stop_signs, ss_object_tags, tl_object_tags)
         qas_conversation_ego, important_objects, key_object_infos = res
         
+        ######## for [debug] appendix ########
+        append_dict = {
+            'ego': ego,
+            'measurements': self.appended_measurements,
+            'scene_data': scene_data
+        }
+
+        file_name = f'{self.output_graph_directory}/appendix/' \
+                            f'{scenario_name}/{int(frame_number):05d}.json'
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+        with open(file_name, 'w', encoding='utf-8') as f:
+            json.dump(append_dict, f, sort_keys=True, indent=4)
+        ######## for [debug] appendix ########
+
         num_objects = len(important_objects)
         num_questions = len(qas_conversation_vehicle) + len(qas_conversation_roadlayout) + \
                         len(qas_conversation_stopsign) + len(qas_conversation_trafficlight) + \

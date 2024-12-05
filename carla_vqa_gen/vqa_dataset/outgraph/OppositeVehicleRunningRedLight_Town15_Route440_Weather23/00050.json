@@ -1,6 +1,7 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,696.8,456.5>": {
+        "<c273,CAM_FRONT,696.8,456.5>": {
+            "id": "273",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "silver car",
@@ -57,7 +58,8 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT,588.3,456.8>": {
+        "<c275,CAM_FRONT,588.3,456.8>": {
+            "id": "275",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "black car",
@@ -114,7 +116,66 @@
                 ]
             ]
         },
-        "<c3,CAM_FRONT>": {
+        "<c223,CAM_FRONT,-9967.6,190.1>": {
+            "id": "223",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "red firetruck",
+            "2d_bbox": [
+                [
+                    -16744.8,
+                    -1076.0
+                ],
+                [
+                    -3190.4,
+                    1456.2
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    2.2,
+                    -17.9,
+                    2.3
+                ],
+                [
+                    2.3,
+                    -17.8,
+                    -1.6
+                ],
+                [
+                    5.1,
+                    -18.1,
+                    2.3
+                ],
+                [
+                    5.2,
+                    -18.0,
+                    -1.5
+                ],
+                [
+                    1.7,
+                    -26.3,
+                    2.2
+                ],
+                [
+                    1.7,
+                    -26.3,
+                    -1.7
+                ],
+                [
+                    4.6,
+                    -26.5,
+                    2.2
+                ],
+                [
+                    4.6,
+                    -26.5,
+                    -1.6
+                ]
+            ]
+        },
+        "<e4,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
@@ -125,16 +186,17 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the silver car and the black car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are a junction and the silver car, the black car and the red firetruck to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,696.8,456.5>",
-                    "<c2,CAM_FRONT,588.3,456.8>",
-                    "<c3,CAM_FRONT>"
+                    "<c273,CAM_FRONT,696.8,456.5>",
+                    "<c275,CAM_FRONT,588.3,456.8>",
+                    "<c223,CAM_FRONT,-9967.6,190.1>",
+                    "<e4,CAM_FRONT>"
                 ]
             },
             {
@@ -172,7 +234,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,696.8,456.5>"
+                    "<c273,CAM_FRONT,696.8,456.5>"
                 ]
             },
             {
@@ -210,7 +272,45 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c2,CAM_FRONT,588.3,456.8>"
+                    "<c275,CAM_FRONT,588.3,456.8>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the red firetruck that is to the front left of the ego vehicle located?",
+                "A": "The red firetruck is on the left side of the junction and is pointing away from the junction.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c223,CAM_FRONT,-9967.6,190.1>"
                 ]
             },
             {
@@ -519,7 +619,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,696.8,456.5>"
+                    "<c273,CAM_FRONT,696.8,456.5>"
                 ]
             },
             {
@@ -541,7 +641,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,696.8,456.5>"
+                    "<c273,CAM_FRONT,696.8,456.5>"
                 ]
             },
             {
@@ -563,7 +663,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c2,CAM_FRONT,588.3,456.8>"
+                    "<c275,CAM_FRONT,588.3,456.8>"
                 ]
             },
             {
@@ -585,7 +685,51 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c2,CAM_FRONT,588.3,456.8>"
+                    "<c275,CAM_FRONT,588.3,456.8>"
+                ]
+            },
+            {
+                "Q": "Where is the red firetruck that is to the front left of the ego vehicle going?",
+                "A": "The red firetruck is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c223,CAM_FRONT,-9967.6,190.1>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the red firetruck that is to the front left of the ego vehicle?",
+                "A": "The red firetruck is driving.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c223,CAM_FRONT,-9967.6,190.1>"
                 ]
             },
             {
@@ -749,7 +893,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,696.8,456.5>"
+                    "<c273,CAM_FRONT,696.8,456.5>"
                 ]
             },
             {
@@ -783,7 +927,41 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c2,CAM_FRONT,588.3,456.8>"
+                    "<c275,CAM_FRONT,588.3,456.8>"
+                ]
+            },
+            {
+                "Q": "The ego vehicle follows the road. Is the red firetruck that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the red firetruck is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c223,CAM_FRONT,-9967.6,190.1>"
                 ]
             },
             {
@@ -808,7 +986,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
-                "A": "There is no reason for the ego vehicle to brake.",
+                "A": "The ego vehicle should brake because of the red truck that is on the left side of the junction.",
                 "C": null,
                 "con_up": -1,
                 "con_down": [
@@ -847,7 +1025,9 @@
                 ],
                 "cluster": 6,
                 "layer": 0,
-                "object_tags": []
+                "object_tags": [
+                    "<c223,CAM_FRONT,-9967.6,190.1>"
+                ]
             },
             {
                 "Q": "What should the ego vehicle do based on the traffic light?",

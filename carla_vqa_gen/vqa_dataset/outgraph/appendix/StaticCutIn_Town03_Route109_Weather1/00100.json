@@ -161,12 +161,18 @@
         ],
         "yaw": 1.3544290024538994
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             3.4667651653289795,
             0.5026192665100098,
             9.557707786560059
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.009554929099977016,
             -0.032993923872709274,
@@ -675,7 +681,7 @@
                 "state": "dynamic",
                 "steer": 0.30304816428837805,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.8509607911109924,
@@ -1908,7 +1914,7 @@
                 "state": "dynamic",
                 "steer": 0.13086917366966422,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.4280822277069092,
@@ -3443,6 +3449,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -4422,6 +4432,7 @@
         },
         "should_brake": true,
         "speed": 8.329179011703067,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             237.90737915039062,
@@ -4429,6 +4440,7 @@
         ],
         "theta": 2.9252257347106934,
         "throttle": 1.0,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4953,7 +4965,7 @@
             "state": "dynamic",
             "steer": 0.30304816428837805,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.8509607911109924,
@@ -6186,7 +6198,7 @@
             "state": "dynamic",
             "steer": 0.13086917366966422,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.4280822277069092,

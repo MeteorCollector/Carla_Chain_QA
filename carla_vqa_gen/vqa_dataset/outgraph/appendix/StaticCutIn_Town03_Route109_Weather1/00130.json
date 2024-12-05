@@ -164,12 +164,18 @@
         ],
         "yaw": 1.5948517288152009
     },
-    "measuerments": {
+    "measurements": {
         "acceleration": [
             -11.064498901367188,
             0.6078546047210693,
             11.125732421875
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.03921445459127426,
             0.11355035752058029,
@@ -544,7 +550,7 @@
                 "state": "dynamic",
                 "steer": 0.128063252826225,
                 "type_id": "vehicle.audi.tt",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.14739413559436798,
@@ -2325,7 +2331,7 @@
                 "state": "dynamic",
                 "steer": 0.11123369463272387,
                 "type_id": "vehicle.chevrolet.impala",
-                "vehicle_cuts_in": true,
+                "vehicle_cuts_in": false,
                 "world2vehicle": [
                     [
                         0.38467544317245483,
@@ -2845,6 +2851,148 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    5.263549610390328e-05,
+                    0.0017914252821356058,
+                    0.7014925479888916
+                ],
+                "brake": 0.0,
+                "center": [
+                    237.54273986816406,
+                    -99.53882598876953,
+                    0.693835973739624
+                ],
+                "class": "vehicle",
+                "color": "61,86,143",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 33.246389796268474,
+                "distance_to_junction": 84.0,
+                "extent": [
+                    2.6787397861480713,
+                    1.0166014432907104,
+                    0.7053293585777283
+                ],
+                "id": "426",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "Position",
+                "location": [
+                    237.5445098876953,
+                    -99.53858947753906,
+                    -0.007656583562493324
+                ],
+                "next_junction_id": 1135,
+                "next_next_road_ids": [
+                    66
+                ],
+                "next_road_ids": [
+                    1165
+                ],
+                "num_points": 18,
+                "position": [
+                    33.24583915142807,
+                    0.029883738848923258,
+                    0.19132432499247387
+                ],
+                "road_id": 65,
+                "rotation": [
+                    0.019151849672198296,
+                    -0.0007019045297056437,
+                    91.82705688476562
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 1.805056003686728,
+                "state": "dynamic",
+                "steer": 0.04588118467565301,
+                "type_id": "vehicle.chevrolet.impala",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        -0.03188276290893555,
+                        0.9994915723800659,
+                        0.00033426281879656017,
+                        107.06156158447266
+                    ],
+                    [
+                        -0.9994916319847107,
+                        -0.031882770359516144,
+                        1.2250544386915863e-05,
+                        234.25018310546875
+                    ],
+                    [
+                        2.2901540432940237e-05,
+                        -0.00033370230812579393,
+                        0.9999999403953552,
+                        -0.03099980764091015
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        236.44125366210938,
+                        -96.89409637451172,
+                        1.4000731706619263
+                    ],
+                    [
+                        236.44122314453125,
+                        -96.89363098144531,
+                        -0.010585497133433819
+                    ],
+                    [
+                        238.4734344482422,
+                        -96.82927703857422,
+                        1.4000482559204102
+                    ],
+                    [
+                        238.47340393066406,
+                        -96.82880401611328,
+                        -0.01061040535569191
+                    ],
+                    [
+                        236.61207580566406,
+                        -102.24885559082031,
+                        1.3982824087142944
+                    ],
+                    [
+                        236.61204528808594,
+                        -102.24838256835938,
+                        -0.012376303784549236
+                    ],
+                    [
+                        238.6442413330078,
+                        -102.18402862548828,
+                        1.3982574939727783
+                    ],
+                    [
+                        238.6442108154297,
+                        -102.18355560302734,
+                        -0.012401212006807327
+                    ]
+                ],
+                "yaw": 1.5948517288152009
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": true,
@@ -3824,6 +3972,7 @@
         },
         "should_brake": true,
         "speed": 6.604181457065184,
+        "speed_limit": 10000,
         "steer": 0.10000000149011612,
         "target_point": [
             237.90737915039062,
@@ -3831,6 +3980,7 @@
         ],
         "theta": 3.1656458377838135,
         "throttle": 0.5,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 2.0,
@@ -4221,7 +4371,7 @@
             "state": "dynamic",
             "steer": 0.128063252826225,
             "type_id": "vehicle.audi.tt",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.14739413559436798,
@@ -6002,7 +6152,7 @@
             "state": "dynamic",
             "steer": 0.11123369463272387,
             "type_id": "vehicle.chevrolet.impala",
-            "vehicle_cuts_in": true,
+            "vehicle_cuts_in": false,
             "world2vehicle": [
                 [
                     0.38467544317245483,

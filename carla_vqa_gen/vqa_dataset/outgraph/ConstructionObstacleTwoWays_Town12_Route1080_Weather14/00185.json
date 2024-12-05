@@ -1,6 +1,65 @@
 {
     "key_object_infos": {
-        "<c1,CAM_FRONT,418.8,555.3>": {
+        "<c49443,CAM_FRONT,-743.1,708.6>": {
+            "id": "49443",
+            "Category": "Vehicle",
+            "Status": null,
+            "Visual_description": "black SUV",
+            "2d_bbox": [
+                [
+                    -1256.9,
+                    235.2
+                ],
+                [
+                    -229.3,
+                    1182.1
+                ]
+            ],
+            "3d_bbox": [
+                [
+                    2.5,
+                    -2.3,
+                    0.5
+                ],
+                [
+                    2.5,
+                    -2.3,
+                    -1.6
+                ],
+                [
+                    2.5,
+                    -4.4,
+                    0.5
+                ],
+                [
+                    2.5,
+                    -4.4,
+                    -1.6
+                ],
+                [
+                    -3.0,
+                    -2.1,
+                    0.4
+                ],
+                [
+                    -3.0,
+                    -2.1,
+                    -1.6
+                ],
+                [
+                    -3.1,
+                    -4.3,
+                    0.4
+                ],
+                [
+                    -3.1,
+                    -4.3,
+                    -1.6
+                ]
+            ]
+        },
+        "<c49442,CAM_FRONT,418.8,555.3>": {
+            "id": "49442",
             "Category": "Vehicle",
             "Status": null,
             "Visual_description": "navy car",
@@ -57,7 +116,8 @@
                 ]
             ]
         },
-        "<c2,CAM_FRONT>": {
+        "<e3,CAM_FRONT>": {
+            "id": null,
             "Category": "Traffic element",
             "Status": null,
             "Visual_description": "Junction",
@@ -68,15 +128,54 @@
         "perception": [
             {
                 "Q": "What are the important objects in the scene?",
-                "A": "The important objects in the scene are a junction and the navy car to the front left of the ego vehicle.",
+                "A": "The important objects in the scene are a junction and the black SUV and the navy car to the front left of the ego vehicle.",
                 "C": null,
                 "con_up": -1,
                 "con_down": -1,
                 "cluster": 0,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,418.8,555.3>",
-                    "<c2,CAM_FRONT>"
+                    "<c49443,CAM_FRONT,-743.1,708.6>",
+                    "<c49442,CAM_FRONT,418.8,555.3>",
+                    "<e3,CAM_FRONT>"
+                ]
+            },
+            {
+                "Q": "Where on the road is the black SUV that is to the front left of the ego vehicle located?",
+                "A": "The black SUV is on the same road driving in the same direction. It is one lane to the left of the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        3,
+                        0
+                    ],
+                    [
+                        3,
+                        2
+                    ],
+                    [
+                        3,
+                        3
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 0,
+                "object_tags": [
+                    "<c49443,CAM_FRONT,-743.1,708.6>"
                 ]
             },
             {
@@ -114,7 +213,7 @@
                 "cluster": 4,
                 "layer": 0,
                 "object_tags": [
-                    "<c1,CAM_FRONT,418.8,555.3>"
+                    "<c49442,CAM_FRONT,418.8,555.3>"
                 ]
             },
             {
@@ -405,6 +504,50 @@
         ],
         "prediction": [
             {
+                "Q": "Where is the black SUV that is to the front left of the ego vehicle going?",
+                "A": "The black SUV is going straight.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 1,
+                "object_tags": [
+                    "<c49443,CAM_FRONT,-743.1,708.6>"
+                ]
+            },
+            {
+                "Q": "What is the moving status of the black SUV that is to the front left of the ego vehicle?",
+                "A": "The black SUV is driving slowly.",
+                "C": null,
+                "con_up": [
+                    [
+                        4,
+                        3
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 2,
+                "object_tags": [
+                    "<c49443,CAM_FRONT,-743.1,708.6>"
+                ]
+            },
+            {
                 "Q": "Where is the navy car that is to the front left of the ego vehicle going?",
                 "A": "The navy car is going straight.",
                 "C": null,
@@ -423,7 +566,7 @@
                 "cluster": 4,
                 "layer": 1,
                 "object_tags": [
-                    "<c1,CAM_FRONT,418.8,555.3>"
+                    "<c49442,CAM_FRONT,418.8,555.3>"
                 ]
             },
             {
@@ -445,7 +588,7 @@
                 "cluster": 4,
                 "layer": 2,
                 "object_tags": [
-                    "<c1,CAM_FRONT,418.8,555.3>"
+                    "<c49442,CAM_FRONT,418.8,555.3>"
                 ]
             },
             {
@@ -579,6 +722,40 @@
         ],
         "planning": [
             {
+                "Q": "The ego vehicle follows the road. Is the black SUV that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
+                "A": "No, the black SUV is not crossing paths with the ego vehicle.",
+                "C": null,
+                "con_up": [
+                    [
+                        6,
+                        0
+                    ]
+                ],
+                "con_down": [
+                    [
+                        4,
+                        0
+                    ],
+                    [
+                        4,
+                        1
+                    ],
+                    [
+                        4,
+                        2
+                    ],
+                    [
+                        3,
+                        1
+                    ]
+                ],
+                "cluster": 4,
+                "layer": 3,
+                "object_tags": [
+                    "<c49443,CAM_FRONT,-743.1,708.6>"
+                ]
+            },
+            {
                 "Q": "The ego vehicle follows the road. Is the navy car that is to the front left of the ego vehicle potentially crossing the path of the ego vehicle?",
                 "A": "No, the navy car is not crossing paths with the ego vehicle.",
                 "C": null,
@@ -609,7 +786,7 @@
                 "cluster": 4,
                 "layer": 3,
                 "object_tags": [
-                    "<c1,CAM_FRONT,418.8,555.3>"
+                    "<c49442,CAM_FRONT,418.8,555.3>"
                 ]
             },
             {
