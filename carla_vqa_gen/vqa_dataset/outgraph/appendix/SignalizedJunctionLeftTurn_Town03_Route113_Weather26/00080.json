@@ -89,6 +89,7 @@
         "sidewalk_left": true,
         "sidewalk_right": true,
         "speed": 6.480897869660235,
+        "traffic_light_state": "green",
         "type_id": "vehicle.lincoln.mkz_2020",
         "virtual_steer": -0.0815073760171279,
         "world2ego": [
@@ -167,6 +168,12 @@
             0.0013032931601628661,
             9.420547485351562
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": "green"
+        },
         "angular_velocity": [
             -0.0016982541419565678,
             -0.021881232038140297,
@@ -263,6 +270,7 @@
                 "sidewalk_left": true,
                 "sidewalk_right": true,
                 "speed": 6.480897869660235,
+                "traffic_light_state": "green",
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "virtual_steer": -0.0815073760171279,
                 "world2ego": [
@@ -1718,6 +1726,7 @@
                     7
                 ],
                 "state": 2,
+                "state_str": "",
                 "trigger_volume_extent": [
                     3.0,
                     0.5,
@@ -2353,6 +2362,123 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.031259529292583466,
+                    -6.699561936329701e-07,
+                    0.8910346627235413
+                ],
+                "brake": 0.0,
+                "center": [
+                    0.2145954668521881,
+                    -172.4762725830078,
+                    0.8951147198677063
+                ],
+                "class": "vehicle",
+                "color": "0,28,0",
+                "distance": 19.509339613053072,
+                "extent": [
+                    2.2763495445251465,
+                    1.0485360622406006,
+                    0.8835831880569458
+                ],
+                "id": "8817",
+                "lane_id": 2,
+                "light_state": "NONE",
+                "location": [
+                    0.2136968970298767,
+                    -172.4464874267578,
+                    0.004029865376651287
+                ],
+                "num_points": 89,
+                "road_id": 29,
+                "rotation": [
+                    -0.09414732456207275,
+                    -0.00021362712141126394,
+                    91.72050476074219
+                ],
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 3.3722426754658015,
+                "state": "dynamic",
+                "type_id": "vehicle.mini.cooper_s_2021",
+                "world2vehicle": [
+                    [
+                        -0.030023952946066856,
+                        0.9995477795600891,
+                        -0.001643180032260716,
+                        172.37490844726562
+                    ],
+                    [
+                        -0.999549150466919,
+                        -0.030023988336324692,
+                        3.7284917198121548e-06,
+                        -4.963930606842041
+                    ],
+                    [
+                        -4.560801244224422e-05,
+                        0.0016425511566922069,
+                        0.9999986290931702,
+                        0.27923205494880676
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        -0.9018530249595642,
+                        -170.23097229003906,
+                        1.7749601602554321
+                    ],
+                    [
+                        -0.9017724394798279,
+                        -170.23388671875,
+                        0.0077961524948477745
+                    ],
+                    [
+                        1.1942734718322754,
+                        -170.1680145263672,
+                        1.7749524116516113
+                    ],
+                    [
+                        1.1943540573120117,
+                        -170.17091369628906,
+                        0.007788333110511303
+                    ],
+                    [
+                        -0.7651630640029907,
+                        -174.7816162109375,
+                        1.7824411392211914
+                    ],
+                    [
+                        -0.7650824785232544,
+                        -174.78451538085938,
+                        0.015277056954801083
+                    ],
+                    [
+                        1.330963373184204,
+                        -174.71865844726562,
+                        1.782433271408081
+                    ],
+                    [
+                        1.3310439586639404,
+                        -174.7215576171875,
+                        0.015269237570464611
+                    ]
+                ]
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 1,
         "only_ap_brake": false,
         "reverse": false,
@@ -3332,6 +3458,7 @@
         },
         "should_brake": false,
         "speed": 6.480897869660235,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             -0.30211544036865234,
@@ -3339,6 +3466,7 @@
         ],
         "theta": 3.1767067909240723,
         "throttle": 1.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 50.0,
             "fog_density": 0.0,
@@ -3451,6 +3579,7 @@
             "sidewalk_left": true,
             "sidewalk_right": true,
             "speed": 6.480897869660235,
+            "traffic_light_state": "green",
             "type_id": "vehicle.lincoln.mkz_2020",
             "virtual_steer": -0.0815073760171279,
             "world2ego": [
@@ -4906,6 +5035,7 @@
                 7
             ],
             "state": 2,
+            "state_str": "",
             "trigger_volume_extent": [
                 3.0,
                 0.5,

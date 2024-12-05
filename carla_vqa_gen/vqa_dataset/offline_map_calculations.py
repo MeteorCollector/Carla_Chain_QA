@@ -1225,7 +1225,35 @@ def vehicle_obstacle_list(ego_data, vehicle_list, carla_map, max_distance, junct
             continue
 
         target_location = target_vehicle['location']
-        target_bounding_box = target_vehicle['world_cord']
+
+        if 'world_cord' in target_vehicle and target_vehicle['world_cord']:
+            world_corners = np.array(target_vehicle['world_cord'])
+        else:
+            extent = target_vehicle.get('extent', [0.15, 0.15, 0.15])
+            position = np.array(target_vehicle['center'])
+            corners = np.array([
+                [-extent[0], -extent[1], -extent[2]],  # bottom left back
+                [extent[0], -extent[1], -extent[2]],   # bottom right back
+                [extent[0], extent[1], -extent[2]],    # bottom right front
+                [-extent[0], extent[1], -extent[2]],   # bottom left front
+                [-extent[0], -extent[1], extent[2]],   # top left back
+                [extent[0], -extent[1], extent[2]],    # top right back
+                [extent[0], extent[1], extent[2]],     # top right front
+                [-extent[0], extent[1], extent[2]]     # top left front
+            ])
+            world_yaw = target_vehicle.get('rotation', [0, 0, 0])[2]
+
+            yaw_camera = world_yaw
+            
+            rotation_matrix = np.array([
+                [np.cos(yaw_camera), -np.sin(yaw_camera), 0],
+                [np.sin(yaw_camera), np.cos(yaw_camera), 0],
+                [0, 0, 1]
+            ])
+            corners = corners @ rotation_matrix.T
+            world_corners = corners + position
+
+        target_bounding_box = world_corners.tolist()
 
         if compute_distance(ego_location, target_location) > search_distance:
             continue

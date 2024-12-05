@@ -89,6 +89,7 @@
         "sidewalk_left": true,
         "sidewalk_right": true,
         "speed": 0.0,
+        "traffic_light_state": "red",
         "type_id": "vehicle.lincoln.mkz_2020",
         "virtual_steer": 0.0,
         "world2ego": [
@@ -167,6 +168,12 @@
             -0.0001026938552968204,
             9.80350112915039
         ],
+        "affect_flags": {
+            "affected_by_red_light": true,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": "red"
+        },
         "angular_velocity": [
             -0.0002639958693180233,
             -0.00033420720137655735,
@@ -263,6 +270,7 @@
                 "sidewalk_left": true,
                 "sidewalk_right": true,
                 "speed": 0.0,
+                "traffic_light_state": "red",
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "virtual_steer": 0.0,
                 "world2ego": [
@@ -4640,6 +4648,7 @@
                     7
                 ],
                 "state": 0,
+                "state_str": "",
                 "trigger_volume_extent": [
                     1.6081249713897705,
                     2.646250009536743,
@@ -5263,6 +5272,123 @@
         "command_far": 3,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Constant",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    0.03214571997523308,
+                    -1.0470394045114517e-05,
+                    0.650456964969635
+                ],
+                "brake": 0.0,
+                "center": [
+                    2506.09326171875,
+                    4543.1064453125,
+                    363.35382080078125
+                ],
+                "class": "vehicle",
+                "color": "85,0,0",
+                "distance": 17.487534204358237,
+                "extent": [
+                    2.358762502670288,
+                    0.947413444519043,
+                    0.650469958782196
+                ],
+                "id": "27071",
+                "lane_id": -2,
+                "light_state": "139",
+                "location": [
+                    2506.0634765625,
+                    4543.1015625,
+                    362.7032775878906
+                ],
+                "num_points": 66,
+                "road_id": 958,
+                "rotation": [
+                    0.17193634808063507,
+                    -0.0008544911397621036,
+                    9.128795623779297
+                ],
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 0.4814078509760303,
+                "state": "dynamic",
+                "type_id": "vehicle.ford.mustang",
+                "world2vehicle": [
+                    [
+                        0.9873297214508057,
+                        0.15865358710289001,
+                        0.003000851022079587,
+                        -3196.1787109375
+                    ],
+                    [
+                        -0.1586543470621109,
+                        0.9873341917991638,
+                        1.4913616723788437e-05,
+                        -4087.967041015625
+                    ],
+                    [
+                        -0.002960476791486144,
+                        -0.0004908227128908038,
+                        0.9999954700469971,
+                        -353.0526428222656
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        2508.27001953125,
+                        4544.41552734375,
+                        364.0113830566406
+                    ],
+                    [
+                        2508.273681640625,
+                        4544.41650390625,
+                        362.71044921875
+                    ],
+                    [
+                        2508.570556640625,
+                        4542.544921875,
+                        364.0113525390625
+                    ],
+                    [
+                        2508.574462890625,
+                        4542.54541015625,
+                        362.7104187011719
+                    ],
+                    [
+                        2503.612060546875,
+                        4543.6669921875,
+                        363.9972229003906
+                    ],
+                    [
+                        2503.615966796875,
+                        4543.66796875,
+                        362.6962890625
+                    ],
+                    [
+                        2503.912841796875,
+                        4541.79638671875,
+                        363.9971923828125
+                    ],
+                    [
+                        2503.916748046875,
+                        4541.796875,
+                        362.6962585449219
+                    ]
+                ]
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 3,
         "only_ap_brake": false,
         "reverse": false,
@@ -6242,6 +6368,7 @@
         },
         "should_brake": false,
         "speed": 0.0,
+        "speed_limit": 50.0,
         "steer": 0.0,
         "target_point": [
             2531.3427734375,
@@ -6249,6 +6376,7 @@
         ],
         "theta": 1.7508039474487305,
         "throttle": 0.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 100.0,
             "fog_density": 100.0,
@@ -6361,6 +6489,7 @@
             "sidewalk_left": true,
             "sidewalk_right": true,
             "speed": 0.0,
+            "traffic_light_state": "red",
             "type_id": "vehicle.lincoln.mkz_2020",
             "virtual_steer": 0.0,
             "world2ego": [
@@ -10738,6 +10867,7 @@
                 7
             ],
             "state": 0,
+            "state_str": "",
             "trigger_volume_extent": [
                 1.6081249713897705,
                 2.646250009536743,

@@ -104,13 +104,9 @@ def project_all_corners(obj, K, extrinsics):
             [-extent[0], extent[1], extent[2]]     # top left front
         ])
         
-        # object yaw in world
         world_yaw = obj.get('rotation', [0, 0, 0])[2]
-
-        # yaw to cam
-        yaw_camera = world_yaw - camera_yaw
+        yaw_camera = world_yaw # - camera_yaw
         
-        # rotate bbox
         rotation_matrix = np.array([
             [np.cos(yaw_camera), -np.sin(yaw_camera), 0],
             [np.sin(yaw_camera), np.cos(yaw_camera), 0],
@@ -118,7 +114,6 @@ def project_all_corners(obj, K, extrinsics):
         ])
         corners = corners @ rotation_matrix.T
 
-        # move bbox
         world_corners = corners + position
     
     # world to cam cord
