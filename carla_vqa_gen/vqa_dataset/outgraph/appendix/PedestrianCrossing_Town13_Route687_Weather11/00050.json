@@ -89,6 +89,7 @@
         "sidewalk_left": true,
         "sidewalk_right": true,
         "speed": 4.963000904841747,
+        "traffic_light_state": "green",
         "type_id": "vehicle.lincoln.mkz_2020",
         "virtual_steer": -0.09603179875644982,
         "world2ego": [
@@ -167,6 +168,12 @@
             0.009550419636070728,
             9.999655723571777
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": "green"
+        },
         "angular_velocity": [
             -0.0007738678250461817,
             -0.021249722689390182,
@@ -263,6 +270,7 @@
                 "sidewalk_left": true,
                 "sidewalk_right": true,
                 "speed": 4.963000904841747,
+                "traffic_light_state": "green",
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "virtual_steer": -0.09603179875644982,
                 "world2ego": [
@@ -4704,6 +4712,7 @@
                     7
                 ],
                 "state": 2,
+                "state_str": "",
                 "trigger_volume_extent": [
                     0.6924999952316284,
                     1.4901561737060547,
@@ -5134,6 +5143,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 3,
         "only_ap_brake": true,
         "reverse": false,
@@ -6113,6 +6126,7 @@
         },
         "should_brake": true,
         "speed": 4.963000904841747,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             3731.85546875,
@@ -6120,6 +6134,7 @@
         ],
         "theta": 6.28176212310791,
         "throttle": 1.0,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 100.0,
             "fog_density": 50.0,
@@ -6232,6 +6247,7 @@
             "sidewalk_left": true,
             "sidewalk_right": true,
             "speed": 4.963000904841747,
+            "traffic_light_state": "green",
             "type_id": "vehicle.lincoln.mkz_2020",
             "virtual_steer": -0.09603179875644982,
             "world2ego": [
@@ -10673,6 +10689,7 @@
                 7
             ],
             "state": 2,
+            "state_str": "",
             "trigger_volume_extent": [
                 0.6924999952316284,
                 1.4901561737060547,

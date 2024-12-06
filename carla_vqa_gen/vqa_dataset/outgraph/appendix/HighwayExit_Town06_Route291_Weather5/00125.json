@@ -1,8 +1,5 @@
 {
     "ego": {
-        "affects_ego_40": "1233",
-        "affects_ego_40_dis": 21.853617856134285,
-        "affects_ego_40_id": "1233",
         "base_type": "car",
         "bbx_loc": [
             -0.0062891291454434395,
@@ -30,7 +27,7 @@
         "hazard_detected_10": false,
         "hazard_detected_15": false,
         "hazard_detected_20": false,
-        "hazard_detected_40": true,
+        "hazard_detected_40": false,
         "id": "1187",
         "is_in_junction": false,
         "junction_id": -1,
@@ -170,6 +167,12 @@
             -0.15429024398326874,
             9.699165344238281
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             -0.11255089938640594,
             -0.004602350294589996,
@@ -177,9 +180,6 @@
         ],
         "bounding_boxes": [
             {
-                "affects_ego_40": "1233",
-                "affects_ego_40_dis": 21.853617856134285,
-                "affects_ego_40_id": "1233",
                 "base_type": "car",
                 "bbx_loc": [
                     -0.0062891291454434395,
@@ -207,7 +207,7 @@
                 "hazard_detected_10": false,
                 "hazard_detected_15": false,
                 "hazard_detected_20": false,
-                "hazard_detected_40": true,
+                "hazard_detected_40": false,
                 "id": "1187",
                 "is_in_junction": false,
                 "junction_id": -1,
@@ -1488,6 +1488,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": true,
         "reverse": false,
@@ -2467,6 +2471,7 @@
         },
         "should_brake": true,
         "speed": 8.141696851203388,
+        "speed_limit": 10000,
         "steer": -0.20000000298023224,
         "target_point": [
             507.3920593261719,
@@ -2474,6 +2479,7 @@
         ],
         "theta": 0.39302876591682434,
         "throttle": 0.699999988079071,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 80.0,
             "fog_density": 3.0,
@@ -2497,9 +2503,6 @@
     },
     "scene_data": [
         {
-            "affects_ego_40": "1233",
-            "affects_ego_40_dis": 21.853617856134285,
-            "affects_ego_40_id": "1233",
             "base_type": "car",
             "bbx_loc": [
                 -0.0062891291454434395,
@@ -2527,7 +2530,7 @@
             "hazard_detected_10": false,
             "hazard_detected_15": false,
             "hazard_detected_20": false,
-            "hazard_detected_40": true,
+            "hazard_detected_40": false,
             "id": "1187",
             "is_in_junction": false,
             "junction_id": -1,

@@ -117,7 +117,7 @@ ParkedObstacle
 
 'DynamicObjectCrossing'
 'ParkingCrossingPedestrian'
-'PedestrianCrossing'
+'PedestrianCrossing' [没问题]
 'VehicleTurningRoutePedestrian'
 
 'VehicleTurningRoute' 

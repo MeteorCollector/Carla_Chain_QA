@@ -693,7 +693,7 @@
         "prediction": [
             {
                 "Q": "Where is the black car that is to the front right of the ego vehicle going?",
-                "A": "The black car is turning slightly left.",
+                "A": "The black car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -737,7 +737,7 @@
             },
             {
                 "Q": "Where is the black car that is to the front left of the ego vehicle going?",
-                "A": "The black car is turning slightly right.",
+                "A": "The black car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -781,7 +781,7 @@
             },
             {
                 "Q": "Where is the gray car that is to the front right of the ego vehicle going?",
-                "A": "The gray car is turning slightly right.",
+                "A": "The gray car is going straight.",
                 "C": null,
                 "con_up": [
                     [
@@ -1157,7 +1157,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
-                "A": "There is no reason for the ego vehicle to brake.",
+                "A": "The ego vehicle should stop because of the black car that is to the front right.",
                 "C": null,
                 "con_up": -1,
                 "con_down": [
@@ -1196,7 +1196,9 @@
                 ],
                 "cluster": 6,
                 "layer": 0,
-                "object_tags": []
+                "object_tags": [
+                    "<c1702,CAM_FRONT,1719.4,694.6>"
+                ]
             },
             {
                 "Q": "What should the ego vehicle do based on the traffic light?",

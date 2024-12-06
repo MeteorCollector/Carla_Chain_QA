@@ -9,9 +9,9 @@
         "affects_ego_20": "3697",
         "affects_ego_20_dis": 6.490336352275271,
         "affects_ego_20_id": "3697",
-        "affects_ego_40": "4431",
-        "affects_ego_40_dis": 28.59991612812398,
-        "affects_ego_40_id": "4431",
+        "affects_ego_40": "3697",
+        "affects_ego_40_dis": 6.490336352275271,
+        "affects_ego_40_id": "3697",
         "base_type": "car",
         "bbx_loc": [
             -0.006267515476793051,
@@ -179,6 +179,12 @@
             -0.0005719959153793752,
             9.66383171081543
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.0005743091460317373,
             0.006868925876915455,
@@ -195,9 +201,9 @@
                 "affects_ego_20": "3697",
                 "affects_ego_20_dis": 6.490336352275271,
                 "affects_ego_20_id": "3697",
-                "affects_ego_40": "4431",
-                "affects_ego_40_dis": 28.59991612812398,
-                "affects_ego_40_id": "4431",
+                "affects_ego_40": "3697",
+                "affects_ego_40_dis": 6.490336352275271,
+                "affects_ego_40_id": "3697",
                 "base_type": "car",
                 "bbx_loc": [
                     -0.006267515476793051,
@@ -2777,6 +2783,146 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.031248483806848526,
+                    -2.7468204280012287e-05,
+                    0.8910483121871948
+                ],
+                "brake": 0.0,
+                "center": [
+                    -71.98825073242188,
+                    3624.1982421875,
+                    364.41156005859375
+                ],
+                "class": "vehicle",
+                "color": "73,0,0",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 6.490336352275271,
+                "distance_to_junction": null,
+                "extent": [
+                    2.2763495445251465,
+                    1.0485360622406006,
+                    0.8835831880569458
+                ],
+                "id": "3697",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": -4,
+                "lane_relative_to_ego": -1,
+                "lane_type": 256,
+                "lane_type_str": "Parking",
+                "light_state": "3",
+                "location": [
+                    -71.97523498535156,
+                    3624.177978515625,
+                    363.5202941894531
+                ],
+                "next_junction_id": -1,
+                "next_next_road_ids": [],
+                "next_road_ids": [
+                    1171
+                ],
+                "num_points": 1060,
+                "position": [
+                    6.251996261237764,
+                    -1.743227894198725,
+                    0.015715487433546116
+                ],
+                "road_id": 1171,
+                "rotation": [
+                    -0.47595489025115967,
+                    -0.17913813889026642,
+                    -63.897193908691406
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 3.635200266996419,
+                "state": "dynamic",
+                "steer": 0.06221571844923136,
+                "type_id": "vehicle.mini.cooper_s_2021",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        0.4399679899215698,
+                        -0.8979750275611877,
+                        -0.008306884206831455,
+                        3289.10791015625
+                    ],
+                    [
+                        0.8980130553245544,
+                        0.43995770812034607,
+                        0.003126437310129404,
+                        -1530.98681640625
+                    ],
+                    [
+                        0.0008472150657325983,
+                        -0.008835222572088242,
+                        0.9999606013298035,
+                        -331.4245910644531
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        -70.04438781738281,
+                        3622.607666015625,
+                        365.27947998046875
+                    ],
+                    [
+                        -70.04588317871094,
+                        3622.623046875,
+                        363.51239013671875
+                    ],
+                    [
+                        -71.92758178710938,
+                        3621.684814453125,
+                        365.2729187011719
+                    ],
+                    [
+                        -71.9290771484375,
+                        3621.700439453125,
+                        363.5058288574219
+                    ],
+                    [
+                        -72.04742431640625,
+                        3626.69580078125,
+                        365.3172912597656
+                    ],
+                    [
+                        -72.04891967773438,
+                        3626.71142578125,
+                        363.5502014160156
+                    ],
+                    [
+                        -73.93062591552734,
+                        3625.773193359375,
+                        365.3107604980469
+                    ],
+                    [
+                        -73.93212127685547,
+                        3625.788818359375,
+                        363.54364013671875
+                    ]
+                ],
+                "yaw": -1.5718553328023666
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -3756,6 +3902,7 @@
         },
         "should_brake": true,
         "speed": 8.417339583022791,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             -70.24282836914062,
@@ -3763,6 +3910,7 @@
         ],
         "theta": 6.282093524932861,
         "throttle": 0.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 50.0,
@@ -3795,9 +3943,9 @@
             "affects_ego_20": "3697",
             "affects_ego_20_dis": 6.490336352275271,
             "affects_ego_20_id": "3697",
-            "affects_ego_40": "4431",
-            "affects_ego_40_dis": 28.59991612812398,
-            "affects_ego_40_id": "4431",
+            "affects_ego_40": "3697",
+            "affects_ego_40_dis": 6.490336352275271,
+            "affects_ego_40_id": "3697",
             "base_type": "car",
             "bbx_loc": [
                 -0.006267515476793051,

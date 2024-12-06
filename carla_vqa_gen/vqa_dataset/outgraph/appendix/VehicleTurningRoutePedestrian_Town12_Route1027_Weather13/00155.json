@@ -167,6 +167,12 @@
             -0.742370069026947,
             9.905476570129395
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.049148671329021454,
             0.009649264626204967,
@@ -3914,6 +3920,68 @@
         "command_far": 4,
         "command_near": 2,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [
+            {
+                "affects_ego": false,
+                "center": [
+                    29.718046188354492,
+                    4621.13720703125,
+                    378.06182861328125
+                ],
+                "class": "traffic_light",
+                "distance": 8.54017789845542,
+                "extent": [
+                    0.13374999165534973,
+                    0.16941405832767487,
+                    0.5240625143051147
+                ],
+                "id": "39406",
+                "lane_id": -1,
+                "location": [
+                    29.718046188354492,
+                    4621.13720703125,
+                    378.06182861328125
+                ],
+                "position": [
+                    5.579541263410263,
+                    -0.47873940328281606,
+                    5.798060433864816
+                ],
+                "road_id": 10094,
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -90.12591552734375
+                ],
+                "section_id": 0,
+                "semantic_tags": [
+                    6,
+                    8,
+                    7
+                ],
+                "state": 0,
+                "trigger_volume_extent": [
+                    1.4961376190185547,
+                    0.6840624809265137,
+                    1.0080077648162842
+                ],
+                "trigger_volume_location": [
+                    50.55905532836914,
+                    4618.97021484375,
+                    372.11578369140625
+                ],
+                "trigger_volume_rotation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "type_id": "traffic.traffic_light",
+                "yaw": -0.031117967911950664
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -4893,6 +4961,7 @@
         },
         "should_brake": false,
         "speed": 5.26213621322041,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             35.94162368774414,
@@ -4900,6 +4969,7 @@
         ],
         "theta": 1.5396783351898193,
         "throttle": 0.699999988079071,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 50.0,

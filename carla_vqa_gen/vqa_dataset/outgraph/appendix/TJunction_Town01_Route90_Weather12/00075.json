@@ -1,11 +1,5 @@
 {
     "ego": {
-        "affects_ego_20": "1127",
-        "affects_ego_20_dis": 18.72831991805324,
-        "affects_ego_20_id": "1127",
-        "affects_ego_40": "1127",
-        "affects_ego_40_dis": 18.72831991805324,
-        "affects_ego_40_id": "1127",
         "base_type": "car",
         "bbx_loc": [
             -0.00628906162455678,
@@ -32,8 +26,8 @@
         ],
         "hazard_detected_10": false,
         "hazard_detected_15": false,
-        "hazard_detected_20": true,
-        "hazard_detected_40": true,
+        "hazard_detected_20": false,
+        "hazard_detected_40": false,
         "id": "1091",
         "is_in_junction": false,
         "junction_id": -1,
@@ -95,6 +89,7 @@
         "sidewalk_left": true,
         "sidewalk_right": true,
         "speed": 6.134002167740372,
+        "traffic_light_state": "green",
         "type_id": "vehicle.lincoln.mkz_2020",
         "virtual_steer": 1.996750563776225,
         "world2ego": [
@@ -173,6 +168,12 @@
             4.893433094024658,
             9.562294960021973
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": "green"
+        },
         "angular_velocity": [
             0.05161850154399872,
             -0.0007156238425523043,
@@ -180,12 +181,6 @@
         ],
         "bounding_boxes": [
             {
-                "affects_ego_20": "1127",
-                "affects_ego_20_dis": 18.72831991805324,
-                "affects_ego_20_id": "1127",
-                "affects_ego_40": "1127",
-                "affects_ego_40_dis": 18.72831991805324,
-                "affects_ego_40_id": "1127",
                 "base_type": "car",
                 "bbx_loc": [
                     -0.00628906162455678,
@@ -212,8 +207,8 @@
                 ],
                 "hazard_detected_10": false,
                 "hazard_detected_15": false,
-                "hazard_detected_20": true,
-                "hazard_detected_40": true,
+                "hazard_detected_20": false,
+                "hazard_detected_40": false,
                 "id": "1091",
                 "is_in_junction": false,
                 "junction_id": -1,
@@ -275,6 +270,7 @@
                 "sidewalk_left": true,
                 "sidewalk_right": true,
                 "speed": 6.134002167740372,
+                "traffic_light_state": "green",
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "virtual_steer": 1.996750563776225,
                 "world2ego": [
@@ -1593,6 +1589,7 @@
                     7
                 ],
                 "state": 2,
+                "state_str": "",
                 "trigger_volume_extent": [
                     1.0,
                     0.5,
@@ -1942,6 +1939,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -2921,6 +2922,7 @@
         },
         "should_brake": false,
         "speed": 6.134002167740372,
+        "speed_limit": 30.0,
         "steer": 0.699999988079071,
         "target_point": [
             374.0799865722656,
@@ -2928,6 +2930,7 @@
         ],
         "theta": 3.569646120071411,
         "throttle": 0.30000001192092896,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 50.0,
@@ -2951,12 +2954,6 @@
     },
     "scene_data": [
         {
-            "affects_ego_20": "1127",
-            "affects_ego_20_dis": 18.72831991805324,
-            "affects_ego_20_id": "1127",
-            "affects_ego_40": "1127",
-            "affects_ego_40_dis": 18.72831991805324,
-            "affects_ego_40_id": "1127",
             "base_type": "car",
             "bbx_loc": [
                 -0.00628906162455678,
@@ -2983,8 +2980,8 @@
             ],
             "hazard_detected_10": false,
             "hazard_detected_15": false,
-            "hazard_detected_20": true,
-            "hazard_detected_40": true,
+            "hazard_detected_20": false,
+            "hazard_detected_40": false,
             "id": "1091",
             "is_in_junction": false,
             "junction_id": -1,
@@ -3046,6 +3043,7 @@
             "sidewalk_left": true,
             "sidewalk_right": true,
             "speed": 6.134002167740372,
+            "traffic_light_state": "green",
             "type_id": "vehicle.lincoln.mkz_2020",
             "virtual_steer": 1.996750563776225,
             "world2ego": [
@@ -4364,6 +4362,7 @@
                 7
             ],
             "state": 2,
+            "state_str": "",
             "trigger_volume_extent": [
                 1.0,
                 0.5,

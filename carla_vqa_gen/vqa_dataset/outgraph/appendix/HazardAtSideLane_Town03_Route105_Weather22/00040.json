@@ -170,6 +170,12 @@
             0.0004002843052148819,
             9.914693832397461
         ],
+        "affect_flags": {
+            "affected_by_red_light": false,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": null
+        },
         "angular_velocity": [
             0.0009935763664543629,
             0.00944434478878975,
@@ -1913,6 +1919,10 @@
         "command_far": 4,
         "command_near": 4,
         "control_brake": false,
+        "future_acceleration": "Accelerate",
+        "hazardous_actors": [],
+        "hazardous_flag": false,
+        "hazardous_walkers": [],
         "next_command": 4,
         "only_ap_brake": false,
         "reverse": false,
@@ -2892,6 +2902,7 @@
         },
         "should_brake": false,
         "speed": 7.367687632508573,
+        "speed_limit": 10000,
         "steer": 0.0,
         "target_point": [
             248.02523803710938,
@@ -2899,6 +2910,7 @@
         ],
         "theta": 0.02563197910785675,
         "throttle": 0.0,
+        "vehicle_hazard_flag": false,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 60.0,

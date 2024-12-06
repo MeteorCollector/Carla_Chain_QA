@@ -879,7 +879,7 @@ class QAsGenerator():
 
             object_tags = []
 
-            acc = get_acceleration_by_future(self.current_measurement_path, 4)
+            acc = get_acceleration_by_future(self.current_measurement_path, 6)
             flags = get_affect_flags(scene_data)
 
             predict_second = 2.5
@@ -925,7 +925,7 @@ class QAsGenerator():
             self.appended_measurements['vehicle_hazard_flag'] = measurements['vehicle_hazard']
             ######## for [debug] ########
 
-            if measurements['control_brake'] or acc is "Decelerate" or hazardous:
+            if (measurements['control_brake'] or acc is "Decelerate") or hazardous:
                 # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
                 limit_speed = float(measurements['speed_limit']) / 3.6
                 junction_speed = 64. / 3.6
@@ -1210,6 +1210,10 @@ class QAsGenerator():
                 if stop_sign_info and stop_sign_info['affects_ego'] and stop_sign_info['distance'] < 40:
                     answer = "The ego vehicle should slow down and stop at the stop sign."
                     object_tags = self.get_key_of_key_object(key_object_infos, object_dict=stop_sign_info)
+            
+            if answer == "There is no reason for the ego vehicle to brake.":
+                if abs(ego_data['speed']) <= 0.001:
+                    answer = "There is no reason for the ego vehicle to brake because ego vehicle is already static."
 
 
             self.add_qas_questions(qa_list=qas_conversation_ego, 

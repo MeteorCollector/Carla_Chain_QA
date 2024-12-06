@@ -1312,6 +1312,9 @@ def remove_normal_speed_vehicles(vehicle_list, ego_vehicle):
         ego_dir = rotation_to_vector(ego_vehicle["rotation"])
         hazard_dir = rotation_to_vector(vehicle["rotation"])
         
+        if not vehicle.get("speed"):
+            print(f'[debug] static object in hazard: {vehicle}')
+            return 0.0
         hazard_speed_in_ego_dir = np.dot(hazard_dir, ego_dir) * vehicle["speed"]
         return hazard_speed_in_ego_dir
 

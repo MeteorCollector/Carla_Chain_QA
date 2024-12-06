@@ -101,6 +101,7 @@
         "sidewalk_left": true,
         "sidewalk_right": true,
         "speed": -0.0026857217748295775,
+        "traffic_light_state": "red",
         "type_id": "vehicle.lincoln.mkz_2020",
         "virtual_steer": 0.0,
         "world2ego": [
@@ -179,6 +180,12 @@
             -0.001131934579461813,
             9.798328399658203
         ],
+        "affect_flags": {
+            "affected_by_red_light": true,
+            "affected_by_stop_sign": false,
+            "affected_by_yellow_light": false,
+            "traffic_light_state": "red"
+        },
         "angular_velocity": [
             0.0007658146787434816,
             -0.0009528524242341518,
@@ -287,6 +294,7 @@
                 "sidewalk_left": true,
                 "sidewalk_right": true,
                 "speed": -0.0026857217748295775,
+                "traffic_light_state": "red",
                 "type_id": "vehicle.lincoln.mkz_2020",
                 "virtual_steer": 0.0,
                 "world2ego": [
@@ -2290,6 +2298,7 @@
                     7
                 ],
                 "state": 0,
+                "state_str": "",
                 "trigger_volume_extent": [
                     1.0,
                     0.5,
@@ -2720,6 +2729,148 @@
         "command_far": 3,
         "command_near": 4,
         "control_brake": true,
+        "future_acceleration": "Decelerate",
+        "hazardous_actors": [
+            {
+                "base_type": "car",
+                "bbx_loc": [
+                    -0.00628906162455678,
+                    -2.4437904357910156e-06,
+                    0.7488452196121216
+                ],
+                "brake": 1.0,
+                "center": [
+                    360.7433776855469,
+                    326.5106506347656,
+                    0.7442680597305298
+                ],
+                "class": "vehicle",
+                "color": "0,0,0",
+                "color_name": null,
+                "color_rgb": null,
+                "distance": 9.887018971847304,
+                "distance_to_junction": 15.0,
+                "extent": [
+                    2.44619083404541,
+                    0.9183566570281982,
+                    0.7451388239860535
+                ],
+                "id": "1127",
+                "is_in_junction": false,
+                "junction_id": -1,
+                "lane_id": 1,
+                "lane_relative_to_ego": 0,
+                "lane_type": 2,
+                "lane_type_str": "Driving",
+                "light_state": "139",
+                "location": [
+                    360.73748779296875,
+                    326.5106506347656,
+                    -0.004580497741699219
+                ],
+                "next_junction_id": 143,
+                "next_next_road_ids": [
+                    19
+                ],
+                "next_road_ids": [
+                    144
+                ],
+                "num_points": 260,
+                "position": [
+                    9.88275081751641,
+                    0.2903107981009043,
+                    0.0001236957920479377
+                ],
+                "road_id": 7,
+                "rotation": [
+                    -0.0316169448196888,
+                    0.0,
+                    -179.97959899902344
+                ],
+                "same_direction_as_ego": true,
+                "same_road_as_ego": true,
+                "section_id": 0,
+                "semantic_tags": [
+                    14
+                ],
+                "speed": 0.0,
+                "state": "dynamic",
+                "steer": 0.0,
+                "type_id": "vehicle.lincoln.mkz_2020",
+                "vehicle_cuts_in": false,
+                "world2vehicle": [
+                    [
+                        -0.9999997615814209,
+                        -0.00035610987106338143,
+                        -0.0005518198013305664,
+                        360.8536682128906
+                    ],
+                    [
+                        0.00035610992927104235,
+                        -0.9999999403953552,
+                        -0.0,
+                        326.3821716308594
+                    ],
+                    [
+                        -0.0005518197431229055,
+                        -1.9650850902053207e-07,
+                        0.9999998211860657,
+                        0.20370672643184662
+                    ],
+                    [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                ],
+                "world_cord": [
+                    [
+                        358.2970886230469,
+                        325.5914306640625,
+                        1.4880568981170654
+                    ],
+                    [
+                        358.29791259765625,
+                        325.5914306640625,
+                        -0.0022204890847206116
+                    ],
+                    [
+                        358.29644775390625,
+                        327.4281311035156,
+                        1.4880568981170654
+                    ],
+                    [
+                        358.2972717285156,
+                        327.4281311035156,
+                        -0.0022204890847206116
+                    ],
+                    [
+                        363.1894836425781,
+                        325.5931701660156,
+                        1.490756630897522
+                    ],
+                    [
+                        363.1902770996094,
+                        325.5931701660156,
+                        0.00047922413796186447
+                    ],
+                    [
+                        363.1888122558594,
+                        327.42987060546875,
+                        1.490756630897522
+                    ],
+                    [
+                        363.18963623046875,
+                        327.42987060546875,
+                        0.00047922413796186447
+                    ]
+                ],
+                "yaw": 3.1250975664300604
+            }
+        ],
+        "hazardous_flag": true,
+        "hazardous_walkers": [],
         "next_command": 3,
         "only_ap_brake": true,
         "reverse": false,
@@ -3699,6 +3850,7 @@
         },
         "should_brake": true,
         "speed": -0.0026857217748295775,
+        "speed_limit": 30.0,
         "steer": -0.10000000149011612,
         "target_point": [
             347.72998046875,
@@ -3706,6 +3858,7 @@
         ],
         "theta": 4.695894241333008,
         "throttle": 0.0,
+        "vehicle_hazard_flag": true,
         "weather": {
             "cloudiness": 5.0,
             "fog_density": 50.0,
@@ -3830,6 +3983,7 @@
             "sidewalk_left": true,
             "sidewalk_right": true,
             "speed": -0.0026857217748295775,
+            "traffic_light_state": "red",
             "type_id": "vehicle.lincoln.mkz_2020",
             "virtual_steer": 0.0,
             "world2ego": [
@@ -5833,6 +5987,7 @@
                 7
             ],
             "state": 0,
+            "state_str": "",
             "trigger_volume_extent": [
                 1.0,
                 0.5,
