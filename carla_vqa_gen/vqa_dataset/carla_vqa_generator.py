@@ -884,14 +884,31 @@ class QAsGenerator():
             predict_second = 5
             predict_frame = predict_second * self.frame_rate
             predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
-
+            static_threshold = 10.0
+            
             # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
             hazardous_walkers = get_hazard_by_future(self.current_measurement_path, self.map, 
-                                                     k=predict_frame, filter='pedestrian', max_distance=predict_distance)
+                                                     k=predict_frame, filter='walker', max_distance=predict_distance)
             hazardous_actors = get_hazard_by_future(self.current_measurement_path, self.map, 
                                                      k=predict_frame, filter=None, max_distance=predict_distance)
-            
+            static_hazardous_actors = get_hazard_by_future(self.current_measurement_path, self.map, 
+                                                     k=1, filter=None, max_distance=static_threshold)
+
+            print(f"[debug] hazardous_actors = {hazardous_actors}")
+            cuts_in_actor_ids = [actor['id'] for actor in scene_data if actor.get('vehicle_cuts_in') and actor['distance'] < 20.0]
+            hazardous_actor_ids = [actor['id'] for actor in hazardous_actors]
+            static_hazardous_ids = [actor['id'] for actor in static_hazardous_actors if actor['distance'] < static_threshold]
+
+            combined_actors = [
+                actor for actor in scene_data if actor.get('id') in hazardous_actor_ids or \
+                    actor.get('id') in cuts_in_actor_ids or \
+                    actor.get('id') in static_hazardous_ids
+            ]
+            print(f"[debug] combined_actors = {combined_actors}")
+            hazardous_actors = sorted(combined_actors, key=lambda actor: actor.get('distance', float('inf')))
+            print(f"[debug] finally, hazardous_actors = {hazardous_actors}")
+
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
             measurements['vehicle_hazard'] = hazardous and 'vehicle' in hazardous_actors[0]['class']
