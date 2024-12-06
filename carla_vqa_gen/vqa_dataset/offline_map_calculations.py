@@ -1216,6 +1216,11 @@ def vehicle_obstacle_list(ego_data, vehicle_list, carla_map, max_distance, junct
         if target_vehicle['id'] == ego_data['id']:
             continue
 
+        if target_vehicle['lane_id'] != ego_data['lane_id']:
+            # not in original code, but when route curves,
+            # sometimes polygon produces error
+            continue
+
         target_location = target_vehicle['location']
 
         if 'world_cord' in target_vehicle and target_vehicle['world_cord']:

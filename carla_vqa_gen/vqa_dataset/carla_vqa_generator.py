@@ -887,6 +887,7 @@ class QAsGenerator():
             predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
             static_threshold = 10.0
 
+            print(f"[debug] current frame if {self.current_measurement_index}")
             # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
             hazardous_walkers = get_hazard_by_future(self.current_measurement_path, self.map, 
