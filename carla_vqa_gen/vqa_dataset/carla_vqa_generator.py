@@ -813,7 +813,8 @@ class QAsGenerator():
             """
             question = "What is the current speed limit?"
 
-            speed_limit = int(measurements['speed_limit'] * 3.6)
+            speed_limit = int(measurements['speed_limit'])
+            print(f"[debug] speed limit is {speed_limit}") # debug
             if speed_limit >= 999:
                 answer = f"There's no speed limit now."
             else:
@@ -885,7 +886,7 @@ class QAsGenerator():
             predict_frame = predict_second * self.frame_rate
             predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
             static_threshold = 10.0
-            
+
             # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
             hazardous_walkers = get_hazard_by_future(self.current_measurement_path, self.map, 
@@ -1144,7 +1145,7 @@ class QAsGenerator():
                         color = get_vehicle_color(leading_vehicle)
                         vehicletype = get_vehicle_type(leading_vehicle)
                         rough_pos_str = get_rough_position(leading_vehicle)
-                        if measurements['speed'] < 0.72 * 0.9 * measurements['speed_limit'] \
+                        if measurements['speed'] < (1 / 3.6) * 0.9 * measurements['speed_limit'] \
                                                             and measurements['throttle'] < 0.9:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=leading_vehicle)
                             answer = "The ego vehicle should adjust its speed to the speed of the " +\
@@ -2350,7 +2351,6 @@ class QAsGenerator():
         if ego_distance_to_junction is None:
             ego_distance_to_junction = 1000 # Set a default value if distance to junction is not available
 
-        # Convert the speed limit from m/s to km/h
         speed_limit_kmh = int(get_speed_limit(scene_data))
         # this value only used to indicate specified scenario
             

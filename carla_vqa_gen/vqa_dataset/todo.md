@@ -84,7 +84,7 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 7. QA 里面，为什么没有提到颜色？ 已经修复 [已解决]
 
-8. cutting into the lane of the ego vehicle 判定有点宽
+8. cutting into the lane of the ego vehicle 判定有点宽 [已解决]
 
 9. 根本没有 `behaviour` 问题类，要不要用 LLM 打标
 
@@ -126,8 +126,8 @@ ParkedObstacle
 
 13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了 [已解决]
 
-14. current speed limit 是怎么答的？PedestrianCrossing_Town12_Route1013_Weather25 有一个180km/h，是不是和路口有关
+14. current speed limit 是怎么答的？PedestrianCrossing_Town12_Route1013_Weather25 有一个180km/h，是不是和路口有关 [已解决] 是单位问题
 
 15. 看看 vehicle hazard [已解决] 和 crash into 之类的
 
-16. StaticCutIn_Town03_Route109_Weather1 这种中间的虚线加实线为什么可以变道
+16. StaticCutIn_Town03_Route109_Weather1 [已解决] 这种中间的虚线加实线为什么可以变道 可能是carla本身waypoint的lane_change没做好，，

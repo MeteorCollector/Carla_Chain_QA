@@ -186,7 +186,6 @@ def find_first_junction_in_direction(map, ego_location):
     if waypoint and waypoint.is_junction:
         junction_location = waypoint.transform.location
         distance_to_junction = calculate_distance(ego_location, junction_location)
-        # print(f"[debug] first junction of vehicle is at {junction_location}, {distance_to_junction}m away. ego is at {ego_location}") # debug
         return junction_location, distance_to_junction
     else:
         return None, None # represents no junction found
@@ -743,9 +742,6 @@ def is_vehicle_cutting_in(ego_data, vehicle_data, map, path):
     ego_location = carla.Location(x=ego_data['location'][0], y=ego_data['location'][1])
     ego_waypoint = map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
 
-    print(f"[debug] path = {path}")
-    print(f"[debug] vehicle_id = {vehicle_id}, {vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id}, old_lane_id = {old_lane_id}, new_lane_id = {new_lane_id}, ego_lane_id = {ego_waypoint.lane_id}")
-
     return vehicle_data['road_id'] == ego_waypoint.road_id and new_lane_id == ego_waypoint.lane_id
 
 def detect_lane_change_by_time(map, id, path, k=16):
@@ -888,18 +884,14 @@ def get_acceleration_by_future(path, k):
         speeds.append(data['speed'])
 
     if len(speeds) < 2:
-        # print("[debug] vehicle status is Ambiguous")  # debug
         return "Ambiguous"
     
     acceleration_trend = speeds[-1] - speeds[0]
     if acceleration_trend > 0:
-        # print("[debug] vehicle status is Accelerate")  # debug
         return "Accelerate"
     elif acceleration_trend < 0:
-        # print("[debug] vehicle status is Decelerate")  # debug
         return "Decelerate"
     else:
-        # print("[debug] vehicle status is Constant")  # debug
         return "Constant"
 
 def get_steer_by_future(path, id, k=5):
@@ -1349,8 +1341,6 @@ def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_
     if not os.path.exists(current_file):
         return hazards
 
-    print(f'[debug] current_file = {current_file}')
-    print(f'[debug] max_distance = {max_distance}')
     current_data = load_measurement(current_file)
     ego_data = next((item for item in current_data["bounding_boxes"] if item["class"] == "ego_vehicle"), None)
     if ego_data is None:
@@ -1388,10 +1378,6 @@ def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_
             actor['position'] = transform_to_ego_coordinates(actor['location'], future_ego_data['world2ego'])
             if actor['position'][0] > 0.0: # in the front
                 append_list.append(actor)
-        ######## for [debug] #########
-        for actor in append_list:
-            print(f"[debug] frame = {initial_index + i:05d}, id = {actor['id']}, distance = {actor['distance']}")
-        ######## for [debug] #########
         hazards.extend(append_list)
 
     unique_ids = {hazard["id"] for hazard in hazards}
