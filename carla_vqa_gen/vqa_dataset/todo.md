@@ -131,3 +131,5 @@ ParkedObstacle
 15. 看看 vehicle hazard [已解决] 和 crash into 之类的
 
 16. StaticCutIn_Town03_Route109_Weather1 [已解决] 这种中间的虚线加实线为什么可以变道 可能是carla本身waypoint的lane_change没做好，，
+
+17. HardBreakRoute只根据车辆速度判断而不通过刹车灯判断，有局限性

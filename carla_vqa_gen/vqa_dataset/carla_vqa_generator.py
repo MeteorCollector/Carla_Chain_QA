@@ -882,8 +882,8 @@ class QAsGenerator():
             acc = get_acceleration_by_future(self.current_measurement_path, 4)
             flags = get_affect_flags(scene_data)
 
-            predict_second = 5
-            predict_frame = predict_second * self.frame_rate
+            predict_second = 2.5
+            predict_frame = int(predict_second * self.frame_rate)
             predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
             static_threshold = 10.0
 
