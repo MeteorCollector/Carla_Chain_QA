@@ -126,7 +126,7 @@ ParkedObstacle
 
 13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了 [已解决]
 
-14. current speed limit 是怎么答的？
+14. current speed limit 是怎么答的？PedestrianCrossing_Town12_Route1013_Weather25 有一个180km/h，是不是和路口有关
 
 15. 看看 vehicle hazard 和 crash into 之类的
 

@@ -882,8 +882,8 @@ class QAsGenerator():
             flags = get_affect_flags(scene_data)
 
             predict_second = 5
-            predict_frame = 10 * self.frame_rate
-            predict_distance = max(ego_vehicle['speed'] * predict_second, 20.0)
+            predict_frame = predict_second * self.frame_rate
+            predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
 
             # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 

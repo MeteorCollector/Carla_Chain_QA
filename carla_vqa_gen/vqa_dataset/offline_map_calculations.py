@@ -1295,6 +1295,34 @@ def vehicle_obstacle_detected(ego_data, vehicle_list, carla_map, max_distance=30
     detected, vehicle_list = vehicle_obstacle_list(ego_data, vehicle_list, carla_map, max_distance, junction_threshold)
     return (detected, vehicle_list[0]) if detected else (False, [])
 
+def remove_normal_speed_vehicles(vehicle_list, ego_vehicle):
+    """
+    删除列表中包含my_str的字符串，且速度条件不满足的元素。
+
+    Args:
+        vehicle_list (list): 车辆列表，每个元素是一个字典。
+        my_str (str): 用于字符串匹配的子串。
+        ego_vehicle (dict): 包含ego_vehicle的速度和旋转信息。
+
+    Returns:
+        list: 过滤后的车辆列表。
+    """
+    def speed_in_direction(vehicle, ego_vehicle):
+        def rotation_to_vector(rotation):
+            yaw = np.deg2rad(rotation[2])
+            return np.array([np.cos(yaw), np.sin(yaw)])
+        
+        ego_dir = rotation_to_vector(ego_vehicle["rotation"])
+        hazard_dir = rotation_to_vector(vehicle["rotation"])
+        
+        hazard_speed_in_ego_dir = np.dot(hazard_dir, ego_dir) * vehicle["speed"]
+        return hazard_speed_in_ego_dir
+
+    return [
+        vehicle for vehicle in vehicle_list
+        if speed_in_direction(vehicle, ego_vehicle) < max(0.5, ego_vehicle["speed"] * (1 / 2))
+    ]
+    
 def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_threshold=3.0):
     """
     Identify hazards within the next k measurements based on the specified filter.
@@ -1321,7 +1349,8 @@ def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_
     if not os.path.exists(current_file):
         return hazards
 
-    print(F'[debug] current_file = {current_file}')
+    print(f'[debug] current_file = {current_file}')
+    print(f'[debug] max_distance = {max_distance}')
     current_data = load_measurement(current_file)
     ego_data = next((item for item in current_data["bounding_boxes"] if item["class"] == "ego_vehicle"), None)
     if ego_data is None:
@@ -1341,16 +1370,29 @@ def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_
             if filter is None or filter in item["class"]
         ]
 
+        future_ego_data = next((item for item in future_data["bounding_boxes"] if item["class"] == "ego_vehicle"), None)
+        if future_ego_data is None:
+            break
+
         # Call vehicle_obstacle_list to get hazards
         _, hazard_list = vehicle_obstacle_list(
             ego_data=ego_data,
             vehicle_list=vehicle_list,
             carla_map=carla_map,
-            max_distance=max_distance,
+            max_distance=max_distance * (i + 1) / (k),
             junction_threshold=junction_threshold
         )
 
-        hazards.extend(hazard_list)
+        append_list = []
+        for actor in hazard_list:
+            actor['position'] = transform_to_ego_coordinates(actor['location'], future_ego_data['world2ego'])
+            if actor['position'][0] > 0.0: # in the front
+                append_list.append(actor)
+        ######## for [debug] #########
+        for actor in append_list:
+            print(f"[debug] frame = {initial_index + i:05d}, id = {actor['id']}, distance = {actor['distance']}")
+        ######## for [debug] #########
+        hazards.extend(append_list)
 
     unique_ids = {hazard["id"] for hazard in hazards}
     
@@ -1361,7 +1403,7 @@ def get_hazard_by_future(path, map, k, filter=None, max_distance=30.0, junction_
 
     matched_hazards.sort(key=lambda x: x["distance"])
 
-    return matched_hazards
+    return remove_normal_speed_vehicles(matched_hazards, ego_data)
 
 def get_vehicle_str(vehicle):
     """
