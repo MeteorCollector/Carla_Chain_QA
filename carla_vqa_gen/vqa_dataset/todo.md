@@ -135,3 +135,5 @@ invade the opposite lane需要判断一下，因为有些时候并不用opposite
 16. StaticCutIn_Town03_Route109_Weather1 [已解决] 这种中间的虚线加实线为什么可以变道 可能是carla本身waypoint的lane_change没做好，，
 
 17. HardBreakRoute只根据车辆速度判断而不通过刹车灯判断，有局限性
+
+18. HazardAtSideLane_Town03_Route105_Weather22 frame 90 maroon bicycle The ego vehicle follows the road. Is the maroon bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle? 答案是 NO，显然是错误的。
