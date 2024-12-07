@@ -95,7 +95,7 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 AccidentTwoWays [没问题]
 ConstructionObstacleTwoWays [没问题]
 ParkedObstacleTwoWays [没问题]
-VehicleOpensDoorTwoWays
+VehicleOpensDoorTwoWays [没问题]
 HazardAtSideLaneTwoWays [没问题]
 
 "EnterActorFlow", 

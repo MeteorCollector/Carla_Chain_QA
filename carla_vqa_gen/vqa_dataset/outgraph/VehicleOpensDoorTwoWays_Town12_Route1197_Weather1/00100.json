@@ -751,7 +751,7 @@
             },
             {
                 "Q": "Is there an obstacle on the current road?",
-                "A": "No, there is no obstacle on the current route.",
+                "A": "Yes, there is a vehicle with the opened door on the current road.",
                 "C": null,
                 "con_up": [
                     [
@@ -1310,7 +1310,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to change lanes or deviate from the lane center due to an upcoming obstruction?",
-                "A": "The ego vehicle has already changed to another lane to circumvent the vehicle with the opened door.",
+                "A": "The ego vehicle must change to the left lane to circumvent the vehicle with the opened door.",
                 "C": null,
                 "con_up": [
                     [
@@ -1332,7 +1332,7 @@
             },
             {
                 "Q": "Does the ego vehicle need to brake? Why?",
-                "A": "There is no reason for the ego vehicle to brake.",
+                "A": "The ego vehicle should stop because it must invade the nearby lane, which is occupied, in order to bypass the vehicle with the opened doors.",
                 "C": null,
                 "con_up": -1,
                 "con_down": [
@@ -1371,7 +1371,9 @@
                 ],
                 "cluster": 6,
                 "layer": 0,
-                "object_tags": []
+                "object_tags": [
+                    "<c45851,CAM_FRONT,1643.0,737.9>"
+                ]
             },
             {
                 "Q": "What should the ego vehicle do based on the traffic light?",

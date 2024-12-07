@@ -1020,12 +1020,16 @@ class QAsGenerator():
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
                                         "is occupied, in order to bypass the parked vehicle."
-                    elif hazardous and 'VehicleOpensDoorTwoWays' in scenario_type \
-                                    and measurements['speed_reduced_by_obj_id'] in vehicles:
-                        vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
-                        object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
-                        answer = "The ego vehicle should stop because it must invade the nearby lane, which is " \
-                                                    "occupied, in order to bypass the vehicle with the opened doors."
+                    elif 'VehicleOpensDoorTwoWays' in scenario_type:
+                        vehicles_open_door = [v for v in vehicles_by_id.values() if v['type_id'] == 'vehicle.mercedes.coupe_2020' 
+                                    and v['position'][0] > 0
+                                    and v['position'][1] > 0.5 
+                                    and (float(v['distance']) <= 22.0 and v['speed'] < 0.1) and is_vehicle_in_camera(self.CAMERA_FRONT, v)]
+                        if vehicles_open_door:
+                            vehicle = vehicles_open_door[0]
+                            object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
+                            answer = "The ego vehicle should stop because it must invade the nearby lane, which is " \
+                                                        "occupied, in order to bypass the vehicle with the opened doors."
                     elif 'HazardAtSideLaneTwoWays' in scenario_type:
                         bicycles = [v for v in vehicles_by_id.values() if v['base_type'] == 'bicycle' 
                                                                         and self.should_consider_vehicle(v) 
@@ -1707,7 +1711,7 @@ class QAsGenerator():
                     changed_route = relevant_objects[0]['lane_id'] != ego_data['lane_id']
                     if changed_route and relevant_obj and\
                         scenario_name not in ['DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian', 'VehicleTurningRoute',
-                                           'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight']:
+                                           'OppositeVehicleTakingPriority', 'OppositeVehicleRunningRedLight', 'VehicleOpensDoorTwoWays']:
                         if 'InvadingTurn' == scenario_name:
                             answer = f"The ego vehicle has already shifted to the side to avoid {obstacle}."
                         else:
