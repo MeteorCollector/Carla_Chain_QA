@@ -112,6 +112,11 @@ class QAsGenerator():
 
         # config
         self.frame_rate = 10 # collect 10 data every 1s
+
+        # global variables for calculation
+        self.inf_num = 999
+        self.leftmost_pos_of_left_hazard = self.inf_num
+        self.last_full_scenario_name = 'last_name'
     
     def load_processed_paths(self):
         """从文件加载已处理的路径"""
@@ -814,7 +819,6 @@ class QAsGenerator():
             question = "What is the current speed limit?"
 
             speed_limit = int(measurements['speed_limit'])
-            print(f"[debug] speed limit is {speed_limit}") # debug
             if speed_limit >= 999:
                 answer = f"There's no speed limit now."
             else:
@@ -879,6 +883,13 @@ class QAsGenerator():
 
             object_tags = []
 
+            full_scenario_name = scenario_type
+            if self.last_full_scenario_name != full_scenario_name:
+                self.leftmost_pos_of_left_hazard = self.inf_num
+            self.last_full_scenario_name = full_scenario_name
+            scenario_type = scenario_type.split('_')[0]
+            scenario_name = scenario_type # why is it not unified?
+
             acc = get_acceleration_by_future(self.current_measurement_path, 6)
             flags = get_affect_flags(scene_data)
 
@@ -887,7 +898,7 @@ class QAsGenerator():
             predict_distance = max(ego_vehicle['speed'] * predict_second, 10.0)
             static_threshold = 10.0
 
-            print(f"[debug] current frame if {self.current_measurement_index}")
+            print(f"[debug] current frame is {self.current_measurement_index}")
             # hazardous_walkers = get_walker_hazard_with_prediction(scene_data, prediction_time=15)
             # hazardous_actors = get_all_hazard_with_prediction_sorted(scene_data, prediction_time=15) 
             hazardous_walkers = get_hazard_by_future(self.current_measurement_path, self.map, 
@@ -897,7 +908,6 @@ class QAsGenerator():
             static_hazardous_actors = get_hazard_by_future(self.current_measurement_path, self.map, 
                                                      k=1, filter=None, max_distance=static_threshold)
 
-            print(f"[debug] hazardous_actors = {hazardous_actors}")
             cuts_in_actor_ids = [actor['id'] for actor in scene_data if actor.get('vehicle_cuts_in') and actor['distance'] < 20.0]
             hazardous_actor_ids = [actor['id'] for actor in hazardous_actors]
             static_hazardous_ids = [actor['id'] for actor in static_hazardous_actors if actor['distance'] < static_threshold]
@@ -907,9 +917,8 @@ class QAsGenerator():
                     actor.get('id') in cuts_in_actor_ids or \
                     actor.get('id') in static_hazardous_ids
             ]
-            print(f"[debug] combined_actors = {combined_actors}")
             hazardous_actors = sorted(combined_actors, key=lambda actor: actor.get('distance', float('inf')))
-            print(f"[debug] finally, hazardous_actors = {hazardous_actors}")
+            print(f"[debug] hazardous_actors = {hazardous_actors}")
 
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
@@ -935,6 +944,12 @@ class QAsGenerator():
                     measurements['speed_reduced_by_obj_id'] = hazardous_actors[0]['id']
                     measurements['speed_reduced_by_obj_type'] = hazardous_actors[0]['type_id']
                     measurements['speed_reduced_by_obj_distance'] = hazardous_actors[0]['distance']
+
+                    ######## for [debug] ########
+                    self.appended_measurements['speed_reduced_by_obj'] = measurements['speed_reduced_by_obj']
+                    self.appended_measurements['speed_reduced_by_obj_id'] = measurements['speed_reduced_by_obj_id']
+                    self.appended_measurements['speed_reduced_by_obj_type'] = measurements['speed_reduced_by_obj_type']
+                    self.appended_measurements['speed_reduced_by_obj_distance'] = measurements['speed_reduced_by_obj_distance']
 
                 if measurements['speed'] / limit_speed > 1.031266635497984:
                     answer = "The ego vehicle should brake because it is faster than speed limit."
@@ -972,9 +987,12 @@ class QAsGenerator():
                     if hazardous and 'AccidentTwoWays' in scenario_type \
                             and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
                         police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
+                        self.leftmost_pos_of_left_hazard = min(self.leftmost_pos_of_left_hazard, police_cars[0]['position'][1])
+                        delta = 1.2 if self.leftmost_pos_of_left_hazard < 1.2 else 2
+                        police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard + delta]
                         if police_cars:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_cars[0])
-                        answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
+                            answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
                                     "occupied, in order to bypass the accident."
                     elif hazardous and 'ConstructionObstacleTwoWays' in scenario_type \
                                     and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
@@ -1158,12 +1176,16 @@ class QAsGenerator():
                         answer = f"The ego vehicle should stop because of the {color}{vehicletype} that is " +\
                                                                     f"{rough_pos_str} and is blocking the intersection."
 
-            if answer == "There is no reason for the ego vehicle to brake." and measurements['control_brake']:
+            # if answer == "There is no reason for the ego vehicle to brake." and (measurements['control_brake'] or acc is 'Decelerate'):
+            if hazardous and (measurements['control_brake'] or acc is 'Decelerate'):
+                print(f"[debug] into second branch, scenario_name = {scenario_name}")
                 if scenario_name == 'Accident':
-                    police_cars = [x for x in vehicles.values() if x['type_id'] == 'vehicle.dodge.charger_police_2020']
+                    police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
+                    self.leftmost_pos_of_left_hazard = min(self.leftmost_pos_of_left_hazard, police_cars[0]['position'][1])
+                    delta = 1.2 if self.leftmost_pos_of_left_hazard < 1.2 else 2
+                    police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard + delta]
                     if police_cars:
                         police_car = list(sorted(police_cars, key=lambda x: x['distance']))[0]
-
                         brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
                         if police_car['distance'] < 40:
                             answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
@@ -2596,7 +2618,6 @@ class QAsGenerator():
         ego['virtual_steer'] = get_steer_by_future(self.current_measurement_path, ego['id'])
         ego['hazard_detected_10'] = False
         res = vehicle_obstacle_detected(ego, other_vehicles, self.map, 10)
-        print(f'[debug] res = {res}')
         affected_by_vehicle_10, hazard_actor_10 = res
         if affected_by_vehicle_10:
                 ego['hazard_detected_10'] = True
