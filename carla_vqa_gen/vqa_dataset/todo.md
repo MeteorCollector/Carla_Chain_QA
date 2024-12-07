@@ -96,7 +96,7 @@ AccidentTwoWays [没问题]
 ConstructionObstacleTwoWays [没问题]
 ParkedObstacleTwoWays [没问题]
 VehicleOpensDoorTwoWays
-HazardAtSideLaneTwoWays
+HazardAtSideLaneTwoWays [没问题]
 
 "EnterActorFlow", 
 "EnterActorFlowV2", 
@@ -112,7 +112,7 @@ InterurbanActorFlow
 
 Accident [没问题]
 ConstructionObstacle [没问题]
-HazardAtSideLane
+HazardAtSideLane [没问题]
 ParkedObstacle [没问题]
 
 'DynamicObjectCrossing'
@@ -137,3 +137,5 @@ invade the opposite lane需要判断一下，因为有些时候并不用opposite
 17. HardBreakRoute只根据车辆速度判断而不通过刹车灯判断，有局限性
 
 18. HazardAtSideLane_Town03_Route105_Weather22 frame 90 maroon bicycle The ego vehicle follows the road. Is the maroon bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle? 答案是 NO，显然是错误的。
+
+19. In which direction is the ego car allowed to change lanes? 这里的overtakes lane是从哪里开始算的？ HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 完全算不对 frame 170

@@ -1029,7 +1029,8 @@ class QAsGenerator():
                     elif 'HazardAtSideLaneTwoWays' in scenario_type:
                         bicycles = [v for v in vehicles_by_id.values() if v['base_type'] == 'bicycle' 
                                                                         and self.should_consider_vehicle(v) 
-                                                                        and float(v['distance']) < 40]
+                                                                        and float(v['distance']) < 40
+                                                                        and v['lane_relative_to_ego'] == 0]
                         print(f'[debug] in HazardAtSideLaneTwoWays, bicycles = {bicycles}')
                         if bicycles:
                             bicycles.sort(key=lambda x:x['distance'])
@@ -1236,7 +1237,8 @@ class QAsGenerator():
                 elif scenario_name == 'HazardAtSideLane':
                     bicycles = [v for v in vehicles_by_id.values() if v['base_type'] == 'bicycle' 
                                                                         and self.should_consider_vehicle(v) 
-                                                                        and float(v['distance']) < 40]
+                                                                        and float(v['distance']) < 40
+                                                                        and v['lane_relative_to_ego'] == 0]
                     print(f'[debug] in HazardAtSideLane, bicycles = {bicycles}')
                     if bicycles:
                         bicycles.sort(key=lambda x:x['distance'])
@@ -1655,7 +1657,8 @@ class QAsGenerator():
                 if 'HazardAtSideLane' in scenario_name:
                     relevant_objects = [v for v in vehicles_by_id.values() if v['base_type'] == 'bicycle' 
                                                                         and self.should_consider_vehicle(v) 
-                                                                        and float(v['distance']) < 40]
+                                                                        and float(v['distance']) < 40
+                                                                        and v['lane_relative_to_ego'] == 0]
                     if len(relevant_objects) == 1:
                         obstacle = 'bicycle'
                 elif scenario_name not in ['VehicleOpensDoorTwoWays', 'ConstructionObstacle', 
