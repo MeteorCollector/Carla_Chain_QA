@@ -115,7 +115,7 @@ class QAsGenerator():
 
         # global variables for calculation
         self.inf_num = 999
-        self.leftmost_pos_of_left_hazard = self.inf_num
+        self.leftmost_pos_of_left_hazard = {}
         self.last_full_scenario_name = 'last_name'
     
     def load_processed_paths(self):
@@ -885,7 +885,7 @@ class QAsGenerator():
 
             full_scenario_name = scenario_type
             if self.last_full_scenario_name != full_scenario_name:
-                self.leftmost_pos_of_left_hazard = self.inf_num
+                self.leftmost_pos_of_left_hazard = {}
             self.last_full_scenario_name = full_scenario_name
             scenario_type = scenario_type.split('_')[0]
             scenario_name = scenario_type # why is it not unified?
@@ -987,28 +987,39 @@ class QAsGenerator():
                     if hazardous and 'AccidentTwoWays' in scenario_type \
                             and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
                         police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
-                        self.leftmost_pos_of_left_hazard = min(self.leftmost_pos_of_left_hazard, police_cars[0]['position'][1])
-                        delta = 1.2 if self.leftmost_pos_of_left_hazard < 1.2 else 2
-                        police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard + delta]
+                        car_id = [police_cars[0]['id']]
+                        if car_id not in self.leftmost_pos_of_left_hazard:
+                            self.leftmost_pos_of_left_hazard[car_id] = self.inf_num
+                        self.leftmost_pos_of_left_hazard[car_id] = \
+                            min(self.leftmost_pos_of_left_hazard[car_id], police_cars[0]['position'][1])
+                        delta = 1.2 if self.leftmost_pos_of_left_hazard[car_id] < 1.2 else 2
+                        police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard[car_id] + delta]
                         if police_cars:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_cars[0])
                             answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
                                     "occupied, in order to bypass the accident."
                     elif hazardous and 'ConstructionObstacleTwoWays' in scenario_type \
                                     and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
-                        traffic_warnings = [x for x in static_objects if x['type_id'] == 'static.prop.trafficwarning']
+                        traffic_warnings = [x for x in hazardous_actors if x['type_id'] == 'static.prop.trafficwarning']
                         if traffic_warnings:
-                            object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warnings[0])
+                            wid = traffic_warnings[0]['id']
+                            if wid not in self.leftmost_pos_of_left_hazard:
+                                self.leftmost_pos_of_left_hazard[wid] = self.inf_num
+                            self.leftmost_pos_of_left_hazard[wid] = min(self.leftmost_pos_of_left_hazard[wid], traffic_warnings[0]['position'][1])
+                            delta = 1.2 if self.leftmost_pos_of_left_hazard[wid] < 1.2 else 2
+                            traffic_warnings = [x for x in traffic_warnings if x['position'][1] < self.leftmost_pos_of_left_hazard[wid] + delta]
+                            if traffic_warnings:
+                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warnings[0])
 
-                        answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
-                                    "occupied, in order to bypass the construction warning."
+                            answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
+                                        "occupied, in order to bypass the construction warning."
                         
                     elif hazardous and 'ParkedObstacleTwoWays' in scenario_type \
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
                         answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
-                                    "is occupied, in order to bypass the parked vehicle."
+                                        "is occupied, in order to bypass the parked vehicle."
                     elif hazardous and 'VehicleOpensDoorTwoWays' in scenario_type \
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
@@ -1181,28 +1192,39 @@ class QAsGenerator():
                 print(f"[debug] into second branch, scenario_name = {scenario_name}")
                 if scenario_name == 'Accident':
                     police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
-                    self.leftmost_pos_of_left_hazard = min(self.leftmost_pos_of_left_hazard, police_cars[0]['position'][1])
-                    delta = 1.2 if self.leftmost_pos_of_left_hazard < 1.2 else 2
-                    police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard + delta]
                     if police_cars:
-                        police_car = list(sorted(police_cars, key=lambda x: x['distance']))[0]
-                        brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
-                        if police_car['distance'] < 40:
-                            answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
-                                                                                                "bypass the accident."
-                            object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_car)
+                        pid = police_cars[0]['id']
+                        if pid not in self.leftmost_pos_of_left_hazard:
+                                self.leftmost_pos_of_left_hazard[pid] = self.inf_num
+                        self.leftmost_pos_of_left_hazard[pid] = min(self.leftmost_pos_of_left_hazard[pid], police_cars[0]['position'][1])
+                        delta = 1.2 if self.leftmost_pos_of_left_hazard[pid] < 1.2 else 2
+                        police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard[pid] + delta]
+                        if police_cars:
+                            police_car = list(sorted(police_cars, key=lambda x: x['distance']))[0]
+                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            if police_car['distance'] < 40:
+                                answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
+                                                                                                    f"bypass the accident."
+                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_car)
                 elif scenario_name == 'ConstructionObstacle':
-                    traffic_warnings = [x for x in static_objects if 'type_id' in x 
+                    traffic_warnings = [x for x in hazardous_actors if 'type_id' in x 
                                                     and x['type_id'] == 'static.prop.trafficwarning']
                     if traffic_warnings:
-                        assert len(traffic_warnings) == 1
-                        traffic_warning = traffic_warnings[0]
+                        wid = police_cars[0]['id']
+                        if wid not in self.leftmost_pos_of_left_hazard:
+                                self.leftmost_pos_of_left_hazard[wid] = self.inf_num
+                        self.leftmost_pos_of_left_hazard[wid] = min(self.leftmost_pos_of_left_hazard[wid], traffic_warnings[0]['position'][1])
+                        delta = 1.2 if self.leftmost_pos_of_left_hazard[wid] < 1.2 else 2
+                        traffic_warnings = [x for x in traffic_warnings if x['position'][1] < self.leftmost_pos_of_left_hazard[wid] + delta]
+                        if traffic_warnings:
+                            assert len(traffic_warnings) == 1
+                            traffic_warning = traffic_warnings[0]
 
-                        brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
-                        if traffic_warning['distance'] < 40:
-                            answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
-                                        "bypass the construction warning."
-                            object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warning)
+                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            if traffic_warning['distance'] < 40:
+                                answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
+                                            f"bypass the construction warning."
+                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warning)
                 elif scenario_name == 'HazardAtSideLane':
                     bicycles = [x for x in vehicles.values() if x['base_type'] == 'bicycle']
                     if bicycles:
@@ -1216,16 +1238,27 @@ class QAsGenerator():
                                         "to bypass the two bicycles."
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=closest_bicycle)
                 elif scenario_name == 'ParkedObstacle':
-                    parked_vehicles = [x for x in vehicles.values()]
+                    print(f'[debug] in branch, hazardous_actors = {hazardous_actors}')
+                    parked_vehicles = [x for x in hazardous_actors if 'speed' in x and abs(x['speed']) < 0.5]
+                    print(f'[debug] parked_obstacles = {parked_vehicles}')
                     if parked_vehicles:
-                        assert len(parked_vehicles) == 1
-                        parked_vehicle = parked_vehicles[0]
+                        pid = parked_vehicles[0]['id']
+                        if pid not in self.leftmost_pos_of_left_hazard:
+                                self.leftmost_pos_of_left_hazard[pid] = self.inf_num
+                        self.leftmost_pos_of_left_hazard[pid] = min(self.leftmost_pos_of_left_hazard[pid], parked_vehicles[0]['position'][1])
+                        delta = 1.2 if self.leftmost_pos_of_left_hazard[pid] < 1.2 else 2
+                        print(f'[debug] delta = {delta} left_most = {self.leftmost_pos_of_left_hazard}')
+                        parked_vehicles = [x for x in parked_vehicles if x['position'][1] < self.leftmost_pos_of_left_hazard[pid] + delta]
+                        if parked_vehicles:
+                            print(f'[debug] finally, parked_obstacles = {parked_vehicles}')
+                            # assert len(parked_vehicles) == 1
+                            parked_vehicle = parked_vehicles[0]
 
-                        brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
-                        if parked_vehicle['distance'] < 40:
-                            answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to " \
-                                            "bypass the parked vehicle."
-                            object_tags = self.get_key_of_key_object(key_object_infos, object_dict=parked_vehicle)
+                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            if parked_vehicle['distance'] < 40:
+                                answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to " \
+                                                "bypass the parked vehicle."
+                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=parked_vehicle)
 
             
             if answer == "There is no reason for the ego vehicle to brake.":
@@ -1234,7 +1267,7 @@ class QAsGenerator():
                     object_tags = self.get_key_of_key_object(key_object_infos, object_dict=stop_sign_info)
             
             if answer == "There is no reason for the ego vehicle to brake.":
-                if abs(ego_data['speed']) <= 0.001:
+                if abs(ego_data['speed']) <= 0.01:
                     answer = "There is no reason for the ego vehicle to brake because ego vehicle is already static."
 
 

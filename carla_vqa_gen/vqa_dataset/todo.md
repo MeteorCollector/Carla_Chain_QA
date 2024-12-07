@@ -93,8 +93,8 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
 
 AccidentTwoWays [没问题]
-ConstructionObstacleTwoWays
-ParkedObstacleTwoWays
+ConstructionObstacleTwoWays [没问题]
+ParkedObstacleTwoWays [没问题]
 VehicleOpensDoorTwoWays
 HazardAtSideLaneTwoWays
 
@@ -111,9 +111,9 @@ CrossingBicycleFlow
 InterurbanActorFlow
 
 Accident [没问题]
-ConstructionObstacle 
+ConstructionObstacle [没问题]
 HazardAtSideLane
-ParkedObstacle
+ParkedObstacle [没问题]
 
 'DynamicObjectCrossing'
 'ParkingCrossingPedestrian'
@@ -121,6 +121,8 @@ ParkedObstacle
 'VehicleTurningRoutePedestrian'
 
 'VehicleTurningRoute' 
+
+invade the opposite lane需要判断一下，因为有些时候并不用opposite。B2D里面的twoways有的时候是多车道。
 
 12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。 [已解决]
 
