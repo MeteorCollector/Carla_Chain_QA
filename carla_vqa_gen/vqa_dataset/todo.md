@@ -106,21 +106,20 @@ HazardAtSideLaneTwoWays [没问题]
 "MergerIntoSlowTrafficV2",
 "YieldToEmergencyVehicle",
 
-BlockedIntersection
-CrossingBicycleFlow
-InterurbanActorFlow
-
+BlockedIntersection [没问题]
+CrossingBicycleFlow [未有效验证]
+InterurbanActorFlow 我觉得这个需要验证左后方是不是clear. TODO
 Accident [没问题]
 ConstructionObstacle [没问题]
 HazardAtSideLane [没问题]
 ParkedObstacle [没问题]
 
-'DynamicObjectCrossing'
-'ParkingCrossingPedestrian'
+'DynamicObjectCrossing' [没问题]
+'ParkingCrossingPedestrian' [没问题]
 'PedestrianCrossing' [没问题]
-'VehicleTurningRoutePedestrian'
+'VehicleTurningRoutePedestrian' [没问题]
 
-'VehicleTurningRoute' 
+'VehicleTurningRoute' [没问题]
 
 invade the opposite lane需要判断一下，因为有些时候并不用opposite。B2D里面的twoways有的时候是多车道。
 

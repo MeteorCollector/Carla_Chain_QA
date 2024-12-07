@@ -464,7 +464,7 @@ class QAsGenerator():
 
     def should_consider_vehicle(self, vehicle):
         """
-        True, if it's in same lane as ego
+        True, if it's in front and left cam
         False, if vehicle is not bicycle and the number of points on it are below a threshold
         False, if the vehicle is behind the ego vehicle
         False, if it's a parking vehicle, that does not cut in
@@ -491,6 +491,37 @@ class QAsGenerator():
         # so it's ok
         vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle) or \
                              is_vehicle_in_camera(self.CAMERA_FRONT_LEFT, vehicle)
+        # print(f'[debug] visibility: {vehicle_is_visible}')
+
+        return vehicle_is_visible
+
+    def is_object_in_front(self, vehicle):
+        """
+        True, if it's in front cam
+        False, if vehicle is not bicycle and the number of points on it are below a threshold
+        False, if the vehicle is behind the ego vehicle
+        False, if it's a parking vehicle, that does not cut in
+        """
+        if vehicle['state'] == "static":
+            # print('[debug] is static, so no consider')
+            return False
+        # Max. distance is 25m and similar to the max. distance of junctions
+        if  (
+            vehicle['position'][1] > 1.75
+            or vehicle['position'][1] < -1.75
+            or vehicle['position'][0] < -1.5
+            or (vehicle['class'] != 'bicycle' and vehicle['num_points'] < 15)
+            or (vehicle['num_points'] < 10)
+        ):
+            # print('[debug] not satisfied')
+            return False
+
+        # Check if the vehicle is visible in the image
+        # But here only vehicle in front is considered!
+        # A pity...
+        # but this is only used to identify obstacle in forward route
+        # so it's ok
+        vehicle_is_visible = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
         # print(f'[debug] visibility: {vehicle_is_visible}')
 
         return vehicle_is_visible
@@ -923,6 +954,17 @@ class QAsGenerator():
             hazardous = len(hazardous_actors) > 0
             measurements['speed_limit'] = get_speed_limit(scene_data) # km/h
             measurements['vehicle_hazard'] = hazardous and 'vehicle' in hazardous_actors[0]['class']
+            if (hazardous):
+                measurements['speed_reduced_by_obj'] = hazardous_actors[0]
+                measurements['speed_reduced_by_obj_id'] = hazardous_actors[0]['id']
+                measurements['speed_reduced_by_obj_type'] = hazardous_actors[0]['type_id']
+                measurements['speed_reduced_by_obj_distance'] = hazardous_actors[0]['distance']
+                ######## for [debug] ########
+                self.appended_measurements['speed_reduced_by_obj'] = measurements['speed_reduced_by_obj']
+                self.appended_measurements['speed_reduced_by_obj_id'] = measurements['speed_reduced_by_obj_id']
+                self.appended_measurements['speed_reduced_by_obj_type'] = measurements['speed_reduced_by_obj_type']
+                self.appended_measurements['speed_reduced_by_obj_distance'] = measurements['speed_reduced_by_obj_distance']
+                ######## for [debug] ########
 
             ######## for [debug] ########
             self.appended_measurements['future_acceleration'] = acc
@@ -933,43 +975,33 @@ class QAsGenerator():
             self.appended_measurements['speed_limit'] = measurements['speed_limit']
             self.appended_measurements['vehicle_hazard_flag'] = measurements['vehicle_hazard']
             ######## for [debug] ########
+            
+            
+            # speed / speed_limit > 1.031266635497984, done by the controller
+            limit_speed = float(measurements['speed_limit']) / 3.6
+            junction_speed = 64. / 3.6
+            
+            if measurements['speed'] / limit_speed > 1.031266635497984:
+                answer = "The ego vehicle should brake because it is faster than speed limit."
 
+            elif ego_vehicle['is_in_junction'] and measurements['speed'] / junction_speed > 1.031266635497984:
+                answer = "The ego vehicle should brake because it should slow down in junction."
+
+            elif flags['affected_by_stop_sign'] is True:
+                answer = "The ego vehicle should stop because of the stop sign."
+                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=stop_sign_info)
+            
+            elif flags['affected_by_red_light'] is True:
+                answer = "The ego vehicle should stop because of the traffic light that is red."
+                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
+            
+            elif flags['affected_by_yellow_light'] is True:
+                answer = "The ego vehicle should slow down because of the traffic light that is yellow."
+                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
+            
             if (measurements['control_brake'] or acc is "Decelerate") or hazardous:
-                # speed / 0.72*speed_limit > 1.031266635497984, done by the controller
-                limit_speed = float(measurements['speed_limit']) / 3.6
-                junction_speed = 64. / 3.6
-                
-                if (hazardous):
-                    measurements['speed_reduced_by_obj'] = hazardous_actors[0]
-                    measurements['speed_reduced_by_obj_id'] = hazardous_actors[0]['id']
-                    measurements['speed_reduced_by_obj_type'] = hazardous_actors[0]['type_id']
-                    measurements['speed_reduced_by_obj_distance'] = hazardous_actors[0]['distance']
-
-                    ######## for [debug] ########
-                    self.appended_measurements['speed_reduced_by_obj'] = measurements['speed_reduced_by_obj']
-                    self.appended_measurements['speed_reduced_by_obj_id'] = measurements['speed_reduced_by_obj_id']
-                    self.appended_measurements['speed_reduced_by_obj_type'] = measurements['speed_reduced_by_obj_type']
-                    self.appended_measurements['speed_reduced_by_obj_distance'] = measurements['speed_reduced_by_obj_distance']
-
-                if measurements['speed'] / limit_speed > 1.031266635497984:
-                    answer = "The ego vehicle should brake because it is faster than speed limit."
-
-                elif ego_vehicle['is_in_junction'] and measurements['speed'] / junction_speed > 1.031266635497984:
-                    answer = "The ego vehicle should brake because it should slow down in junction."
-
-                elif flags['affected_by_stop_sign'] is True:
-                    answer = "The ego vehicle should stop because of the stop sign."
-                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=stop_sign_info)
-                
-                elif flags['affected_by_red_light'] is True:
-                    answer = "The ego vehicle should stop because of the traffic light that is red."
-                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
-                
-                elif flags['affected_by_yellow_light'] is True:
-                    answer = "The ego vehicle should slow down because of the traffic light that is yellow."
-                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_light_info)
-                
-                elif len(hazardous_walkers):
+                if len(hazardous_walkers) and scenario_name not in \
+                    ['DynamicObjectCrossing', 'ParkingCrossingPedestrian', 'PedestrianCrossing', 'VehicleTurningRoutePedestrian']:
                     closest_pedestrian_idx = np.argmin([x['distance'] for x in pedestrians])
                     closest_pedestrian = pedestrians[closest_pedestrian_idx]
                     closest_pedestrian_distance = closest_pedestrian['distance']
@@ -984,6 +1016,11 @@ class QAsGenerator():
                 
                 # beware! below contents are scenario-specified. take special care of them.
                 else:
+                    vehicles_in_front = []
+                    if not (ego_data['speed'] > 3.0 and abs(measurements['steer']) > 0.5):
+                        vehicles_in_front = [x for x in vehicles_by_id.values() if self.is_object_in_front(x)]
+                        vehicles_in_front = sorted(vehicles_in_front, key=lambda actor: actor.get('distance', float('inf')))
+
                     if hazardous and 'AccidentTwoWays' in scenario_type \
                             and 'vehicle.dodge.charger_police_2020' == measurements['speed_reduced_by_obj_type']:
                         police_cars = [x for x in hazardous_actors if x['type_id'] == 'vehicle.dodge.charger_police_2020']
@@ -1035,17 +1072,40 @@ class QAsGenerator():
                                                                         and self.should_consider_vehicle(v) 
                                                                         and float(v['distance']) < 40
                                                                         and v['lane_relative_to_ego'] == 0]
-                        print(f'[debug] in HazardAtSideLaneTwoWays, bicycles = {bicycles}')
                         if bicycles:
                             bicycles.sort(key=lambda x:x['distance'])
                             closest_bicycle = bicycles[0]
 
-                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                             if closest_bicycle['distance'] < 40:
                                 answer = f"The ego vehicle should {brake_or_stop} because it must invade the opposite lane, which " \
                                             "is occupied, in order to bypass the bicycles."
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=closest_bicycle)
-                    elif hazardous and measurements['speed_reduced_by_obj_id'] in vehicles:
+                    elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or \
+                        'PedestrianCrossing' in scenario_name or 'VehicleTurningRoutePedestrian' in scenario_name:
+                        # in definition, DynamicObjectCrossing's obstacle might be a bicycle
+                        # but it does not exist in b2d
+                        peds = [x for x in pedestrians if 0.0 < x['position'][0] < 30.0
+                                and abs(x['speed']) > 1.0
+                                and -1.75 < x['position'][1] < 3.5] # carla lane width is 3.5m
+                        if peds:
+                            closest_pedestrian_idx = np.argmin([x['distance'] for x in peds])
+                            closest_pedestrian = peds[closest_pedestrian_idx]
+                            closest_pedestrian_distance = closest_pedestrian['distance']
+                            brake_or_slow_down = 'stop' if closest_pedestrian_distance < 10.0 else 'slow down'
+                            if len(peds) > 1:
+                                answer = f"The ego vehicle should {brake_or_slow_down} because of the pedestrians "\
+                                            "that are crossing the road."
+                            else:
+                                answer = f"The ego vehicle should {brake_or_slow_down} because of the pedestrian "\
+                                            "that is crossing the road."
+                            for ped in peds:
+                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=ped)
+
+                        # print(f"[debug] relevant_objects = {relevant_objects}") # debug1
+
+                    elif vehicles_in_front:
+                        print(f'[debug] in branch in front, vehicles_in_front = {vehicles_in_front}')
                         brake_due_to_leading_vehicle = not measurements['vehicle_hazard']
                         is_highway = False
 
@@ -1067,15 +1127,7 @@ class QAsGenerator():
 
                         bike_scenario = False
                         blocked_intersection_scenario = False
-                        for vehicle in vehicles_by_id.values():
-                            consider_vehicle = self.should_consider_vehicle(vehicle)
-                            if not consider_vehicle:
-                                continue
-                            keep_vehicle = is_vehicle_in_camera(self.CAMERA_FRONT, vehicle)
-
-                            if keep_vehicle != consider_vehicle:
-                                print("Warning: vehicle is not in image but should be considered.")
-
+                        for vehicle in vehicles_in_front:
                             # find bicycles that are of type scenario
                             if 'bicycle' in vehicle['class'] and \
                                             (ego_data['distance_to_junction'] < 10 or ego_data['is_in_junction']) and \
@@ -1095,9 +1147,10 @@ class QAsGenerator():
                                     rough_pos_str = 'at an unknown position'
                             elif vehicle['distance'] < 15 and scenario_name == 'BlockedIntersection':
                                 blocked_intersection_scenario = True
+                                print(f'[debug] blocked_intersection_scenario is True')
                                     
 
-                        actor_hazard = vehicles[measurements['speed_reduced_by_obj_id']]
+                        actor_hazard = vehicles_in_front[0]
                         
                         color = get_vehicle_color(actor_hazard)
                         vehicletype = get_vehicle_type(actor_hazard)
@@ -1113,7 +1166,7 @@ class QAsGenerator():
                         if actor_hazard['num_points'] < 3 or not consider_vehicle:
                             answer = "There is no reason for the ego vehicle to brake."
                         # Handle the case where the hazard vehicle is a leading vehicle
-                        elif brake_due_to_leading_vehicle:
+                        elif brake_due_to_leading_vehicle and actor_hazard['distance'] < 20.:
                             if actor_hazard['speed'] < 0.5:
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
                                 answer = "The ego vehicle should stop because of the " + f"{color}{vehicletype} " +\
@@ -1214,7 +1267,7 @@ class QAsGenerator():
                         police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard[pid] + delta]
                         if police_cars:
                             police_car = list(sorted(police_cars, key=lambda x: x['distance']))[0]
-                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                             if police_car['distance'] < 40:
                                 answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
                                                                                                     f"bypass the accident."
@@ -1233,7 +1286,7 @@ class QAsGenerator():
                             assert len(traffic_warnings) == 1
                             traffic_warning = traffic_warnings[0]
 
-                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                             if traffic_warning['distance'] < 40:
                                 answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to "\
                                             f"bypass the construction warning."
@@ -1248,7 +1301,7 @@ class QAsGenerator():
                         bicycles.sort(key=lambda x:x['distance'])
                         closest_bicycle = bicycles[0]
 
-                        brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                        brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                         if closest_bicycle['distance'] < 40:
                             answer = f"The ego vehicle should {brake_or_stop} because it must change the lane " \
                                         "to bypass the two bicycles."
@@ -1268,7 +1321,7 @@ class QAsGenerator():
                             # assert len(parked_vehicles) == 1
                             parked_vehicle = parked_vehicles[0]
 
-                            brake_or_stop = 'stop' if measurements['speed'] < 1 else 'brake'
+                            brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                             if parked_vehicle['distance'] < 40:
                                 answer = f"The ego vehicle should {brake_or_stop} because it must change the lane to " \
                                                 "bypass the parked vehicle."
