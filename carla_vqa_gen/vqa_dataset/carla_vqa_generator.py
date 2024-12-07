@@ -1167,13 +1167,19 @@ class QAsGenerator():
                             answer = "There is no reason for the ego vehicle to brake."
                         # Handle the case where the hazard vehicle is a leading vehicle
                         elif brake_due_to_leading_vehicle and actor_hazard['distance'] < 20.:
+
                             if actor_hazard['speed'] < 0.5:
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
                                 answer = "The ego vehicle should stop because of the " + f"{color}{vehicletype} " +\
                                                                                             f"that is {rough_pos_str}."
                             else:
-                                object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
-                                answer = "The ego vehicle should adjust its speed to the speed of the " +\
+                                if actor_hazard['base_type'] == 'bicycle':
+                                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
+                                    answer = "The ego vehicle should slow down because of the " +\
+                                                                        f"{color}{vehicletype} that is {rough_pos_str}."
+                                else:
+                                    object_tags = self.get_key_of_key_object(key_object_infos, object_dict=actor_hazard)
+                                    answer = "The ego vehicle should adjust its speed to the speed of the " +\
                                                                         f"{color}{vehicletype} that is {rough_pos_str}."
                         # Handle the case where the scenario is on a highway
                         elif is_highway:
@@ -1244,7 +1250,11 @@ class QAsGenerator():
                         if measurements['speed'] < (1 / 3.6) * 0.9 * measurements['speed_limit'] \
                                                             and measurements['throttle'] < 0.9:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=leading_vehicle)
-                            answer = "The ego vehicle should adjust its speed to the speed of the " +\
+                            if leading_vehicle['base_type'] == 'bicycle':
+                                answer = "The ego vehicle should slow down because of the " +\
+                                                                    f"{color}{vehicletype} that is {rough_pos_str}."
+                            else:       
+                                answer = "The ego vehicle should adjust its speed to the speed of the " +\
                                                                     f"{color}{vehicletype} that is {rough_pos_str}."
                     
                     # Special cases for specific scenarios
