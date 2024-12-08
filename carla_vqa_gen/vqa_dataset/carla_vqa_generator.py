@@ -2794,7 +2794,7 @@ class QAsGenerator():
 
         qas_conversation_vehicle, important_objects, key_object_infos = res
         
-        res = self.analyze_road_layout(ego, scene_data, important_objects, key_object_infos, measurements, scenario)
+        res = self.analyze_road_layout(ego, other_vehicles, scene_data, important_objects, key_object_infos, measurements, scenario)
         qas_conversation_roadlayout, important_objects, key_object_infos = res
         
         res = self.process_stop_signs(stop_signs, important_objects, key_object_infos)
@@ -2923,7 +2923,7 @@ class QAsGenerator():
 
         return combined_qas, num_questions, num_objects, num_questions_per_category, key_object_infos
 
-    def analyze_road_layout(self, ego_vehicle_info, scene_data, important_objects, key_object_infos, current_measurement, scenario):
+    def analyze_road_layout(self, ego_vehicle_info, vehicle_info, scene_data, important_objects, key_object_infos, current_measurement, scenario):
         """
         This method answers the following questions:
         - Is the ego vehicle at a junction?
@@ -3034,7 +3034,7 @@ class QAsGenerator():
                                     question=question,
                                     answer=answer)
 
-        def analyze_ego_lane_change_direction(is_acceleration_lane, command_int, ego_vehicle_info, is_junction, 
+        def analyze_ego_lane_change_direction(is_acceleration_lane, command_int, ego_vehicle_info, vehicle_info, is_junction, 
                                                                                         qas_conversation_roadlayout):
             """
             Answer "In which direction is the ego car allowed to change lanes?".
@@ -3064,6 +3064,23 @@ class QAsGenerator():
                 answer = "The ego vehicle is allowed to change lanes to the left and right."
             else:
                 raise NotImplementedError()
+            
+            left_clear_distance = get_clear_distance_of_lane(vehicle_info, -1, True)
+            right_clear_distance = get_clear_distance_of_lane(vehicle_info, 1, True)
+
+            append_sentence = ""
+            occupy_threshold = 25.0
+            if ego_vehicle_info['lane_change'] in [1, 3]: # right
+                if right_clear_distance <= occupy_threshold:
+                    append_sentence = " But it couldn't change to right lane because it is currently occupied."
+            if ego_vehicle_info['lane_change'] in [2, 3]: # left
+                if left_clear_distance <= occupy_threshold:
+                    append_sentence = " But it couldn't change to left lane because it is currently occupied."
+            if ego_vehicle_info['lane_change'] in [3]: # both
+                if left_clear_distance <= occupy_threshold and right_clear_distance <= occupy_threshold:
+                    append_sentence = " But it couldn't change to either side because they're all currently occupied." 
+
+            answer += append_sentence
 
             # Handle parking lanes
             if ego_vehicle_info['parking_left'] and ego_vehicle_info['parking_right'] and \
@@ -3668,7 +3685,7 @@ class QAsGenerator():
         analyze_lane_marking(ego_vehicle_info, qas_conversation_roadlayout)
 
         # Analyze the directions in which the ego vehicle is allowed to change lanes
-        analyze_ego_lane_change_direction(is_acceleration_lane, command_int, ego_vehicle_info, is_junction, 
+        analyze_ego_lane_change_direction(is_acceleration_lane, command_int, ego_vehicle_info, vehicle_info, is_junction, 
                                                                                         qas_conversation_roadlayout)
 
         # Analyze the directions from which other vehicles are allowed to change lanes into the ego lane

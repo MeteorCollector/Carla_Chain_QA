@@ -1484,3 +1484,38 @@ def get_bicycle_str(vehicle):
 
     important_object_str = f'{color_str}bicycle'
     return important_object_str
+
+def get_rel_lane_vehicles(vehicles, rel_lane, backwards=True):
+    """
+    :param other_vehicles (list of actor dict), be sure to have 'position' attribute
+    :param the relative lane index, -1 for left lane, 1 for right lane (int)
+    :param the direction we count, backward or forward
+    :return list of vehicle dicts satisfy conditions, sorted by distance
+    """
+
+    filtered_vehicles = []
+    for vehicle in vehicles:
+        if vehicle['class'] == 'ego_vehicle':
+            continue
+        if vehicle['lane_relative_to_ego'] == rel_lane and \
+            ((backwards is True and vehicle['position'][0] < 1.0) or \
+             (backwards is False and vehicle['position'][0] > -1.0)):
+            filtered_vehicles.append(vehicle)
+    
+    filtered_vehicles = sorted(filtered_vehicles, key=lambda actor: actor.get('distance', float('inf')))
+
+    return filtered_vehicles
+
+def get_clear_distance_of_lane(vehicles, rel_lane, backwards=True):
+    """
+    :param other_vehicles (list of actor dict), be sure to have 'position' attribute
+    :param the relative lane index, -1 for left lane, 1 for right lane (int)
+    :param the direction we count, backward or forward
+    :return distance to closest vehicle of this lane
+    """
+
+    vehicle_list = get_rel_lane_vehicles(vehicles, rel_lane, backwards)
+
+    if vehicle_list:
+        return vehicle_list[0]['distance']
+    return 99999
