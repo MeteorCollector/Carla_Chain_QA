@@ -2011,9 +2011,14 @@ class QAsGenerator():
             scenario = scenario.split('_')[0]
             print(f"[debug] scenario = {scenario}")
             # Map command integers to their corresponding string descriptions
-            command_int = current_measurement['command_near']
-            x = current_measurement['target_point'][0]**2
-            y = current_measurement['target_point'][1]**2
+            command_int = current_measurement['next_command']
+            if ego_vehicle['is_in_junction']:
+                command_int = current_measurement['command']
+            x = (current_measurement['target_point'][0] - current_measurement['x'])**2
+            y = (current_measurement['target_point'][1] - current_measurement['y'])**2
+            if ego_vehicle['is_in_junction']:
+                x = (current_measurement['x_command_near'] - current_measurement['x'])**2
+                y = (current_measurement['y_command_near'] - current_measurement['y'])**2
             command_distance = np.sqrt(x + y)
             if command_distance > 25:
                 command_int = 4
@@ -3609,13 +3614,13 @@ class QAsGenerator():
                                                 ego_vehicle_info, is_highway, distance_to_junction, scenario, 
                                                 current_measurement, qas_conversation_roadlayout)
         
-        command_int = current_measurement['command_near']
-        command_next_int = current_measurement['command_far']
+        command_int = current_measurement['command']
+        command_next_int = current_measurement['next_command']
         lane_change_soon = False
         map_command = {
-            1: 'go left at the next intersection',
-            2: 'go right at the next intersection',
-            3: 'go straight at the next intersection',
+            1: 'go left at the intersection',
+            2: 'go right at the intersection',
+            3: 'go straight at the intersection',
             4: 'follow the road',
             5: 'do a lane change to the left',
             6: 'do a lane change to the right',        
@@ -3626,7 +3631,7 @@ class QAsGenerator():
             # get distance to current_measurement['target_point_next'], ego is at 0,0
             # print(current_measurement)
             # target_point_next = current_measurement['target_point_next']
-            target_point_next = [current_measurement['x_command_far'], current_measurement['y_command_far']]
+            target_point_next = [current_measurement['x_command_far'] - current_measurement['x'], current_measurement['y_command_far'] - current_measurement['y']]
             distance_to_target_point_next = np.sqrt(target_point_next[0]**2 + target_point_next[1]**2)
             if distance_to_target_point_next < 20 and current_measurement['next_command'] == 5:
                 command_str = 'do a lane change to the left soon'
