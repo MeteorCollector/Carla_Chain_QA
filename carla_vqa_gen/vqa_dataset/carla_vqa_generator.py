@@ -1017,6 +1017,9 @@ class QAsGenerator():
                 # beware! below contents are scenario-specified. take special care of them.
                 else:
                     vehicles_in_front = []
+
+                    lane_str = 'opposite lane' if ego_data['lane_change'] in [0] else 'nearby lane'
+                        
                     if not (ego_data['speed'] > 3.0 and abs(measurements['steer']) > 0.5):
                         vehicles_in_front = [x for x in vehicles_by_id.values() if self.is_object_in_front(x)]
                         vehicles_in_front = sorted(vehicles_in_front, key=lambda actor: actor.get('distance', float('inf')))
@@ -1033,7 +1036,7 @@ class QAsGenerator():
                         police_cars = [x for x in police_cars if x['position'][1] < self.leftmost_pos_of_left_hazard[car_id] + delta]
                         if police_cars:
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=police_cars[0])
-                            answer = "The ego vehicle should stop because it must invade the opposite lane, which is "\
+                            answer = f"The ego vehicle should stop because it must invade the {lane_str}, which is "\
                                     "occupied, in order to bypass the accident."
                     elif hazardous and 'ConstructionObstacleTwoWays' in scenario_type \
                                     and 'static.prop.trafficwarning' == measurements['speed_reduced_by_obj_type']:
@@ -1048,14 +1051,14 @@ class QAsGenerator():
                             if traffic_warnings:
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=traffic_warnings[0])
 
-                            answer = "The ego vehicle should stop because it must invade the opposite lane, which is " \
+                            answer = f"The ego vehicle should stop because it must invade the {lane_str}, which is " \
                                         "occupied, in order to bypass the construction warning."
                         
                     elif hazardous and 'ParkedObstacleTwoWays' in scenario_type \
                                     and measurements['speed_reduced_by_obj_id'] in vehicles:
                         vehicle = vehicles[measurements['speed_reduced_by_obj_id']]
                         object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
-                        answer = "The ego vehicle should stop because it must invade the opposite lane, which " \
+                        answer = f"The ego vehicle should stop because it must invade the {lane_str}, which " \
                                         "is occupied, in order to bypass the parked vehicle."
                     elif 'VehicleOpensDoorTwoWays' in scenario_type:
                         vehicles_open_door = [v for v in vehicles_by_id.values() if v['type_id'] == 'vehicle.mercedes.coupe_2020' 
@@ -1065,7 +1068,7 @@ class QAsGenerator():
                         if vehicles_open_door:
                             vehicle = vehicles_open_door[0]
                             object_tags = self.get_key_of_key_object(key_object_infos, object_dict=vehicle)
-                            answer = "The ego vehicle should stop because it must invade the nearby lane, which is " \
+                            answer = f"The ego vehicle should stop because it must invade the {lane_str}, which is " \
                                                         "occupied, in order to bypass the vehicle with the opened doors."
                     elif 'HazardAtSideLaneTwoWays' in scenario_type:
                         bicycles = [v for v in vehicles_by_id.values() if v['base_type'] == 'bicycle' 
@@ -1078,7 +1081,7 @@ class QAsGenerator():
 
                             brake_or_stop = 'stop' if measurements['speed'] < 0.5 else 'brake'
                             if closest_bicycle['distance'] < 40:
-                                answer = f"The ego vehicle should {brake_or_stop} because it must invade the opposite lane, which " \
+                                answer = f"The ego vehicle should {brake_or_stop} because it must invade the {lane_str}, which " \
                                             "is occupied, in order to bypass the bicycles."
                                 object_tags = self.get_key_of_key_object(key_object_infos, object_dict=closest_bicycle)
                     elif 'DynamicObjectCrossing' in scenario_name or 'ParkingCrossingPedestrian' in scenario_name or \
@@ -2284,7 +2287,7 @@ class QAsGenerator():
                     False if pointing away from the junction, or None if the direction is unknown.
             """
 
-            scenario = scenario.split["_"][0]
+            scenario = scenario.split("_")[0]
             question = f"Where on the road is {other_vehicle_location_description} located?"
             answer = ''
             pos = other_vehicle['position']
@@ -2961,7 +2964,6 @@ class QAsGenerator():
                 qas_conversation_roadlayout (list): A list to store question-answer pairs related to the road layout.
             """
 
-            scenario = scenario.split["_"][0]
             # Lane change analysis
             question = "From which side are other vehicles allowed to change lanes into the ego lane?"
             if is_acceleration_lane and command_int==5:
@@ -3297,7 +3299,7 @@ class QAsGenerator():
                 qas_conversation_roadlayout (list): A list to store question-answer pairs related to the road layout.
             """
             
-            scenario = scenario.split["_"][0]
+            scenario = scenario.split("_")[0]
             question = 'Is the ego vehicle at a junction?'
 
             if is_acceleration_lane:
@@ -3419,7 +3421,7 @@ class QAsGenerator():
 
             question = f"The ego vehicle wants to {command_description}. Which lanes are important to watch out for?"
             answer = ''
-            scenario = scenario.split["_"][0]
+            scenario = scenario.split("_")[0]
 
             if command_int == 1:
                 answer = f"The ego vehicle should pay particular attention to traffic coming from the left side of " +\

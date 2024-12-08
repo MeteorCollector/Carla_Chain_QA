@@ -138,3 +138,5 @@ ParkedObstacle [没问题]
 20. CrossingBicycleFlow_Town12_Route1062_Weather22 frame 355 这个prediction The ego vehicle wants to go left at the next intersection. command 到底是怎么算的？ [已解决]
 
 21. invade the opposite lane需要判断一下，因为有些时候并不用opposite。B2D里面的twoways有的时候是多车道。
+
+22. 加：变道准入判断
