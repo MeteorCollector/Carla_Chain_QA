@@ -2009,7 +2009,7 @@ class QAsGenerator():
             """            
 
             scenario = scenario.split('_')[0]
-            print(f"[debug] scenario = {scenario}")
+            # print(f"[debug] scenario = {scenario}")
             # Map command integers to their corresponding string descriptions
             command_int = current_measurement['next_command']
             if ego_vehicle['is_in_junction']:
@@ -2284,6 +2284,7 @@ class QAsGenerator():
                     False if pointing away from the junction, or None if the direction is unknown.
             """
 
+            scenario = scenario.split["_"][0]
             question = f"Where on the road is {other_vehicle_location_description} located?"
             answer = ''
             pos = other_vehicle['position']
@@ -2960,6 +2961,7 @@ class QAsGenerator():
                 qas_conversation_roadlayout (list): A list to store question-answer pairs related to the road layout.
             """
 
+            scenario = scenario.split["_"][0]
             # Lane change analysis
             question = "From which side are other vehicles allowed to change lanes into the ego lane?"
             if is_acceleration_lane and command_int==5:
@@ -3012,9 +3014,9 @@ class QAsGenerator():
             if is_junction:
                 answer = "It is not possible to tell since the ego vehicle is in a junction."
 
-            if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
-                answer = "The ego vehicle overtakes an obstruction. We do not expect vehicles to change " +\
-                                                                                        f"into the ego lane."
+            # if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
+            #     answer = "The ego vehicle overtakes an obstruction. We do not expect vehicles to change " +\
+            #                                                                             f"into the ego lane."
 
             # Store the question-answer pair
             self.all_qa_pairs.append((question, answer))
@@ -3089,8 +3091,8 @@ class QAsGenerator():
             if is_junction:
                 answer = "It is not possible to tell since the ego vehicle is in a junction."
 
-            if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
-                answer = "The ego vehicle overtakes an obstruction. It is not expected to change lanes."
+            # if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
+            #     answer = "The ego vehicle overtakes an obstruction. It is not expected to change lanes."
 
             # Store the question-answer pair
             self.all_qa_pairs.append((question, answer))
@@ -3208,8 +3210,8 @@ class QAsGenerator():
             if is_junction:
                 answer = "It is not possible to tell since the ego vehicle is in a junction."
 
-            if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
-                answer = f"The ego vehicle is on lane {ego['ego_lane_number']+1} since it overtakes an obstruction."
+            # if current_measurement['changed_route'] and ('TwoWays' in scenario or 'HazardAtSideLaneTwoWays' in scenario):
+            #     answer = f"The ego vehicle is on lane {ego['ego_lane_number']+1} since it overtakes an obstruction."
 
             # Add the question-answer pair to the conversation roadlayout
             self.add_qas_questions(qa_list=qas_conversation_roadlayout,
@@ -3295,6 +3297,7 @@ class QAsGenerator():
                 qas_conversation_roadlayout (list): A list to store question-answer pairs related to the road layout.
             """
             
+            scenario = scenario.split["_"][0]
             question = 'Is the ego vehicle at a junction?'
 
             if is_acceleration_lane:
@@ -3416,6 +3419,7 @@ class QAsGenerator():
 
             question = f"The ego vehicle wants to {command_description}. Which lanes are important to watch out for?"
             answer = ''
+            scenario = scenario.split["_"][0]
 
             if command_int == 1:
                 answer = f"The ego vehicle should pay particular attention to traffic coming from the left side of " +\

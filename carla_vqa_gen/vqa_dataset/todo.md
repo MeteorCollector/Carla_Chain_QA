@@ -119,8 +119,6 @@ ParkedObstacle [没问题]
 
 'VehicleTurningRoute' [没问题]
 
-invade the opposite lane需要判断一下，因为有些时候并不用opposite。B2D里面的twoways有的时候是多车道。
-
 12. important object 有的时候会重复？DynamicObjectCrossing 和 VehicleOpensDoorTwoWays都有这种情况。 [已解决]
 
 13. DynamicObjectCrossing里面没有bicycle,PedestriansCrossing里面有的没等行人过马路就过去了 [已解决]
@@ -135,6 +133,8 @@ invade the opposite lane需要判断一下，因为有些时候并不用opposite
 
 18. HazardAtSideLane_Town03_Route105_Weather22 frame 90 maroon bicycle The ego vehicle follows the road. Is the maroon bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle? 答案是 NO，显然是错误的。[已解决]
 
-19. In which direction is the ego car allowed to change lanes? 这里的overtakes lane是从哪里开始算的？ HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 完全算不对 frame 170
+19. In which direction is the ego car allowed to change lanes? From which side are other vehicles allowed to change lanes into the ego lane? 这里的overtakes lane是从哪里开始算的？ HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 完全算不对 frame 170 [注释掉了，我觉得边上车道是否允许变道(clear)的判断应该加到这里]
 
-20. CrossingBicycleFlow_Town12_Route1062_Weather22 frame 355 这个prediction The ego vehicle wants to go left at the next intersection. command 到底是怎么算的？
+20. CrossingBicycleFlow_Town12_Route1062_Weather22 frame 355 这个prediction The ego vehicle wants to go left at the next intersection. command 到底是怎么算的？ [已解决]
+
+21. invade the opposite lane需要判断一下，因为有些时候并不用opposite。B2D里面的twoways有的时候是多车道。
