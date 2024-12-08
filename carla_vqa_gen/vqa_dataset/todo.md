@@ -90,7 +90,7 @@ YieldToEmergencyVehicle_Town03_Route148_Weather18 需要识别后方来车
 
 10. 没有天气 复杂情况理解等等
 
-11. brake 那里需要好好弄弄，因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
+11. brake 那里需要好好弄弄，[已解决] 因为 b2d 里面的 twoways 事件不一定要 invade opposite lane，和原版不一样。accident two ways的时候，接近了accident反倒不brake了，不太好，感觉这些的判定就是凡是brake且在情景内，都统一划进躲障碍的原因了。
 
 AccidentTwoWays [没问题]
 ConstructionObstacleTwoWays [没问题]
@@ -131,8 +131,10 @@ invade the opposite lane需要判断一下，因为有些时候并不用opposite
 
 16. StaticCutIn_Town03_Route109_Weather1 [已解决] 这种中间的虚线加实线为什么可以变道 可能是carla本身waypoint的lane_change没做好，，
 
-17. HardBreakRoute只根据车辆速度判断而不通过刹车灯判断，有局限性
+17. HardBreakRoute只根据车辆速度判断而不通过刹车灯判断，有局限性 [之后再解决]
 
-18. HazardAtSideLane_Town03_Route105_Weather22 frame 90 maroon bicycle The ego vehicle follows the road. Is the maroon bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle? 答案是 NO，显然是错误的。
+18. HazardAtSideLane_Town03_Route105_Weather22 frame 90 maroon bicycle The ego vehicle follows the road. Is the maroon bicycle that is to the front of the ego vehicle potentially crossing the path of the ego vehicle? 答案是 NO，显然是错误的。[已解决]
 
 19. In which direction is the ego car allowed to change lanes? 这里的overtakes lane是从哪里开始算的？ HazardAtSideLaneTwoWays_Town12_Route1128_Weather10 完全算不对 frame 170
+
+20. CrossingBicycleFlow_Town12_Route1062_Weather22 frame 355 这个prediction The ego vehicle wants to go left at the next intersection. command 到底是怎么算的？

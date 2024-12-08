@@ -2008,18 +2008,21 @@ class QAsGenerator():
                 None
             """            
 
+            scenario = scenario.split('_')[0]
+            print(f"[debug] scenario = {scenario}")
             # Map command integers to their corresponding string descriptions
-            command_int = current_measurement['command']
+            command_int = current_measurement['command_near']
             x = current_measurement['target_point'][0]**2
             y = current_measurement['target_point'][1]**2
             command_distance = np.sqrt(x + y)
             if command_distance > 25:
                 command_int = 4
 
+            # the next intersection -> the intersection
             command_map = {
-                1: 'turns left at the next intersection',
-                2: 'turns right at the next intersection',
-                3: 'drives straight at the next intersection',
+                1: 'turns left at the intersection',
+                2: 'turns right at the intersection',
+                3: 'drives straight at the intersection',
                 4: 'follows the road',
                 5: f'does a lane change to the left in {int(command_distance)} m',
                 6: f'does a lane change to the right in {int(command_distance)} m',
@@ -2107,7 +2110,12 @@ class QAsGenerator():
                    
             elif other_vehicle['lane_relative_to_ego'] == 1 and command_int == 6:
                 answer = f"Yes, the {other_vehicle_description} is crossing paths with the ego vehicle because the " +\
-                        f"ego vehicle does a lane change to the right onto the lane of the {other_vehicle_description}."
+                        f"ego vehicle does a lane change to the right onto the lane of the {other_vehicle_description}."\
+            
+            elif other_vehicle['lane_relative_to_ego'] == 0 and \
+                other_vehicle['base_type'] == 'bicycle' and 0.0 < other_vehicle['position'][0] < 30.0 and is_vehicle_in_camera(self.CAMERA_FRONT, other_vehicle):
+                answer = f"Yes, the {other_vehicle_description} is potentially crossing paths with the ego vehicle because the " +\
+                        f"{other_vehicle_description} doesn't match the speed of ego vehicle."\
                 
             # Check for scenarios involving acceleration lanes
             elif is_ego_on_highway and is_ego_in_accel_lane:
