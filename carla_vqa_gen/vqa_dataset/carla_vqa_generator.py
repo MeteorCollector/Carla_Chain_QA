@@ -1844,7 +1844,8 @@ class QAsGenerator():
                                     answer = "No, the ego vehicle can stay on its current lane."
                                     answer2 = 'No, there is no obstacle on the current route.'
                                 else:
-                                    answer = f"The ego vehicle must change to the left lane to circumvent the {obstacle}."
+                                    lane_str = 'opposite lane' if ego_data['lane_change'] in [0] else 'left_lane'
+                                    answer = f"The ego vehicle must change to the {lane_str} to circumvent the {obstacle}."
 
                                     if not obstacle.startswith('two'):
                                         obstacle2 = 'an '+obstacle if obstacle[0] in ['a', 'e', 'i', 'o', 'u'] else 'a '+obstacle
