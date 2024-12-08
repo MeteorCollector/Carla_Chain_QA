@@ -98,13 +98,11 @@ ParkedObstacleTwoWays [没问题]
 VehicleOpensDoorTwoWays [没问题]
 HazardAtSideLaneTwoWays [没问题]
 
-"EnterActorFlow", 
-"EnterActorFlowV2", 
-"HighwayCutIn", 
-"HighwayExit", 
-"MergerIntoSlowTraffic",
-"MergerIntoSlowTrafficV2",
-"YieldToEmergencyVehicle",
+"EnterActorFlow", [未特殊处理]
+"HighwayCutIn",  [未特殊处理]
+"HighwayExit",  [未特殊处理]
+"MergerIntoSlowTraffic", [未特殊处理]
+"YieldToEmergencyVehicle", [未特殊处理]
 
 BlockedIntersection [没问题]
 CrossingBicycleFlow [未有效验证]
